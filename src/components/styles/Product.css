@@ -1,0 +1,42 @@
+.containerUl {
+  list-style:none;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 100px;
+}
+
+.containerUl .btn{
+	padding: 3px;
+	margin-left: 2px;
+}
+
+.item {
+/*  background: tomato;
+  padding: 5px;
+  width: 100px;
+  height: 50px;
+  margin: 10px;*/
+  
+  line-height: 20px;
+  color: white;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 1em;
+  text-align: center;
+}
+
+/*float layout*/
+.float {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.float:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.float-item {
+  float: left;
+}
