@@ -29,38 +29,39 @@ class ProductForm extends Component {
 		    customization_fee: "",
 		    stock_alarm: "",
 		    sales_price: "",
-		    product_image: ""
+		    product_image: null
 		};		
 
 		handleInputChange = e => this.setState({[e.target.name]: e.target.value });
-
+		handleFileChange = e => this.setState({ product_image: URL.createObjectURL(e.target.files[0]) })	
+	
 		onFormSubmit = e => {
 		    e.preventDefault();
-
+				
 		    if (e.target.value !== "") {
 		      this.props.postProduct(this.state);
 		      this.clearValue();
 		    }
 		};
 
-	  // Adding material tags
-	  addTag = e => {
-	    if (e.key === "Enter" && e.target.value !== "") {
-	      const value = e.target.value;
+		// Adding material tags
+		addTag = e => {
+		    if (e.key === "Enter" && e.target.value !== "") {
+		      const value = e.target.value;
 
-	      // check the duplicate value in array
-	      if (
-	        this.state.material_tags.find(
-	          tag => tag.toLowerCase() === value.toLowerCase()
-	        )
-	      ) {
-	        return;
-	      }
-	      let newTag = this.state.material_tags.concat(value);
-	      this.setState({ material_tags: newTag });
-	      e.target.value = "";
-	    }
-	  };
+		      // check the duplicate value in array
+		      if (
+		        this.state.material_tags.find(
+		          tag => tag.toLowerCase() === value.toLowerCase()
+		        )
+		      ) {
+		        return;
+		      }
+		      let newTag = this.state.material_tags.concat(value);
+		      this.setState({ material_tags: newTag });
+		      e.target.value = "";
+		    }
+		 };
 
 	  removeTag = id => {
 	    // console.log(id)
@@ -613,10 +614,9 @@ class ProductForm extends Component {
 			              <div className="col-md-4">
 			                <img
 			                  id="imagePreview"
-			                  src="/square.jpg"
+			                  src={this.state.product_image ? this.state.product_image : '/square.jpg'}
 			                  alt="image"
 			                  className="img-fluid"
-			                  onChange={this.handleInputChange}
 			                />
 			              </div>
 			              <div id="drop-area" className="col-md-8">
@@ -625,8 +625,7 @@ class ProductForm extends Component {
 			                    id="product_image"
 			                    type="file"
 			                    name="product_image"
-			                    onChange={this.handleInputChange}
-			                    value={product_image}
+			                    onChange={this.handleFileChange}
 			                  />
 			                </div>
 			              </div>

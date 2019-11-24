@@ -1,6 +1,41 @@
 import React, { Component } from "react";
+import axios from "axios";
+import Spinner from "../layouts/Spinner";
+import ProductTable from "./ProductTable";
 
 class Product extends Component {
+    state = {
+        products: [],
+        loading: false,
+    };
+
+    componentDidMount() {
+        this.getProducts();
+    }
+
+    getProducts = async () => {
+        this.setState({ loading: true });
+        let res = await axios.get(`http://inventory.test/api/admin/product`);
+
+        console.log(res.data);
+        this.setState({ products: res.data });
+        this.setState({ loading: false });
+    };
+
+    moveToArchived = async (id) => {
+        let res = await axios.put(
+            `http://inventory.test/api/admin/product/${id}`,
+            {
+                archived: 1
+            }
+        );
+        
+        // fetch the new updated data
+        this.getProducts();
+
+        console.log(res.data);
+    };
+
     render() {
         return (
             <div>
@@ -82,6 +117,21 @@ class Product extends Component {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </section>
+
+                <section className="row">
+                    <div className="col-sm-12">
+                        {this.state.loading ? (
+                            <Spinner />
+                        ) : this.state.products.length > 0 ? (
+                            <ProductTable
+                                products={this.state.products}
+                                moveToArchived={this.moveToArchived}
+                            />
+                        ) : (
+                            <h1>No Data to Show...</h1>
+                        )}
                     </div>
                 </section>
             </div>
