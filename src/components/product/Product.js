@@ -7,12 +7,14 @@ class Product extends Component {
     state = {
         products: [],
         loading: false,
+        singleProduct: []
     };
 
     componentDidMount() {
         this.getProducts();
     }
-
+    
+    // fetch all items
     getProducts = async () => {
         this.setState({ loading: true });
         let res = await axios.get(`http://inventory.test/api/admin/product`);
@@ -21,21 +23,27 @@ class Product extends Component {
         this.setState({ products: res.data });
         this.setState({ loading: false });
     };
-
-    moveToArchived = async (id) => {
+    
+    // fetch single item
+    getSingleProduct = async (id) => {
+        let res = await axios.get(`http://inventory.test/api/admin/product/${id}`);
+        console.log(res.data);
+        this.setState({singleProduct: res.data});
+    }
+    
+    // update archived: 1 if deleted
+    moveToArchived = async id => {
         let res = await axios.put(
             `http://inventory.test/api/admin/product/${id}`,
             {
                 archived: 1
             }
         );
-        
         // fetch the new updated data
         this.getProducts();
-
         console.log(res.data);
     };
-
+        
     render() {
         return (
             <div>
@@ -128,6 +136,7 @@ class Product extends Component {
                             <ProductTable
                                 products={this.state.products}
                                 moveToArchived={this.moveToArchived}
+                                getSingleProduct={this.getSingleProduct}
                             />
                         ) : (
                             <h1>No Data to Show...</h1>

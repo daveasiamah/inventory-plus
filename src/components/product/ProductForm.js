@@ -1,4 +1,5 @@
 import React, { Component} from 'react'
+import PropTypes from 'prop-types';
 
 class ProductForm extends Component {	
 		
@@ -31,6 +32,10 @@ class ProductForm extends Component {
 		    sales_price: "",
 		    product_image: null
 		};		
+
+		static propTypes = {
+			postProduct: PropTypes.func.isRequired,
+		}
 
 		handleInputChange = e => this.setState({[e.target.name]: e.target.value });
 		handleFileChange = e => this.setState({ product_image: URL.createObjectURL(e.target.files[0]) })	

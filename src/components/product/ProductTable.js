@@ -1,23 +1,22 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
-
+import { Link } from "react-router-dom";
 
 class ProductTable extends Component {
-	
 	state = {
 		id: 0
-	}
-	
+	};
+
 	conFirmMoveToArchived = () => {
-		this.props.moveToArchived(this.state.id)
-	}
+		this.props.moveToArchived(this.state.id);
+	};
 
 	static propTypes = {
 		products: PropTypes.array.isRequired,
 		moveToArchived: PropTypes.func.isRequired,
 	};
-	
+
 	render() {
 		const { products } = this.props;
 
@@ -54,14 +53,21 @@ class ProductTable extends Component {
 											<button className="btn btn-sm btn-info">
 												<i className="la la-eye"></i>
 											</button>
-											<button className="btn btn-sm btn-warning">
+											<Link
+												to={`/product/${product._id}/edit`}
+												className="btn btn-sm btn-warning"
+											>
 												<i className="la la-edit"></i>
-											</button>
+											</Link>
 											<button
 												className="btn btn-sm btn-danger"
 												data-toggle="modal"
 												data-target="#delete-modal"
-												onClick={() => this.setState({id: product._id})}
+												onClick={() =>
+													this.setState({
+														id: product._id
+													})
+												}
 											>
 												<i className="la la-times"></i>
 											</button>

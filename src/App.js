@@ -1,31 +1,30 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Navbar from './components/layouts/Navbar';
-import Footer from './components/layouts/Footer';
-import Home from './components/admin/Home';
+import React, { Component } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Navbar from "./components/layouts/Navbar";
+import Footer from "./components/layouts/Footer";
+import Home from "./components/admin/Home";
 // Product
-import Product from './components/product/Product';
-import ProductAdd from './components/product/ProductAdd';
+import Product from "./components/product/Product";
+import ProductAdd from "./components/product/ProductAdd";
 // Affiliates
-import Affiliate from './components/affiliate/Affiliate';
-import AffiliateAdd from './components/affiliate/AffiliateAdd';
-import AffiliatesCommission from './components/affiliate/AffiliatesCommission';
-import AffiliatesHistory from './components/affiliate/AffiliatesHistory';
+import Affiliate from "./components/affiliate/Affiliate";
+import AffiliateAdd from "./components/affiliate/AffiliateAdd";
+import AffiliatesCommission from "./components/affiliate/AffiliatesCommission";
+import AffiliatesHistory from "./components/affiliate/AffiliatesHistory";
 // Customer
-import Customer from './components/customer/Customer';
-import CustomerAdd from './components/customer/CustomerAdd';
-import CustomerHistory from './components/customer/CustomerHistory';
+import Customer from "./components/customer/Customer";
+import CustomerAdd from "./components/customer/CustomerAdd";
+import CustomerHistory from "./components/customer/CustomerHistory";
 // Inventory
-import Inventory from './components/inventory/Inventory';
+import Inventory from "./components/inventory/Inventory";
 // Invoice
-import Invoice from './components/invoice/Invoice';
-import InvoiceAdd from './components/invoice/InvoiceAdd';
-import InvoiceTemplate from './components/invoice/InvoiceTemplate';
-import PageNotFound from './components/layouts/PageNotFound';
-
+import Invoice from "./components/invoice/Invoice";
+import InvoiceAdd from "./components/invoice/InvoiceAdd";
+import InvoiceTemplate from "./components/invoice/InvoiceTemplate";
+import PageNotFound from "./components/layouts/PageNotFound";
+import ProductEdit from "./components/product/ProductEdit";
 
 class App extends Component {
-
   render() {
     return (
       <Router>
@@ -37,8 +36,9 @@ class App extends Component {
                 <Switch>
                   {/* products */}
                   <Route path="/" exact component={Home} />
-                  <Route path="/product/add" component={ProductAdd} />
                   <Route path="/product" exact component={Product} />
+                  <Route path="/product/:id/edit" component={ProductEdit}/>
+                  <Route path="/product/add" component={ProductAdd} />
 
                   {/* affliates */}
                   <Route path="/affiliates" exact component={Affiliate} />
@@ -67,7 +67,7 @@ class App extends Component {
                     path="/invoice/templates"
                     component={InvoiceTemplate}
                   />
-                  <Route component={PageNotFound}/>
+                  <Route component={PageNotFound} />
                 </Switch>
               </div>
             </div>
