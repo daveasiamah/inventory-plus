@@ -21,8 +21,11 @@ import Inventory from './components/inventory/Inventory';
 import Invoice from './components/invoice/Invoice';
 import InvoiceAdd from './components/invoice/InvoiceAdd';
 import InvoiceTemplate from './components/invoice/InvoiceTemplate';
+import PageNotFound from './components/layouts/PageNotFound';
+
 
 class App extends Component {
+
   render() {
     return (
       <Router>
@@ -64,11 +67,11 @@ class App extends Component {
                     path="/invoice/templates"
                     component={InvoiceTemplate}
                   />
+                  <Route component={PageNotFound}/>
                 </Switch>
               </div>
             </div>
           </div>
-          <Footer />
         </div>
       </Router>
     );

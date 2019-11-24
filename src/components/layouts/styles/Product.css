@@ -1,3 +1,5 @@
+
+/* material_tags styles*/
 .containerUl {
   list-style:none;
   margin: 0;
@@ -11,12 +13,6 @@
 }
 
 .item {
-/*  background: tomato;
-  padding: 5px;
-  width: 100px;
-  height: 50px;
-  margin: 10px;*/
-  
   line-height: 20px;
   color: white;
   padding: 5px;
@@ -40,3 +36,5 @@
 .float-item {
   float: left;
 }
+
+/* end of material_tags styles*/
