@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import axios from "axios";
 import Spinner from "../layouts/Spinner";
 import PropTypes from "prop-types";
+import { Redirect } from 'react-router-dom';
 
 class ProductEdit extends Component {
 	state = {
 		id: this.props.match.params.id,
 		singleProduct: [],
-		loading: false
+		loading: false,
+		redirect: false
 	};
 
 	componentDidMount() {
@@ -15,6 +17,7 @@ class ProductEdit extends Component {
 		this.getSingleProduct(this.state.id);
 	}
 
+	// fetch the single item 
 	getSingleProduct = async id => {
 		this.setState({loading: true});
 
@@ -22,22 +25,64 @@ class ProductEdit extends Component {
 			`http://inventory.test/api/admin/product/${id}`
 		);
 		console.log(res.data);
-		this.setState({ singleProduct: res.data });
-		this.setState({loading: false});
+		this.setState({ singleProduct: res.data, loading: false });
 	};
 
+	// update the data
+	updateSingleProduct = async (singleProduct, id) => {
+		this.setState({loading: true});
+
+		let res = await axios.put(`http://inventory.test/api/admin/product/${id}`, singleProduct);
+		
+		console.log(res.data);
+		this.setState({ singleProduct: [], loading: false, redirect: true});
+	}
+
+	renderRedirect = () => {
+		if(this.state.redirect){
+			return <Redirect to='/product'/>
+		}
+	}
+
 	handleInputChange = e =>
-		this.setState({ singleProduct: { [e.target.name]: e.target.value } });
-	// handleFileChange = e => this.setState({ product_image: URL.createObjectURL(e.target.files[0]) })
+		this.setState({ singleProduct: {...this.state.singleProduct, [e.target.name]: e.target.value } });
+		handleFileChange = e => this.setState({ product_image: URL.createObjectURL(e.target.files[0]) })
 
 	onFormSubmit = e => {
 		e.preventDefault();
 
 		if (e.target.value !== "") {
-			this.props.postProduct(this.state);
-			this.clearValue();
+			let singleProduct = this.state.singleProduct;
+			let id = this.state.id
+			this.updateSingleProduct(singleProduct, id);
 		}
 	};
+
+	// Adding material tags
+	addTag = e => {
+	    if (e.key === "Enter" && e.target.value !== "") {
+	      const value = e.target.value;
+
+	      // check the duplicate value in array
+	      if (
+	        this.state.singleProduct.material_tags.find(
+	          tag => tag.toLowerCase() === value.toLowerCase()
+	        )
+	      ) {
+	        return;
+	      }
+	      let newTag = this.state.singleProduct.material_tags.concat(value);
+	      this.setState({singleProduct: { ...this.state.singleProduct, ['material_tags']: newTag }});
+	      e.target.value = "";
+	    }
+	};
+
+	removeTag = id => {
+	    // console.log(id)
+	    const tags = this.state.singleProduct.material_tags;
+	    tags.splice(id, 1);
+	    this.setState({ material_tags: tags });
+	 };
 
 	render() {
 		// destructuring
@@ -72,7 +117,13 @@ class ProductEdit extends Component {
 		} = this.state.singleProduct;
 
 		if (this.state.loading) {
+			// loading spinner
 			return <Spinner />;
+
+		}else if(this.state.redirect) {
+			// redirect to product page
+			return <Redirect to='/product' />
+
 		} else {
 			return (
 				<div>

@@ -34,7 +34,7 @@ class Product extends Component {
     // update archived: 1 if deleted
     moveToArchived = async id => {
         let res = await axios.put(
-            `http://inventory.test/api/admin/product/${id}`,
+            `http://inventory.test/api/admin/product/archived/${id}`,
             {
                 archived: 1
             }
