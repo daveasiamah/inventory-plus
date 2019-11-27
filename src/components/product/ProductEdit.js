@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import axios from "axios";
 import Spinner from "../layouts/Spinner";
 import PropTypes from "prop-types";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 
 class ProductEdit extends Component {
 	state = {
 		id: this.props.match.params.id,
 		singleProduct: [],
+		product_image_display: '',
 		loading: false,
 		redirect: false
 	};
@@ -17,72 +18,148 @@ class ProductEdit extends Component {
 		this.getSingleProduct(this.state.id);
 	}
 
-	// fetch the single item 
+	// fetch the single item
 	getSingleProduct = async id => {
-		this.setState({loading: true});
+		this.setState({ loading: true });
 
 		let res = await axios.get(
 			`http://inventory.test/api/admin/product/${id}`
 		);
-		console.log(res.data);
-		this.setState({ singleProduct: res.data, loading: false });
+
+		this.setState({
+			singleProduct: {
+				sku: res.data.sku,
+				product_name: res.data.product_name,
+				brand: res.data.brand,
+				product_category: res.data.product_category,
+				description: res.data.description,
+				supplier: res.data.supplier,
+				barcode: res.data.barcode,
+				dimension_length: res.data.dimension_length,
+				dimension_width: res.data.dimension_width,
+				dimension_height: res.data.dimension_height,
+				color: res.data.color,
+				specs_category: res.data.specs_category,
+				material_tags: res.data.material_tags,
+				fitting_type: res.data.fitting_type,
+				fitting_qty: res.data.fitting_qty,
+				weight_kg: res.data.weight_kg,
+				packing_length: res.data.packing_length,
+				packing_width: res.data.packing_width,
+				packing_height: res.data.packing_height,
+				cost: res.data.cost,
+				srp: res.data.srp,
+				delivery_fee: res.data.delivery_fee,
+				stock_overwrite: res.data.stock_overwrite,
+				customization_fee: res.data.customization_fee,
+				stock_alarm: res.data.stock_alarm,
+				sales_price: res.data.sales_price,
+				product_image: res.data.product_image
+			},
+			loading: false
+		});
 	};
 
 	// update the data
 	updateSingleProduct = async (singleProduct, id) => {
-		this.setState({loading: true});
-
-		let res = await axios.put(`http://inventory.test/api/admin/product/${id}`, singleProduct);
+		const data = new FormData();
+		data.append("sku", this.state.singleProduct);
+		data.append("product_name", singleProduct.product_name);
+		data.append("brand", singleProduct.brand);
+		data.append("product_category", singleProduct.product_category);
+		data.append("description", singleProduct.description);
+		data.append("supplier", singleProduct.supplier);
+		data.append("barcode", singleProduct.barcode);
+		data.append("dimension_length", singleProduct.dimension_length);
+		data.append("dimension_width", singleProduct.dimension_width);
+		data.append("dimension_height", singleProduct.dimension_height);
+		data.append("color", singleProduct.color);
+		data.append("specs_category", singleProduct.specs_category);
+		data.append("material_tags", singleProduct.material_tags);
+		data.append("fitting_type", singleProduct.fitting_type);
+		data.append("fitting_qty", singleProduct.fitting_qty);
+		data.append("weight_kg", singleProduct.weight_kg);
+		data.append("packing_length", singleProduct.packing_length);
+		data.append("packing_width", singleProduct.packing_width);
+		data.append("packing_height", singleProduct.packing_height);
+		data.append("cost", singleProduct.cost);
+		data.append("srp", singleProduct.srp);
+		data.append("delivery_fee", singleProduct.delivery_fee);
+		data.append("stock_overwrite", singleProduct.stock_overwrite);
+		data.append("customization_fee", singleProduct.customization_fee);
+		data.append("stock_alarm", singleProduct.stock_alarm);
+		data.append("sales_price", singleProduct.sales_price);
+		data.append("product_image", singleProduct.product_image);
 		
-		console.log(res.data);
-		this.setState({ singleProduct: [], loading: false, redirect: true});
-	}
+		let config = { headers: { "Content-Type": "multipart/form-data"} };
+		let res = await axios.put(
+			`http://inventory.test/api/admin/product/${id}`,
+			singleProduct,
+			config
+		);
+
+		// this.setState({ singleProduct: [], loading: false , redirect: true });
+	};
 
 	renderRedirect = () => {
-		if(this.state.redirect){
-			return <Redirect to='/product'/>
+		if (this.state.redirect) {
+			return <Redirect to="/product" />;
 		}
-	}
+	};
 
 	handleInputChange = e =>
-		this.setState({ singleProduct: {...this.state.singleProduct, [e.target.name]: e.target.value } });
-		handleFileChange = e => this.setState({ product_image: URL.createObjectURL(e.target.files[0]) })
+		this.setState({
+			singleProduct: {
+				...this.state.singleProduct,
+				[e.target.name]: e.target.value
+			}
+		});
+	handleFileChange = e =>{
+		this.setState({singleProduct: {...this.state.singleProduct, product_image: URL.createObjectURL(e.target.files[0])}});
+		// this.setState({product_image_display: URL.createObjectURL(e.target.files[0])});
+	}
+		
 
 	onFormSubmit = e => {
 		e.preventDefault();
 
 		if (e.target.value !== "") {
 			let singleProduct = this.state.singleProduct;
-			let id = this.state.id
+			let id = this.state.id;
 			this.updateSingleProduct(singleProduct, id);
 		}
 	};
 
 	// Adding material tags
 	addTag = e => {
-	    if (e.key === "Enter" && e.target.value !== "") {
-	      const value = e.target.value;
+		if (e.key === "Enter" && e.target.value !== "") {
+			const value = e.target.value;
 
-	      // check the duplicate value in array
-	      if (
-	        this.state.singleProduct.material_tags.find(
-	          tag => tag.toLowerCase() === value.toLowerCase()
-	        )
-	      ) {
-	        return;
-	      }
-	      let newTag = this.state.singleProduct.material_tags.concat(value);
-	      this.setState({singleProduct: { ...this.state.singleProduct, ['material_tags']: newTag }});
-	      e.target.value = "";
-	    }
+			// check the duplicate value in array
+			if (
+				this.state.singleProduct.material_tags.find(
+					tag => tag.toLowerCase() === value.toLowerCase()
+				)
+			) {
+				return;
+			}
+			let newTag = this.state.singleProduct.material_tags.concat(value);
+			this.setState({
+				singleProduct: {
+					...this.state.singleProduct,
+					["material_tags"]: newTag
+				}
+			});
+			e.target.value = "";
+		}
 	};
 
 	removeTag = id => {
-	    // console.log(id)
-	    const tags = this.state.singleProduct.material_tags;
-	    tags.splice(id, 1);
-	    this.setState({ material_tags: tags });
-	 };
+		// console.log(id)
+		const tags = this.state.singleProduct.material_tags;
+		tags.splice(id, 1);
+		this.setState({ material_tags: tags });
+	};
 
 	render() {
 		// destructuring
@@ -113,17 +190,18 @@ class ProductEdit extends Component {
 			customization_fee,
 			stock_alarm,
 			sales_price,
-			product_image
+			product_image,
+			product_image_display
 		} = this.state.singleProduct;
+
+		const url = `http://inventory.test/`;
 
 		if (this.state.loading) {
 			// loading spinner
 			return <Spinner />;
-
-		}else if(this.state.redirect) {
+		} else if (this.state.redirect) {
 			// redirect to product page
-			return <Redirect to='/product' />
-
+			return <Redirect to="/product" />;
 		} else {
 			return (
 				<div>
@@ -752,9 +830,9 @@ class ProductEdit extends Component {
 									<img
 										id="imagePreview"
 										src={
-											this.state.product_image
-												? this.state.product_image
-												: "/square.jpg"
+												product_image
+												? product_image_display
+												: '/square.jpg'
 										}
 										alt="image"
 										className="img-fluid"

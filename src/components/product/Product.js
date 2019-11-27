@@ -19,7 +19,7 @@ class Product extends Component {
         this.setState({ loading: true });
         let res = await axios.get(`http://inventory.test/api/admin/product`);
 
-        console.log(res.data);
+        // console.log(res.data);
         this.setState({ products: res.data });
         this.setState({ loading: false });
     };

@@ -1,5 +1,6 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types';
+import axios from "axios";
 
 class ProductForm extends Component {	
 		
@@ -30,7 +31,8 @@ class ProductForm extends Component {
 		    customization_fee: "",
 		    stock_alarm: "",
 		    sales_price: "",
-		    product_image: null
+		    product_image: null,
+		    product_image_display: ''
 		};		
 
 		static propTypes = {
@@ -38,11 +40,15 @@ class ProductForm extends Component {
 		}
 
 		handleInputChange = e => this.setState({[e.target.name]: e.target.value });
-		handleFileChange = e => this.setState({ product_image: URL.createObjectURL(e.target.files[0]) })	
+		handleFileChange = e => {
+			// show the image e
+			this.setState({ product_image_display: URL.createObjectURL(e.target.files[0])})
+			this.setState({ product_image: e.target.files[0] });
+		}
 	
 		onFormSubmit = e => {
 		    e.preventDefault();
-				
+
 		    if (e.target.value !== "") {
 		      this.props.postProduct(this.state);
 		      this.clearValue();
@@ -103,7 +109,8 @@ class ProductForm extends Component {
 	      customization_fee: "",
 	      stock_alarm: "",
 	      sales_price: "",
-	      product_image: ""
+	      product_image: "",
+	      product_image_display: ""
 	    });
 
 	    return cleared;
@@ -619,7 +626,7 @@ class ProductForm extends Component {
 			              <div className="col-md-4">
 			                <img
 			                  id="imagePreview"
-			                  src={this.state.product_image ? this.state.product_image : '/square.jpg'}
+			                  src={this.state.product_image_display ? this.state.product_image_display : '/square.jpg'}
 			                  alt="image"
 			                  className="img-fluid"
 			                />

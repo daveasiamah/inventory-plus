@@ -51,7 +51,7 @@ class App extends Component {
                     path="/affiliates/history"
                     component={AffiliatesHistory}
                   />
-
+                  
                   {/* customer */}
                   <Route path="/customer" exact component={Customer} />
                   <Route path="/customer/add" component={CustomerAdd} />
