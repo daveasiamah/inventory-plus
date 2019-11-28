@@ -6,6 +6,8 @@ import Home from "./components/admin/Home";
 // Product
 import Product from "./components/product/Product";
 import ProductAdd from "./components/product/ProductAdd";
+import ProductEdit from "./components/product/ProductEdit";
+import ProductShow from './components/product/ProductShow';
 // Affiliates
 import Affiliate from "./components/affiliate/Affiliate";
 import AffiliateAdd from "./components/affiliate/AffiliateAdd";
@@ -22,7 +24,7 @@ import Invoice from "./components/invoice/Invoice";
 import InvoiceAdd from "./components/invoice/InvoiceAdd";
 import InvoiceTemplate from "./components/invoice/InvoiceTemplate";
 import PageNotFound from "./components/layouts/PageNotFound";
-import ProductEdit from "./components/product/ProductEdit";
+
 
 class App extends Component {
   render() {
@@ -37,8 +39,9 @@ class App extends Component {
                   {/* products */}
                   <Route path="/" exact component={Home} />
                   <Route path="/product" exact component={Product} />
-                  <Route path="/product/:id/edit" component={ProductEdit}/>
                   <Route path="/product/add" component={ProductAdd} />
+                  <Route path="/product/:id" exact component={ProductShow}/>
+                  <Route path="/product/:id/edit" component={ProductEdit}/>
 
                   {/* affliates */}
                   <Route path="/affiliates" exact component={Affiliate} />

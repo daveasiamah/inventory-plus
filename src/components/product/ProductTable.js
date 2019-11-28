@@ -50,9 +50,9 @@ class ProductTable extends Component {
 									<td>{product.status ? "Yes" : "No"}</td>
 									<td>
 										<div className="btn-group">
-											<button className="btn btn-sm btn-info">
+											<Link to={`/product/${product._id}`} className="btn btn-sm btn-info">
 												<i className="la la-eye"></i>
-											</button>
+											</Link>
 											<Link
 												to={`/product/${product._id}/edit`}
 												className="btn btn-sm btn-warning"
