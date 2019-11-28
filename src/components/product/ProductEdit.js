@@ -91,12 +91,10 @@ class ProductEdit extends Component {
 		data.append("stock_alarm", singleProduct.stock_alarm);
 		data.append("sales_price", singleProduct.sales_price);
 		data.append("product_image", singleProduct.product_image);
+		// console.table(singleProduct);
 		
-		// console.table(data);
-		console.table(singleProduct);
-
 		let res = await axios.post(
-			`http://inventory.test/api/admin/product/a/update/${id}`,
+			`http://inventory.test/api/admin/product/update/${id}`,
 			data,
 			{
 				headers: {
@@ -105,7 +103,7 @@ class ProductEdit extends Component {
 			}
 		);
 
-		// this.setState({ singleProduct: [], loading: false , redirect: true });
+		this.setState({ singleProduct: [], loading: false , redirect: true });
 	};
 
 	renderRedirect = () => {

@@ -1,24 +1,19 @@
-import React, { Component, Fragment } from "react";
-import axios from "axios";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import React, { Component, Fragment }  from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-class ProductTable extends Component {
-	state = {
-		id: 0
+class SupplierTable extends Component {
+
+	static propTypes = {
+		suppliers: PropTypes.array.isRequired,
+		moveToArchives: PropTypes.func.isRequired,
 	};
-
+	
 	conFirmMoveToArchives = () => {
 		this.props.moveToArchives(this.state.id);
 	};
 
-	static propTypes = {
-		products: PropTypes.array.isRequired,
-		moveToArchives: PropTypes.func.isRequired,
-	};
-
 	render() {
-		const { products } = this.props;
 
 		return (
 			<Fragment>
@@ -26,38 +21,34 @@ class ProductTable extends Component {
 					<table className="table table-striped table-hover">
 						<thead>
 							<tr>
-								<th>SKU</th>
-								<th>Brand</th>
-								<th>Product Name</th>
-								<th>Category</th>
-								<th>SRP</th>
-								<th>Cost</th>
-								<th>Stock</th>
-								<th>Active</th>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Landline</th>
+								<th>Mobile</th>
+								<th>Fax</th>
+								<th>Contact Person</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							{products.map(product => (
-								<tr key={product._id}>
-									<td>{product.sku}</td>
-									<td>{product.brand}</td>
-									<td>{product.product_name}</td>
-									<td>{product.product_category}</td>
-									<td>{product.srp}</td>
-									<td>{product.cost}</td>
-									<td>{product.stocks}</td>
-									<td>{product.status ? "Yes" : "No"}</td>
+							{this.props.suppliers.map(supplier => (
+								<tr key={supplier._id}>
+									<td>{supplier.name}</td>
+									<td>{supplier.email}</td>
+									<td>{supplier.landline}</td>
+									<td>{supplier.mobile}</td>
+									<td>{supplier.fax}</td>
+									<td>{supplier.contact_person}</td>
 									<td>
 										<div className="btn-group">
-											<Link to={`/product/${product._id}`} className="btn btn-sm btn-info">
+											<Link to={`/supplier/${supplier._id}`} className="btn btn-sm btn-info">
 												<i className="la la-eye"></i>
 											</Link>
 											<Link
-												to={`/product/${product._id}/edit`}
+												to={`/product/${supplier._id}/edit`}
 												className="btn btn-sm btn-warning"
 											>
-												<i className="la la-edit"></i>
+											<i className="la la-edit"></i>
 											</Link>
 											<button
 												className="btn btn-sm btn-danger"
@@ -65,7 +56,7 @@ class ProductTable extends Component {
 												data-target="#delete-modal"
 												onClick={() =>
 													this.setState({
-														id: product._id
+														id: supplier._id
 													})
 												}
 											>
@@ -118,8 +109,8 @@ class ProductTable extends Component {
 					</div>
 				</div>
 			</Fragment>
-		);
+		)
 	}
 }
 
-export default ProductTable;
+export default SupplierTable

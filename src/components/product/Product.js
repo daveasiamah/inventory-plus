@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from 'react-router-dom';
 import axios from "axios";
 import Spinner from "../layouts/Spinner";
 import ProductTable from "./ProductTable";
@@ -31,14 +32,12 @@ class Product extends Component {
         this.setState({singleProduct: res.data});
     }
     
-    // update archived: 1 if deleted
-    moveToArchived = async id => {
+    // update archives: 1 if deleted
+    moveToArchives = async id => {
         let res = await axios.put(
-            `http://inventory.test/api/admin/product/archived/${id}`,
-            {
-                archived: 1
-            }
-        );
+            `http://inventory.test/api/admin/product/archives/${id}`,{
+                archives: 1
+            });
         // fetch the new updated data
         this.getProducts();
         console.log(res.data);
@@ -125,17 +124,26 @@ class Product extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> 
                 </section>
+                
+                <div className="row">
+                   <div className="col-sm-12">
+                        <Link to={'/product/add'} className="btn btn-primary btn-sm pull-right mb-2">
+                            Add New
+                        </Link>    
+                   </div>
+                </div>
 
                 <section className="row">
+
                     <div className="col-sm-12">
                         {this.state.loading ? (
                             <Spinner />
                         ) : this.state.products.length > 0 ? (
                             <ProductTable
                                 products={this.state.products}
-                                moveToArchived={this.moveToArchived}
+                                moveToArchives={this.moveToArchives}
                                 getSingleProduct={this.getSingleProduct}
                             />
                         ) : (

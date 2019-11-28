@@ -85,6 +85,11 @@ const Navbar = () => {
                             </ul>
                         </li>
                         <li className=" nav-item">
+                            <Link to="/supplier">
+                                <i className="la la-random"></i><span className="menu-title" data-i18n="">Supplier</span>
+                            </Link>
+                        </li>
+                        <li className=" nav-item">
                             <Link to="/inventory">
                                 <i className="la la-folder"></i><span className="menu-title" data-i18n="">Inventory</span>
                             </Link>

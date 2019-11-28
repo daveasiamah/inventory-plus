@@ -8,6 +8,12 @@ import Product from "./components/product/Product";
 import ProductAdd from "./components/product/ProductAdd";
 import ProductEdit from "./components/product/ProductEdit";
 import ProductShow from './components/product/ProductShow';
+
+// Supplier
+import Supplier from './components/supplier/Supplier';
+import SupplierAdd from './components/supplier/SupplierAdd';
+import SupplierEdit from './components/supplier/SupplierEdit';
+
 // Affiliates
 import Affiliate from "./components/affiliate/Affiliate";
 import AffiliateAdd from "./components/affiliate/AffiliateAdd";
@@ -42,6 +48,11 @@ class App extends Component {
                   <Route path="/product/add" component={ProductAdd} />
                   <Route path="/product/:id" exact component={ProductShow}/>
                   <Route path="/product/:id/edit" component={ProductEdit}/>
+                  
+                  {/* supplier */}
+                  <Route path="/supplier" exact component={Supplier} />
+                  <Route path="/supplier/add" component={SupplierAdd} />
+                  <Route path="/supplier/:id/edit" component={SupplierEdit}/>
 
                   {/* affliates */}
                   <Route path="/affiliates" exact component={Affiliate} />
