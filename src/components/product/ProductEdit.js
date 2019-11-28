@@ -9,7 +9,9 @@ class ProductEdit extends Component {
 		id: this.props.match.params.id,
 		singleProduct: [],
 		loading: false,
-		redirect: false
+		redirect: false,
+		product_image_display: '',
+		product_image_new: null
 	};
 
 	componentDidMount() {
@@ -53,7 +55,7 @@ class ProductEdit extends Component {
 				customization_fee: res.data.customization_fee,
 				stock_alarm: res.data.stock_alarm,
 				sales_price: res.data.sales_price,
-				// product_image: res.data.product_image
+				product_image: res.data.product_image
 			},
 			loading: false
 		});
@@ -62,7 +64,6 @@ class ProductEdit extends Component {
 	// update the data
 	updateSingleProduct = async (singleProduct, id) => {
 		const data = new FormData();
-		data.append("_method", "PUT");
 		data.append("sku", singleProduct.sku);
 		data.append("product_name", singleProduct.product_name);
 		data.append("brand", singleProduct.brand);
@@ -90,9 +91,12 @@ class ProductEdit extends Component {
 		data.append("stock_alarm", singleProduct.stock_alarm);
 		data.append("sales_price", singleProduct.sales_price);
 		data.append("product_image", singleProduct.product_image);
+		
+		// console.table(data);
+		console.table(singleProduct);
 
 		let res = await axios.post(
-			`http://inventory.test/api/admin/product/${id}`,
+			`http://inventory.test/api/admin/product/a/update/${id}`,
 			data,
 			{
 				headers: {
@@ -101,7 +105,7 @@ class ProductEdit extends Component {
 			}
 		);
 
-		this.setState({ singleProduct: [], loading: false , redirect: true });
+		// this.setState({ singleProduct: [], loading: false , redirect: true });
 	};
 
 	renderRedirect = () => {
@@ -117,14 +121,14 @@ class ProductEdit extends Component {
 				[e.target.name]: e.target.value
 			}
 		});
+
 	handleFileChange = e => {
-		this.setState({
-			singleProduct: {
-				...this.state.singleProduct,
-				product_image: URL.createObjectURL(e.target.files[0])
-			}
-		});
-		// this.setState({product_image_display: URL.createObjectURL(e.target.files[0])});
+		// this.setState({ product_image_new: e.target.files[0] })
+		this.setState({	singleProduct: {...this.state.singleProduct, product_image: e.target.files[0]}});
+
+		console.log(e.target.files[0]);
+		console.log(this.state.singleProduct);
+		this.setState({product_image_display: URL.createObjectURL(e.target.files[0])});
 	};
 
 	onFormSubmit = e => {
@@ -198,7 +202,6 @@ class ProductEdit extends Component {
 			stock_alarm,
 			sales_price,
 			product_image,
-			product_image_display
 		} = this.state.singleProduct;
 
 		const url = `http://inventory.test/`;
@@ -827,6 +830,36 @@ class ProductEdit extends Component {
 								</div>
 							</section>
 						</div>
+
+						<h4 className="form-section">
+							<i className="ft-clipboard"></i> Image
+						</h4>
+						<div className="card card-body">
+							<section className="row">
+								<div className="col-md-4">
+									<img
+										id="imagePreview"
+										src={ this.state.product_image_display
+											? this.state.product_image_display
+											: "/square.jpg"
+										}
+										alt="image"
+										className="img-fluid"
+									/>
+								</div>
+								<div id="drop-area" className="col-md-8">
+									<div align="center" className="m-5 py-5">
+										<input
+											id="product_image"
+											type="file"
+											name="product_image"
+											onChange={this.handleFileChange}
+										/>
+									</div>
+								</div>
+							</section>
+						</div>
+
 
 						<div className="row justify-content-end">
 							<div className="mr-2">

@@ -44,6 +44,7 @@ class ProductForm extends Component {
 			// show the image e
 			this.setState({ product_image_display: URL.createObjectURL(e.target.files[0])})
 			this.setState({ product_image: e.target.files[0] });
+			console.log(this.state.product_image)
 		}
 	
 		onFormSubmit = e => {

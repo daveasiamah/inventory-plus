@@ -22,6 +22,11 @@ class ProductTable extends Component {
 
 		return (
 			<Fragment>
+				<div>
+					<Link to={'/product/add'} className="btn btn-primary btn-sm pull-right mb-2">
+						Add New
+					</Link>
+				</div>
 				<div className="table-responsive">
 					<table className="table table-striped table-hover">
 						<thead>
