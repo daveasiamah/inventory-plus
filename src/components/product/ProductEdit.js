@@ -41,7 +41,7 @@ class ProductEdit extends Component {
 				dimension_height: res.data.dimension_height,
 				color: res.data.color,
 				specs_category: res.data.specs_category,
-				material_tags: res.data.material_tags.split(","),
+				material_tags: res.data.material_tags,
 				fitting_type: res.data.fitting_type,
 				fitting_qty: res.data.fitting_qty,
 				weight_kg: res.data.weight_kg,
@@ -169,6 +169,7 @@ class ProductEdit extends Component {
 
 	render() {
 		// destructuring
+		console.log(this.state.singleProduct)
 		const {
 			sku,
 			product_name,

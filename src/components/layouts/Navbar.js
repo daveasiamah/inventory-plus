@@ -72,7 +72,7 @@ const Navbar = () => {
                             </a>
                             <ul className="menu-content">
                                 <li><Link className="menu-item" to="/product" data-i18n="nav.starter_kit.fixed_layout">Products</Link></li>
-                                <li><a className="menu-item" href="#" data-i18n="nav.starter_kit.boxed_layout">Brands</a>
+                                <li><a className="menu-item" href="/brand" data-i18n="nav.starter_kit.boxed_layout">Brands</a>
                                 </li>
                                 <li><a className="menu-item" href="#" data-i18n="nav.starter_kit.static_layout">Categories</a>
                                 </li>

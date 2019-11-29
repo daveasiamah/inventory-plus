@@ -14,6 +14,11 @@ import Supplier from './components/supplier/Supplier';
 import SupplierAdd from './components/supplier/SupplierAdd';
 import SupplierEdit from './components/supplier/SupplierEdit';
 
+// Brand
+import Brand from './components/brand/Brand';
+import BrandAdd from './components/brand/BrandAdd';
+// import BrandEdit from './components/brand/BrandEdit';
+
 // Affiliates
 import Affiliate from "./components/affiliate/Affiliate";
 import AffiliateAdd from "./components/affiliate/AffiliateAdd";
@@ -49,10 +54,15 @@ class App extends Component {
                   <Route path="/product/:id" exact component={ProductShow}/>
                   <Route path="/product/:id/edit" component={ProductEdit}/>
                   
-                  {/* supplier */}
+                  {/* suppliers */}
                   <Route path="/supplier" exact component={Supplier} />
                   <Route path="/supplier/add" component={SupplierAdd} />
                   <Route path="/supplier/:id/edit" component={SupplierEdit}/>
+
+                  {/* brands */}
+                  <Route path="/brand" exact component={Brand} />
+                  <Route path="/brand/add" component={BrandAdd} />
+                  {/*<Route path="/brand/:id/edit" component={BrandEdit}/>*/}
 
                   {/* affliates */}
                   <Route path="/affiliates" exact component={Affiliate} />

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import Spinner from "../layouts/Spinner";
 import axios from 'axios';
+import Pagination from "react-js-pagination";
 import SupplierTable from './SupplierTable';
 
 class Supplier extends Component {
@@ -9,6 +10,10 @@ class Supplier extends Component {
 	state = {
 		suppliers: [],
 		loading: false,
+        activePage: 1,
+        itemsCountPerPage: 1,
+        totalItemsCount: 10,
+        pageRangeDisplayed: 0
 	}
 
 	componentDidMount() {
@@ -21,8 +26,8 @@ class Supplier extends Component {
         let res = await axios.get(`http://inventory.test/api/admin/supplier`);
 
         console.log(res.data);
-        this.setState({ suppliers: res.data.suppliers });
-        this.setState({ loading: false });
+        this.setState({ suppliers: res.data.suppliers.data });
+        this.setState({ loading: false, pageRangeDisplayed: res.data.suppliers.total / res.data.suppliers.per_page});
     };
     
     // update archives: 1 if deleted
@@ -32,6 +37,19 @@ class Supplier extends Component {
         // fetch the new updated data
         this.getSuppliers();
     };
+
+    handlePageChange = (pageNumber) => {
+        // console.log(`active page is ${pageNumber}`);
+        // this.setState({activePage: pageNumber});
+        axios.get(`http://inventory.test/api/admin/supplier?page=${pageNumber}`)
+                    .then(res => this.setState({
+                                suppliers: res.data.suppliers.data,
+                                itemsCountPerPage: res.data.suppliers.per_page,
+                                totalItemsCount: res.data.suppliers.total,
+                                activePage: res.data.suppliers.current_page
+                            })
+                        )
+    }
 
 	render() {
 		return (
@@ -60,6 +78,20 @@ class Supplier extends Component {
                         )}
                     </div>
             	</section>
+                
+                <div className="d-flex justify-content-center">
+                     <Pagination
+                        className="pagination"
+                        activePage={this.state.activePage}
+                        itemsCountPerPage={this.state.itemsCountPerPage}
+                        totalItemsCount={this.state.totalItemsCount}
+                        pageRangeDisplayed={this.state.pageRangeDisplayed}
+                        onChange={this.handlePageChange}
+                        itemClass='page-item'
+                        linkClass='page-link'
+                    />
+                </div>
+               
 			</div>
 		)
 	}
