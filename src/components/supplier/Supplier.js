@@ -8,7 +8,6 @@ class Supplier extends Component {
 		
 	state = {
 		suppliers: [],
-		singleSupplier: [],
 		loading: false,
 	}
 
@@ -55,7 +54,6 @@ class Supplier extends Component {
                             <SupplierTable
                                 suppliers={this.state.suppliers}
                                 moveToArchives={this.moveToArchives}
-                                getSingleSupplier={this.getSingleSupplier}
                             />
                         ) : (
                             <h1 align="center" className="mt-5">Sorry there's no data...</h1>

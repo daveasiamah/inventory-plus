@@ -123,9 +123,6 @@ class ProductEdit extends Component {
 	handleFileChange = e => {
 		// this.setState({ product_image_new: e.target.files[0] })
 		this.setState({	singleProduct: {...this.state.singleProduct, product_image: e.target.files[0]}});
-
-		console.log(e.target.files[0]);
-		console.log(this.state.singleProduct);
 		this.setState({product_image_display: URL.createObjectURL(e.target.files[0])});
 	};
 

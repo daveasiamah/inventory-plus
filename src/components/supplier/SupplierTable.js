@@ -1,18 +1,34 @@
 import React, { Component, Fragment }  from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
+import SupplierShowModal from './SupplierShowModal';
 
 class SupplierTable extends Component {
+	state = {
+		id: 0,
+		singleSupplier: [],
+		showModal: false,
+		close: false,
+	}
 
 	static propTypes = {
 		suppliers: PropTypes.array.isRequired,
 		moveToArchives: PropTypes.func.isRequired,
 	};
+
+	getSingleSupplier = async (id) => {
+        let res = await axios.get(`http://inventory.test/api/admin/supplier/${id}`)
+                                .catch(err => console.log(err));
+
+        this.setState({singleSupplier: res.data.supplier });
+        console.log(res.data.supplier)
+    }
 	
 	conFirmMoveToArchives = () => {
 		this.props.moveToArchives(this.state.id);
 	};
-
+	
 	render() {
 
 		return (
@@ -41,11 +57,30 @@ class SupplierTable extends Component {
 									<td>{supplier.contact_person}</td>
 									<td>
 										<div className="btn-group">
-											<Link to={`/supplier/${supplier._id}`} className="btn btn-sm btn-info">
+											<SupplierShowModal>
+												<h3>{supplier.name}</h3>
+												<p><strong>Business Name:</strong> {supplier.business_name}</p>
+												<p><strong>Address:</strong> {supplier.address}</p>
+												<p><strong>Landline:</strong> {supplier.landline}</p>
+												<p><strong>Fax:</strong> {supplier.fax}</p>
+												<p><strong>Email:</strong> {supplier.email}</p>
+												<p><strong>Mobile: </strong>{supplier.mobile}</p>
+												<p><strong>Contact Person: </strong> {supplier.contact_person}</p>
+												<hr/>
+												<p>created: {supplier.created_at}</p>
+												<p>updated: {supplier.updated_at}</p>
+											</SupplierShowModal>
+											<button 
+												onClick={() => this.setState({id: supplier._id})}
+												className="btn btn-sm btn-info"
+												data-toggle="modal"
+												data-target="#show-modal"
+															
+												>
 												<i className="la la-eye"></i>
-											</Link>
+											</button>
 											<Link
-												to={`/product/${supplier._id}/edit`}
+												to={`/supplier/${supplier._id}/edit`}
 												className="btn btn-sm btn-warning"
 											>
 											<i className="la la-edit"></i>

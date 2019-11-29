@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import SupplierForm from './SupplierForm';
 import Spinner from "../layouts/Spinner";
 import axios from 'axios';
@@ -6,7 +7,8 @@ import axios from 'axios';
 class SupplierAdd extends Component {
 	
 	state = {
-		loading: false
+		loading: false,
+		redirect: false,
 	}
 
 	supplierPost = async (supplier) => {
@@ -25,12 +27,15 @@ class SupplierAdd extends Component {
 	
 		let res = await axios.post(`http://inventory.test/api/admin/supplier`, postData)
 				.catch(err => console.log(err));
-		this.setState({ loading: false });
+				
+		this.setState({ loading: false, redirect: true });
 	}
 
 	render() {
 		if(this.state.loading){
 			return <Spinner />
+		}else if (this.state.redirect){
+			return <Redirect to='/supplier' />
 		}else{
 			return (
 				<div>
