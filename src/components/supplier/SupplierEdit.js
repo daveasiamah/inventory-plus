@@ -9,12 +9,13 @@ class SupplierEdit extends Component {
 		singleSupplier: [],
 		loading: false,
 		redirect: false,
+		errors: null
 	};
 	
 	componentDidMount() {
 		this.getSingleSupplier(this.state.id);
 	}
-	
+
 	getSingleSupplier = async id => {
 		this.setState({ loading: true });
 
@@ -35,6 +36,19 @@ class SupplierEdit extends Component {
 		});
 	}
 
+	// handle input
+	handleInputChange = (e) => {
+		this.setState({ singleSupplier: { ...this.state.singleSupplier, [e.target.name]: e.target.value}})
+	}
+	
+	// on submit
+	onFormSubmit = (e) => {
+		e.preventDefault();
+		let supplier = this.state.singleSupplier;
+		let id = this.state.id;
+		this.updateSingleSupplier(supplier, id);
+	}
+
 	// update single supplier
 	updateSingleSupplier = async (supplier, id) => {
 		let res = await axios.put(`http://inventory.test/api/admin/supplier/${id}`, {
@@ -51,22 +65,7 @@ class SupplierEdit extends Component {
 		this.setState({singleSupplier: [], loading: false, redirect: true })
 	}
 	
-	// handle input
-	handleInputChange = (e) => {
-		this.setState({ singleSupplier: { ...this.state.singleSupplier, [e.target.name]: e.target.value}})
-	}
 	
-	// on submit
-	onFormSubmit = (e) => {
-		e.preventDefault();
-
-		if(e.target.value !== ''){
-			let supplier = this.state.singleSupplier;
-			let id = this.state.id;
-			this.updateSingleSupplier(supplier, id);
-		}
-	}
-
 	render() {
 		// console.log(this.state.singleSupplier)
 		const { name, business_name, address, landline, fax, email, mobile, contact_person, archives } = this.state.singleSupplier; 
@@ -75,7 +74,7 @@ class SupplierEdit extends Component {
 			// loading spinner
 			return <Spinner/>
 		}else if(this.state.redirect){
-			// redirect to
+			// redirect 
 			return <Redirect to='/supplier'/>
 		}else{
 			return(
@@ -83,6 +82,16 @@ class SupplierEdit extends Component {
 					<div className="mb-2">
 						<h2>Edit Supplier</h2>
 					</div>
+					
+					<div>{this.state.errors && this.state.errors.map(error => (
+					  		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+								<li>{error}</li>
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							    	<span aria-hidden="true">&times;</span>
+							  	</button>
+							</div>
+					  	)) }
+					 </div>
 
 					<form onKeyPress={e => {if (e.key === "Enter") e.preventDefault()}}
 				          onSubmit={e => this.onFormSubmit(e)}>

@@ -77,7 +77,6 @@ class SupplierTable extends Component {
 												className="btn btn-sm btn-info"
 												data-toggle="modal"
 												data-target="#show-modal"
-															
 												>
 												<i className="la la-eye"></i>
 											</button>
