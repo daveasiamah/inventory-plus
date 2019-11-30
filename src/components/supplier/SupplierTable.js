@@ -14,6 +14,7 @@ class SupplierTable extends Component {
 
 	static propTypes = {
 		suppliers: PropTypes.array.isRequired,
+		totalCount: PropTypes.number.isRequired,
 		moveToArchives: PropTypes.func.isRequired,
 	};
 
@@ -33,6 +34,7 @@ class SupplierTable extends Component {
 
 		return (
 			<Fragment>
+				<h4>Total: {this.props.totalCount}</h4>
 				<div className="table-responsive">
 					<table className="table table-striped table-hover">
 						<thead>

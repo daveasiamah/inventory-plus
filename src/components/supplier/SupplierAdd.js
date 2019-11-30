@@ -9,6 +9,7 @@ class SupplierAdd extends Component {
 	state = {
 		loading: false,
 		redirect: false,
+		errors: null,
 	}
 
 	supplierPost = async (supplier) => {
@@ -26,10 +27,22 @@ class SupplierAdd extends Component {
 		}
 	
 		let res = await axios.post(`http://inventory.test/api/admin/supplier`, postData)
-				.catch(err => console.log(err));
-				
-		this.setState({ loading: false, redirect: true });
-	}
+					switch(res.data.status){
+						case 0:
+							this.setState({ errors: res.data.errors })
+							break;
+
+						case 1:
+							this.setState({ loading: false, redirect: true });
+							break;
+
+						default:
+							break;
+					}
+		
+		this.setState({ loading: false });
+
+	}		
 
 	render() {
 		if(this.state.loading){
@@ -41,7 +54,7 @@ class SupplierAdd extends Component {
 				<div>
 					<h1>Add Supplier</h1>
 
-					<SupplierForm supplierPost={this.supplierPost}/>
+					<SupplierForm supplierPost={this.supplierPost} errors={this.state.errors}/>
 				</div>
 			)
 		}

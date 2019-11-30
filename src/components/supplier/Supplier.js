@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Spinner from "../layouts/Spinner";
 import axios from 'axios';
@@ -9,10 +9,11 @@ class Supplier extends Component {
 		
 	state = {
 		suppliers: [],
+        totalCount: '',
 		loading: false,
         activePage: 1,
         itemsCountPerPage: 1,
-        totalItemsCount: 10,
+        totalItemsCount: 8,
         pageRangeDisplayed: 0
 	}
 
@@ -26,7 +27,7 @@ class Supplier extends Component {
         let res = await axios.get(`http://inventory.test/api/admin/supplier`);
 
         console.log(res.data);
-        this.setState({ suppliers: res.data.suppliers.data });
+        this.setState({ suppliers: res.data.suppliers.data, totalCount: res.data.count });
         this.setState({ loading: false, pageRangeDisplayed: res.data.suppliers.total / res.data.suppliers.per_page});
     };
     
@@ -69,29 +70,34 @@ class Supplier extends Component {
                         {this.state.loading ? (
                             <Spinner />
                         ) : this.state.suppliers.length > 0 ? (
-                            <SupplierTable
-                                suppliers={this.state.suppliers}
-                                moveToArchives={this.moveToArchives}
-                            />
+                            <Fragment>
+                                <SupplierTable
+                                    suppliers={this.state.suppliers}
+                                    totalCount={this.state.totalCount}
+                                    moveToArchives={this.moveToArchives}
+                                />
+
+                            {this.state.totalCount.length >= 10 && 
+
+                                <div className="d-flex justify-content-center">
+                                     <Pagination
+                                        className="pagination"
+                                        activePage={this.state.activePage}
+                                        itemsCountPerPage={this.state.itemsCountPerPage}
+                                        totalItemsCount={this.state.totalItemsCount}
+                                        pageRangeDisplayed={this.state.pageRangeDisplayed}
+                                        onChange={this.handlePageChange}
+                                        itemClass='page-item'
+                                        linkClass='page-link'
+                                    />
+                                </div>
+                            }
+                            </Fragment>
                         ) : (
-                            <h1 align="center" className="mt-5">Sorry there's no data...</h1>
+                            <h1 align="center" className="mt-5">There's No Data to show...</h1>
                         )}
                     </div>
-            	</section>
-                
-                <div className="d-flex justify-content-center">
-                     <Pagination
-                        className="pagination"
-                        activePage={this.state.activePage}
-                        itemsCountPerPage={this.state.itemsCountPerPage}
-                        totalItemsCount={this.state.totalItemsCount}
-                        pageRangeDisplayed={this.state.pageRangeDisplayed}
-                        onChange={this.handlePageChange}
-                        itemClass='page-item'
-                        linkClass='page-link'
-                    />
-                </div>
-               
+            	</section>   
 			</div>
 		)
 	}
