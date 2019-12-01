@@ -4,6 +4,7 @@ import Spinner from "../layouts/Spinner";
 import axios from 'axios';
 import Pagination from "react-js-pagination";
 import SupplierTable from './SupplierTable';
+import SupplierSearch from './SupplierSearch';
 
 class Supplier extends Component {
 		
@@ -13,7 +14,7 @@ class Supplier extends Component {
 		loading: false,
         activePage: 1,
         itemsCountPerPage: 1,
-        totalItemsCount: 8,
+        totalItemsCount: 10,
         pageRangeDisplayed: 0
 	}
 
@@ -46,24 +47,35 @@ class Supplier extends Component {
                     .then(res => this.setState({
                                 suppliers: res.data.suppliers.data,
                                 itemsCountPerPage: res.data.suppliers.per_page,
-                                totalItemsCount: res.data.suppliers.total,
+                                totalItemsCount: Math.ceil(res.data.suppliers.total / res.data.suppliers.per_page),
                                 activePage: res.data.suppliers.current_page
                             })
                         )
     }
+
+    // search supplier
+    searchSupplier = (text) => {
+        axios.get(``)
+    } 
+    
 
 	render() {
 		return (
 			<div>
 				<h1>Supplier</h1>
 
-				<div className="row">
+				<div className="row mt-2">
                    <div className="col-sm-12">
+                      <h3 className="pull-left">Total: {this.state.totalCount}</h3>
                        <Link to={'/supplier/add'} className="btn btn-primary btn-sm pull-right mb-2">
 							Add New
 						</Link>
                    </div>
                 </div>
+                
+                <section>
+                    <SupplierSearch />
+                </section>    
 
 				<section className="row">
                     <div className="col-sm-12">
@@ -77,7 +89,7 @@ class Supplier extends Component {
                                     moveToArchives={this.moveToArchives}
                                 />
 
-                            {this.state.totalCount.length >= 10 && 
+                            {this.state.totalCount > 10 && 
 
                                 <div className="d-flex justify-content-center">
                                      <Pagination

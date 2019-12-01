@@ -8,20 +8,17 @@ class SupplierTable extends Component {
 	state = {
 		id: 0,
 		singleSupplier: [],
-		showModal: false,
-		close: false,
+		isOpen: false,
 	}
 
 	static propTypes = {
 		suppliers: PropTypes.array.isRequired,
-		totalCount: PropTypes.number.isRequired,
 		moveToArchives: PropTypes.func.isRequired,
 	};
 
 	getSingleSupplier = async (id) => {
         let res = await axios.get(`http://inventory.test/api/admin/supplier/${id}`)
-                                .catch(err => console.log(err));
-
+                             
         this.setState({singleSupplier: res.data.supplier });
         console.log(res.data.supplier)
     }
@@ -29,12 +26,15 @@ class SupplierTable extends Component {
 	conFirmMoveToArchives = () => {
 		this.props.moveToArchives(this.state.id);
 	};
+
+	showModal = (id) => {
+		this.getSingleSupplier(id);
+	}
 	
 	render() {
 
 		return (
 			<Fragment>
-				<h4>Total: {this.props.totalCount}</h4>
 				<div className="table-responsive">
 					<table className="table table-striped table-hover">
 						<thead>
@@ -59,21 +59,8 @@ class SupplierTable extends Component {
 									<td>{supplier.contact_person}</td>
 									<td>
 										<div className="btn-group">
-											<SupplierShowModal>
-												<h3>{supplier.name}</h3>
-												<p><strong>Business Name:</strong> {supplier.business_name}</p>
-												<p><strong>Address:</strong> {supplier.address}</p>
-												<p><strong>Landline:</strong> {supplier.landline}</p>
-												<p><strong>Fax:</strong> {supplier.fax}</p>
-												<p><strong>Email:</strong> {supplier.email}</p>
-												<p><strong>Mobile: </strong>{supplier.mobile}</p>
-												<p><strong>Contact Person: </strong> {supplier.contact_person}</p>
-												<hr/>
-												<p>created: {supplier.created_at}</p>
-												<p>updated: {supplier.updated_at}</p>
-											</SupplierShowModal>
 											<button 
-												onClick={() => this.setState({id: supplier._id})}
+												onClick={() => this.showModal(supplier._id)}
 												className="btn btn-sm btn-info"
 												data-toggle="modal"
 												data-target="#show-modal"
@@ -144,6 +131,8 @@ class SupplierTable extends Component {
 						</div>
 					</div>
 				</div>
+
+				<SupplierShowModal singleSupplier={this.state.singleSupplier}/>
 			</Fragment>
 		)
 	}

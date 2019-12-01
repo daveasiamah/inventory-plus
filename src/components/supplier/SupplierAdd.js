@@ -37,23 +37,31 @@ class SupplierAdd extends Component {
 		}
 	
 		let res = await axios.post(`http://inventory.test/api/admin/supplier`, postData)
-					switch(res.data.status){
-						case 0:
-							this.setState({ errors: res.data.errors })
-							break;
-						case 1:
-							this.setState({ loading: false, redirect: true });
-							break;
-						default:
-							break;
-					}
+							switch(res.data.status){
+								case 0:
+									this.setState({ errors: res.data.errors })
+									break;
+								case 1:
+									this.setState({ loading: false, redirect: true });
+									break;
+								default:
+									break;
+							}
 		
 		this.setState({ loading: false });
 	}		
 	
 	render() {
 
-		const { name, business_name, address, landline, fax, email, mobile, contact_person} = this.state.supplier;
+		const { 
+			name, 
+			business_name, 
+			address, 
+			landline, 
+			fax, 
+			email, 
+			mobile, 
+			contact_person } = this.state.supplier;
 
 		if(this.state.loading){
 			// load spinner

@@ -51,7 +51,7 @@ class SupplierEdit extends Component {
 
 	// update single supplier
 	updateSingleSupplier = async (supplier, id) => {
-		let res = await axios.put(`http://inventory.test/api/admin/supplier/${id}`, {
+		let updateData = {
 			name: supplier.name,
 			business_name: supplier.business_name,
 			address: supplier.address,
@@ -60,15 +60,38 @@ class SupplierEdit extends Component {
 			email: supplier.email,
 			mobile: supplier.mobile,
 			contact_person: supplier.contact_person
-		})
-			
-		this.setState({singleSupplier: [], loading: false, redirect: true })
+		}
+
+		let res = await axios.put(`http://inventory.test/api/admin/supplier/${id}`, updateData)
+							switch(res.data.status){
+								case 0:
+									this.setState({ errors: res.data.errors })
+									break;
+								case 1:
+									this.setState({
+										singleSupplier: [], 
+										loading: false, 
+										redirect: true 
+									});
+									break;
+							}
+		
+		this.setState({ loading: false });
 	}
 	
 	
 	render() {
 		// console.log(this.state.singleSupplier)
-		const { name, business_name, address, landline, fax, email, mobile, contact_person, archives } = this.state.singleSupplier; 
+		const { 
+			name, 
+			business_name, 
+			address, 
+			landline, 
+			fax, 
+			email, 
+			mobile, 
+			contact_person, 
+			archives } = this.state.singleSupplier; 
 
 		if(this.state.loading){
 			// loading spinner
