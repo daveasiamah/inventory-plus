@@ -38,13 +38,24 @@ class ProductForm extends Component {
 		static propTypes = {
 			postProduct: PropTypes.func.isRequired,
 		}
+		
 
+		// handle inputs
+		handleInputChange = (e) => this.setState({brand: { ...this.state.brand,[e.target.name]: e.target.value } });
+		
+		// on submit
+		onFormSubmit = (e)=> {
+			e.preventDefault();
+			this.brandPost(this.state.brand);
+		};
+
+		
 		handleInputChange = e => this.setState({[e.target.name]: e.target.value });
 		handleFileChange = e => {
 			// show the image e
 			this.setState({ product_image_display: URL.createObjectURL(e.target.files[0])})
 			this.setState({ product_image: e.target.files[0] });
-			console.log(this.state.product_image)
+			// console.log(this.state.product_image)
 		}
 	
 		onFormSubmit = e => {
@@ -75,12 +86,12 @@ class ProductForm extends Component {
 		    }
 		 };
 
-	  removeTag = id => {
-	    // console.log(id)
-	    const tags = this.state.material_tags;
-	    tags.splice(id, 1);
-	    this.setState({ material_tags: tags });
-	  };
+		removeTag = id => {
+		    // console.log(id)
+		    const tags = this.state.material_tags;
+		    tags.splice(id, 1);
+		    this.setState({ material_tags: tags });
+		};
 
 	  clearValue = () => {
 	    const cleared = this.setState({

@@ -21,14 +21,14 @@ class Supplier extends Component {
 	componentDidMount() {
 		this.getSuppliers();
 	}
-		
+    	
 	// fetch all suppliers
     getSuppliers = async () => {
         this.setState({ loading: true });
         let res = await axios.get(`http://inventory.test/api/admin/supplier`);
             this.setState({ 
                 suppliers: res.data.suppliers.data, 
-                totalCount: res.data.count,
+                totalCount: res.data.suppliers.total,
                 loading: false 
             });
     };
@@ -65,7 +65,7 @@ class Supplier extends Component {
         
         this.setState({
              suppliers: res.data.suppliers.data,
-             totalCount: res.data.count,
+             totalCount: res.data.suppliers.total,
              loading: false     
         });        
     }

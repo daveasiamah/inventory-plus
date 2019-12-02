@@ -42,7 +42,7 @@ export class SupplierSearch extends Component {
 				</div>
 
 				<div className="col-auto">
-					<Link to={'/supplier/add'} className="btn btn-primary btn-sm pull-right mb-2">
+					<Link to={'/brand/add'} className="btn btn-primary btn-sm pull-right mb-2">
 						Add New
 					</Link>
 				</div>

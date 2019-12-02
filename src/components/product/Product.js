@@ -1,14 +1,19 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import Spinner from "../layouts/Spinner";
+import Pagination from "react-js-pagination";
 import ProductTable from "./ProductTable";
 
 class Product extends Component {
     state = {
         products: [],
         loading: false,
-        singleProduct: []
+        singleProduct: [],
+        activePage: 1,
+        itemsCountPerPage: 1,
+        totalItemsCount: 10,
+        pageRangeDisplayed: 8
     };
 
     componentDidMount() {
@@ -19,10 +24,11 @@ class Product extends Component {
     getProducts = async () => {
         this.setState({ loading: true });
         let res = await axios.get(`http://inventory.test/api/admin/product`);
-
-        // console.log(res.data);
-        this.setState({ products: res.data });
-        this.setState({ loading: false });
+            this.setState({ 
+                products: res.data.products.data, 
+                totalCount: res.data.products.total,
+                loading: false 
+            });
     };
     
     // fetch single item
@@ -141,11 +147,29 @@ class Product extends Component {
                         {this.state.loading ? (
                             <Spinner />
                         ) : this.state.products.length > 0 ? (
-                            <ProductTable
-                                products={this.state.products}
-                                moveToArchives={this.moveToArchives}
-                                getSingleProduct={this.getSingleProduct}
-                            />
+                            <Fragment>
+                                <ProductTable
+                                    products={this.state.products}
+                                    moveToArchives={this.moveToArchives}
+                                    getSingleProduct={this.getSingleProduct}
+                                />
+
+                            {this.state.totalCount > 10 && (
+                                <div className="d-flex justify-content-center">
+                                     <Pagination
+                                        className="pagination"
+                                        itemClass='page-item'
+                                        linkClass='page-link'
+                                        activePage={this.state.activePage}
+                                        itemsCountPerPage={this.state.itemsCountPerPage}
+                                        totalItemsCount={this.state.totalItemsCount}
+                                        pageRangeDisplayed={this.state.pageRangeDisplayed}
+                                        onChange={this.handlePageChange}
+                                    />
+                                </div>
+                            )}    
+
+                            </Fragment>
                         ) : (
                             <h1>No Data to Show...</h1>
                         )}

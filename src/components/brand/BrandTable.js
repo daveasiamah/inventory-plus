@@ -1,24 +1,37 @@
-import React, { Component, Fragment } from "react";
-import axios from "axios";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import React, { Component, Fragment }  from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import BrandShowModal from './BrandShowModal';
 
-class ProductTable extends Component {
+class BrandTable extends Component {
 	state = {
-		id: 0
+		id: 0,
+		singleBrand: [],
+		isOpen: false,
+	}
+
+	static propTypes = {
+		brands: PropTypes.array.isRequired,
+		moveToArchives: PropTypes.func.isRequired,
 	};
 
+	getSingleBrand = async (id) => {
+        let res = await axios.get(`http://inventory.test/api/admin/brand/${id}`)
+                            
+        this.setState({singleBrand: res.data.brand });
+        // console.log(res.data.supplier)
+    }
+	
 	conFirmMoveToArchives = () => {
 		this.props.moveToArchives(this.state.id);
 	};
 
-	static propTypes = {
-		products: PropTypes.array.isRequired,
-		moveToArchives: PropTypes.func.isRequired,
-	};
-
+	showModal = (id) => {
+		this.getSingleBrand(id);
+	}
+	
 	render() {
-		const { products } = this.props;
 
 		return (
 			<Fragment>
@@ -26,48 +39,43 @@ class ProductTable extends Component {
 					<table className="table table-striped table-hover">
 						<thead>
 							<tr>
-								<th>SKU</th>
-								<th>Brand</th>
-								<th>Product Name</th>
-								<th>Category</th>
-								<th>SRP</th>
-								<th>Cost</th>
-								<th>Stock</th>
-								<th>Active</th>
+								<th>Name</th>
+								<th>Description</th>
+								<th>Unit</th>
+								<th>Attributes</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							{products.map(product => (
-								<tr key={product._id}>
-									<td>{product.sku}</td>
-									<td>{product.brand}</td>
-									<td>{product.product_name}</td>
-									<td>{product.product_category}</td>
-									<td>{product.srp}</td>
-									<td>{product.cost}</td>
-									<td>{product.stocks}</td>
-									<td>{product.status ? "Yes" : "No"}</td>
+							{this.props.brands.map(brand => (
+								<tr key={brand._id}>
+									<td>{brand.name}</td>
+									<td>{brand.description}</td>
+									<td>{brand.unit}</td>
+									<td>{brand.attributes}</td>
 									<td>
 										<div className="btn-group">
-											<Link 
-												to={`/product/${product._id}`} 
-												className="btn btn-sm btn-info">
-												<i className="fa ft-eye"></i>
-											</Link>
+											<button 
+												onClick={() => this.showModal(brand._id)}
+												className="btn btn-sm btn-info btn-sm"
+												data-toggle="modal"
+												data-target="#show-modal"
+												>
+												<i className="ft ft-eye"></i>
+											</button>
 											<Link
-												to={`/product/${product._id}/edit`}
-												className="btn btn-sm btn-warning"
+												to={`/brand/${brand._id}/edit`}
+												className="btn btn-sm btn-warning btn-sm"
 											>
-												<i className="ft ft-edit"></i>
+											<i className="ft ft-edit"></i>
 											</Link>
 											<button
-												className="btn btn-sm btn-danger"
+												className="btn btn-sm btn-danger btn-sm"
 												data-toggle="modal"
 												data-target="#delete-modal"
 												onClick={() =>
 													this.setState({
-														id: product._id
+														id: brand._id
 													})
 												}
 											>
@@ -119,9 +127,11 @@ class ProductTable extends Component {
 						</div>
 					</div>
 				</div>
+
+				<BrandShowModal singleBrand={this.state.singleBrand}/>
 			</Fragment>
-		);
+		)
 	}
 }
 
-export default ProductTable;
+export default BrandTable
