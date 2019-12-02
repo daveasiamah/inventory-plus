@@ -20,15 +20,6 @@ class Supplier extends Component {
 
 	componentDidMount() {
 		this.getSuppliers();
-
-        // axios.get(`http://inventory.test/api/admin/supplier?page=${pageNumber}`)
-        //         .then(res => this.setState({
-        //                     suppliers: res.data.suppliers.data,
-        //                     activePage: res.data.suppliers.current_page,
-        //                     itemsCountPerPage: res.data.suppliers.per_page,
-        //                     totalItemsCount: res.data.suppliers.total,
-        //                 })
-        //             )
 	}
 		
 	// fetch all suppliers
@@ -49,9 +40,9 @@ class Supplier extends Component {
         // fetch the new updated data
         this.getSuppliers();
     };
-
+    
+    // pagination links
     handlePageChange = (pageNumber) => {
-        // console.log(`active page is ${pageNumber}`);
         // this.setState({activePage: pageNumber});
         axios.get(`http://inventory.test/api/admin/supplier?page=${pageNumber}`)
                     .then(res => this.setState({
@@ -63,10 +54,21 @@ class Supplier extends Component {
                         )
     }
 
-    // search  
-    searchSupplier = (text) => {
-        axios.get(``)
-    } 
+
+    // search 
+    searchSupplier = async (search) => {
+        this.setState({ loading: true});
+
+        let res = await axios.post(`http://inventory.test/api/admin/supplier/search`, {
+            search: search
+        });
+        
+        this.setState({
+             suppliers: res.data.suppliers.data,
+             totalCount: res.data.count,
+             loading: false     
+        });        
+    }
     
 	render() {
 		return (
@@ -76,14 +78,12 @@ class Supplier extends Component {
 				<div className="row mt-2">
                    <div className="col-sm-12">
                       <h3 className="pull-left">Total: {this.state.totalCount}</h3>
-                       <Link to={'/supplier/add'} className="btn btn-primary btn-sm pull-right mb-2">
-							Add New
-						</Link>
+                       
                    </div>
                 </div>
                 
-                <section>
-                    <SupplierSearch />
+                <section className="row">
+                    <SupplierSearch searchSupplier={this.searchSupplier}/>
                 </section>    
 
 				<section className="row">

@@ -61,20 +61,20 @@ class SupplierTable extends Component {
 										<div className="btn-group">
 											<button 
 												onClick={() => this.showModal(supplier._id)}
-												className="btn btn-sm btn-info"
+												className="btn btn-sm btn-info btn-sm"
 												data-toggle="modal"
 												data-target="#show-modal"
 												>
-												<i className="la la-eye"></i>
+												<i className="ft ft-eye"></i>
 											</button>
 											<Link
 												to={`/supplier/${supplier._id}/edit`}
-												className="btn btn-sm btn-warning"
+												className="btn btn-sm btn-warning btn-sm"
 											>
-											<i className="la la-edit"></i>
+											<i className="ft ft-edit"></i>
 											</Link>
 											<button
-												className="btn btn-sm btn-danger"
+												className="btn btn-sm btn-danger btn-sm"
 												data-toggle="modal"
 												data-target="#delete-modal"
 												onClick={() =>
@@ -83,7 +83,7 @@ class SupplierTable extends Component {
 													})
 												}
 											>
-												<i className="la la-times"></i>
+												<i className="ft ft-x"></i>
 											</button>
 										</div>
 									</td>
