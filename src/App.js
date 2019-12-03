@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
 import Navbar from "./components/layouts/Navbar";
 import Footer from "./components/layouts/Footer";
 import Home from "./components/admin/Home";
+
 // Product
 import Product from "./components/product/Product";
 import ProductAdd from "./components/product/ProductAdd";
@@ -19,17 +21,25 @@ import Brand from './components/brand/Brand';
 import BrandCreate from './components/brand/BrandCreate';
 import BrandEdit from './components/brand/BrandEdit';
 
+// Brand
+import Category from './components/category/Category';
+import CategoryCreate from './components/category/CategoryCreate';
+import CategoryEdit from './components/category/CategoryEdit'
+
 // Affiliates
 import Affiliate from "./components/affiliate/Affiliate";
 import AffiliateAdd from "./components/affiliate/AffiliateAdd";
 import AffiliatesCommission from "./components/affiliate/AffiliatesCommission";
 import AffiliatesHistory from "./components/affiliate/AffiliatesHistory";
+
 // Customer
 import Customer from "./components/customer/Customer";
 import CustomerAdd from "./components/customer/CustomerAdd";
 import CustomerHistory from "./components/customer/CustomerHistory";
+
 // Inventory
 import Inventory from "./components/inventory/Inventory";
+
 // Invoice
 import Invoice from "./components/invoice/Invoice";
 import InvoiceAdd from "./components/invoice/InvoiceAdd";
@@ -63,6 +73,11 @@ class App extends Component {
                   <Route path="/brand" exact component={Brand} />
                   <Route path="/brand/create" component={BrandCreate} />
                   <Route path="/brand/:id/edit" component={BrandEdit}/>
+
+                  {/* category */}
+                  <Route path="/category" exact component={Category} />
+                  <Route path="/category/create" component={CategoryCreate} />
+                  <Route path="/category/:id/edit" component={CategoryEdit}/>
 
                   {/* affliates */}
                   <Route path="/affiliates" exact component={Affiliate} />
