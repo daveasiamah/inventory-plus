@@ -3,73 +3,66 @@ import axios from "axios";
 import Spinner from "../layouts/Spinner";
 import { Redirect, Link } from "react-router-dom";
 
-class SupplierEdit extends Component {
+class BrandEdit extends Component {
 	state = {
 		id: this.props.match.params.id,
-		singleSupplier: [],
+		singleBrand: [],
 		loading: false,
 		redirect: false,
 		errors: null
 	};
 	
 	componentDidMount() {
-		this.getSingleSupplier(this.state.id);
+		this.getSingleBrand(this.state.id);
 	}
 
-	getSingleSupplier = async id => {
+	getSingleBrand = async id => {
 		this.setState({ loading: true });
 
-		let res = await axios.get(`http://inventory.test/api/admin/supplier/${id}`)
+		let res = await axios.get(`http://inventory.test/api/admin/brand/${id}`)
 								.catch(err => console.log(err));
 				
-		this.setState({singleSupplier: {
-				name: res.data.supplier.name,
-				business_name: res.data.supplier.business_name,
-				address: res.data.supplier.address,
-				landline: res.data.supplier.landline,
-				fax: res.data.supplier.fax,
-				email: res.data.supplier.email,
-				mobile: res.data.supplier.mobile,
-				contact_person: res.data.supplier.contact_person,
+		this.setState({singleBrand: {
+				name: res.data.brand.name,
+				description: res.data.brand.description,
+				unit: res.data.brand.unit,
+				attributes: res.data.brand.attributes.split(","),
 			},
+
 			loading: false
 		});
 	}
 
 	// handle input
 	handleInputChange = (e) => {
-		this.setState({ singleSupplier: { ...this.state.singleSupplier, [e.target.name]: e.target.value}})
+		this.setState({ singleBrand: { ...this.state.singleBrand, [e.target.name]: e.target.value}})
 	}
 	
 	// on submit
 	onFormSubmit = (e) => {
 		e.preventDefault();
-		let supplier = this.state.singleSupplier;
+		let brand = this.state.singleBrand;
 		let id = this.state.id;
-		this.updateSingleSupplier(supplier, id);
+		this.updateSingleBrand(brand, id);
 	}
 
 	// update single supplier
-	updateSingleSupplier = async (supplier, id) => {
+	updateSingleBrand = async (brand, id) => {
 		let updateData = {
-			name: supplier.name,
-			business_name: supplier.business_name,
-			address: supplier.address,
-			landline: supplier.landline,
-			fax: supplier.fax,
-			email: supplier.email,
-			mobile: supplier.mobile,
-			contact_person: supplier.contact_person
+			name: brand.name,
+			description: brand.description,
+			unit: brand.unit,
+			attributes: brand.attributes.toString()
 		}
 
-		let res = await axios.put(`http://inventory.test/api/admin/supplier/${id}`, updateData)
+		let res = await axios.put(`http://inventory.test/api/admin/brand/${id}`, updateData)
 							switch(res.data.status){
 								case 0:
 									this.setState({ errors: res.data.errors })
 									break;
 								case 1:
 									this.setState({
-										singleSupplier: [], 
+										singleBrand: [], 
 										loading: false, 
 										redirect: true 
 									});
@@ -79,31 +72,57 @@ class SupplierEdit extends Component {
 		this.setState({ loading: false });
 	}
 	
+
+	// Adding brand attributes
+	addTag = e => {
+		if (e.key === "Enter" && e.target.value !== "") {
+			const value = e.target.value;
+
+			// check the duplicate value in array
+			if (
+				this.state.singleBrand.attributes.find(
+					tag => tag.toLowerCase() === value.toLowerCase()
+				)
+			) {
+				return;
+			}
+			let newTag = this.state.singleBrand.attributes.concat(value);
+			this.setState({
+				singleBrand: {
+					...this.state.singleBrand,
+					["attributes"]: newTag
+				}
+			});
+			e.target.value = "";
+		}
+	};
+
+	removeTag = id => {
+		// console.log(id)
+		const attributes = this.state.singleBrand.attributes;
+		attributes.splice(id, 1);
+		this.setState({ attributes: attributes });
+	};
 	
 	render() {
 		// console.log(this.state.singleSupplier)
 		const { 
 			name, 
-			business_name, 
-			address, 
-			landline, 
-			fax, 
-			email, 
-			mobile, 
-			contact_person, 
-			archives } = this.state.singleSupplier; 
+			description, 
+			unit, 
+			attributes } = this.state.singleBrand; 
 
 		if(this.state.loading){
 			// loading spinner
 			return <Spinner/>
 		}else if(this.state.redirect){
 			// redirect 
-			return <Redirect to='/supplier'/>
+			return <Redirect to='/brand'/>
 		}else{
 			return(
 				<div>
 					<div className="mb-2">
-						<h2>Edit Supplier</h2>
+						<h2>Edit Brand</h2>
 					</div>
 					
 					<div>{this.state.errors && this.state.errors.map(error => (
@@ -137,111 +156,87 @@ class SupplierEdit extends Component {
 				                </div>
 
 				                <div className="form-group row">
-				                  <label className="col-md-3 label-control">Business Name</label>
-				                  <div className="col-md-9">
-				                    <input
-				                      type="text"
-				                      id="business_name"
-				                      name="business_name"
-				                      className="form-control"
-				                      placeholder="Business Name"
-				                      value={business_name}
-				                      onChange={this.handleInputChange}
-				                    />
-				                  </div>
-				                </div>
-
-
-				                <div className="form-group row">
-				                  <label className="col-md-3 label-control">Address</label>
+				                  <label className="col-md-3 label-control">Description</label>
 				                  <div className="col-md-9">
 				                    <textarea
-				                      id="address"
-				                      name="address"
+				                      id="description"
+				                      name="description"
 				                      rows="2"
 				                      className="form-control"
-				                      placeholder="Address"
-				                      value={address}
+				                      placeholder="description"
+				                      value={description}
 				                      onChange={this.handleInputChange}
 				                    ></textarea>
 				                  </div>
 				                </div>
 								
 								<div className="form-group row">
-				                  <label className="col-md-3 label-control">Landline</label>
+				                  <label className="col-md-3 label-control">Unit</label>
 				                  <div className="col-md-9">
 				                    <input
 				                      type="text"
-				                      id="landline"
-				                      name="landline"
+				                      id="unit"
+				                      name="unit"
 				                      className="form-control"
-				                      placeholder="Landline"
-				                      value={landline}
+				                      placeholder="unit"
+				                      value={unit}
 				                      onChange={this.handleInputChange}
 				                    />
 				                  </div>
 				                </div>
 								
+
 								<div className="form-group row">
-				                  <label className="col-md-3 label-control">Fax</label>
-				                  <div className="col-md-9">
-				                    <input
-				                      type="text"
-				                      id="fax"
-				                      name="fax"
-				                      className="form-control"
-				                      placeholder="Fax"
-				                      value={fax}
-				                      onChange={this.handleInputChange}
-				                    />
-				                  </div>
-				                </div>
-
-				                <div className="form-group row">
-				                  <label className="col-md-3 label-control">Email</label>
-				                  <div className="col-md-9">
-				                    <input
-				                      type="email"
-				                      id="email"
-				                      name="email"
-				                      className="form-control"
-				                      placeholder="Email"
-				                      value={email}
-				                      onChange={this.handleInputChange}
-				                    />
-				                  </div>
-				                </div>
-
-
-				                <div className="form-group row">
-				                  <label className="col-md-3 label-control">Mobile</label>
-				                  <div className="col-md-9">
-				                    <input
-				                      type="text"
-				                      id="mobile"
-				                      name="mobile"
-				                      placeholder="Mobile"
-				                      className="form-control"
-				                      value={mobile}
-				                      onChange={this.handleInputChange}
-				                    />
-				                  </div>
-				                </div>
-
-				                <div className="form-group row">
-				                  <label className="col-md-3 label-control">Contact Person</label>
-				                  <div className="col-md-9">
-				                    <input
-				                      type="text"
-				                      id="contact_person"
-				                      name="contact_person"
-				                      placeholder="Contact Person"
-				                      className="form-control"
-				                      value={contact_person}
-				                      onChange={this.handleInputChange}
-				                    />
-				                  </div>
-				                </div>
+									<label className="col-md-3 label-control">
+										Attributes
+									</label>
+									<div className="col-md-9">
+										<div className="form-group">
+											<ul className="containerUl float">
+												{attributes ? (
+													attributes.map(
+														(tag, index) => (
+															<li
+																className="item float-item"
+																key={index}
+															>
+																<span className="badge badge-primary">
+																	{tag}
+																	<button
+																		type="button"
+																		className="btn btn-primary btn-sm"
+																		onClick={e =>
+																			this.removeTag(
+																				index
+																			)
+																		}
+																	>
+																		<i className="icon la la-times"></i>
+																	</button>
+																</span>
+															</li>
+														)
+													)
+												) : (
+													<span>No Tags</span>
+												)}
+											</ul>
+											<input
+												type="text"
+												className="form-control"
+												placeholder="Enter Attributes"
+												name="attributes"
+												onKeyUp={e =>
+													this.addTag(e)
+												}
+												onKeyPress={e => {
+													if (e.key === "Enter")
+														e.preventDefault();
+												}}
+											/>
+										</div>
+									</div>
+								</div>
 				             </div>
 
 				            </section>
@@ -250,7 +245,7 @@ class SupplierEdit extends Component {
 			          <div className="row justify-content-end">
 			            <div className="mr-2">
 			              <div className="form-group">
-			                <Link to={'/supplier'} className="btn btn-danger btn-sm mr-1">Cancel</Link>
+			                <Link to={'/brand'} className="btn btn-danger btn-sm mr-1">Cancel</Link>
 			                <button type="submit" className="btn btn-primary btn-sm">
 			                  Save
 			                </button>
@@ -265,4 +260,4 @@ class SupplierEdit extends Component {
 	}
 }
 
-export default SupplierEdit
+export default BrandEdit;

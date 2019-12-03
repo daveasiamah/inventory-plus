@@ -25,7 +25,7 @@ class BrandAdd extends Component {
 			name: this.state.name,
 			description: this.state.description,
 			unit: this.state.unit,
-			attributes: this.state.attributes,
+			attributes: this.state.attributes.toString()
 		}
 
 		this.brandPost(data);

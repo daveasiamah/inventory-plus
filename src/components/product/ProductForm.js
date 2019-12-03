@@ -51,6 +51,7 @@ class ProductForm extends Component {
 
 		
 		handleInputChange = e => this.setState({[e.target.name]: e.target.value });
+
 		handleFileChange = e => {
 			// show the image e
 			this.setState({ product_image_display: URL.createObjectURL(e.target.files[0])})
@@ -84,7 +85,7 @@ class ProductForm extends Component {
 		      this.setState({ material_tags: newTag });
 		      e.target.value = "";
 		    }
-		 };
+		};
 
 		removeTag = id => {
 		    // console.log(id)

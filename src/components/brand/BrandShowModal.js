@@ -5,10 +5,6 @@ import axios from 'axios';
 
 class BrandShowModal extends Component {
 	
-	static propTypes = {
-		singleBrand: PropTypes.array.isRequired,
-	}
-
 
 	render() {
 
