@@ -20,7 +20,7 @@ class SupplierTable extends Component {
         let res = await axios.get(`http://inventory.test/api/admin/supplier/${id}`)
                              
         this.setState({singleSupplier: res.data.supplier });
-        console.log(res.data.supplier)
+        // console.log(res.data.supplier)
     }
 	
 	conFirmMoveToArchives = () => {

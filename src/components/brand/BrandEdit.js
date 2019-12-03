@@ -67,6 +67,8 @@ class BrandEdit extends Component {
 										redirect: true 
 									});
 									break;
+								default:
+									break;
 							}
 		
 		this.setState({ loading: false });
@@ -125,9 +127,9 @@ class BrandEdit extends Component {
 						<h2>Edit Brand</h2>
 					</div>
 					
-					<div>{this.state.errors && this.state.errors.map(error => (
-					  		<div class="alert alert-danger alert-dismissible fade show" role="alert">
-								<li>{error}</li>
+					<div>{this.state.errors && this.state.errors.map((error, i) => (
+					  		<div className="alert alert-danger alert-dismissible fade show" role="alert">
+								<li key={i}>{error}</li>
 								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 							    	<span aria-hidden="true">&times;</span>
 							  	</button>

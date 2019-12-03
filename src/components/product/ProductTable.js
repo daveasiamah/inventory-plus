@@ -2,10 +2,12 @@ import React, { Component, Fragment } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import ProductShowModal from './ProductShowModal';
 
 class ProductTable extends Component {
 	state = {
-		id: 0
+		id: 0,
+		singleProduct: []
 	};
 
 	conFirmMoveToArchives = () => {
@@ -16,6 +18,17 @@ class ProductTable extends Component {
 		products: PropTypes.array.isRequired,
 		moveToArchives: PropTypes.func.isRequired,
 	};
+
+	getSingleProduct = async (id) => {
+        let res = await axios.get(`http://inventory.test/api/admin/product/${id}`)
+                            
+        this.setState({singleProduct: res.data.product });
+        // console.log(res.data.supplier)
+    }
+	
+	showModal = (id) => {
+		this.getSingleProduct(id);
+	}
 
 	render() {
 		const { products } = this.props;
@@ -50,11 +63,14 @@ class ProductTable extends Component {
 									<td>{product.status ? "Yes" : "No"}</td>
 									<td>
 										<div className="btn-group">
-											<Link 
-												to={`/product/${product._id}`} 
-												className="btn btn-sm btn-info">
-												<i className="fa ft-eye"></i>
-											</Link>
+											<button 
+												onClick={() => this.showModal(product._id)}
+												className="btn btn-sm btn-info btn-sm"
+												data-toggle="modal"
+												data-target="#show-modal"
+												>
+												<i className="ft ft-eye"></i>
+											</button>
 											<Link
 												to={`/product/${product._id}/edit`}
 												className="btn btn-sm btn-warning"
@@ -119,6 +135,8 @@ class ProductTable extends Component {
 						</div>
 					</div>
 				</div>
+
+				<ProductShowModal singleProduct={this.state.singleProduct}/>
 			</Fragment>
 		);
 	}

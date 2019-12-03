@@ -1,5 +1,6 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import axios from "axios";
 
 class ProductForm extends Component {	
@@ -660,7 +661,7 @@ class ProductForm extends Component {
 			          <div className="row justify-content-end">
 			            <div className="mr-2">
 			              <div className="form-group">
-			                <span className="btn btn-danger btn-sm mr-1">Cancel</span>
+			                <Link to={'/product'} className="btn btn-danger btn-sm mr-1">Cancel</Link>
 			                <button type="submit" className="btn btn-primary btn-sm">
 			                  Save
 			                </button>

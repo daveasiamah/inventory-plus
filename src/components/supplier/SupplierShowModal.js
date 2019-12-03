@@ -1,15 +1,9 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
 import Spinner from "../layouts/Spinner";
 import axios from 'axios';
 
 class SupplierShowModal extends Component {
 	
-	static propTypes = {
-		singleSupplier: PropTypes.array.isRequired,
-	}
-
-
 	render() {
 
 		const { 

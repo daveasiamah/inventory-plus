@@ -8,7 +8,6 @@ class BrandTable extends Component {
 	state = {
 		id: 0,
 		singleBrand: [],
-		isOpen: false,
 	}
 
 	static propTypes = {

@@ -7,24 +7,23 @@ import Home from "./components/admin/Home";
 
 // Product
 import Product from "./components/product/Product";
-import ProductAdd from "./components/product/ProductAdd";
+import ProductCreate from "./components/product/ProductCreate";
 import ProductEdit from "./components/product/ProductEdit";
-import ProductShow from './components/product/ProductShow';
 
 // Supplier
-import Supplier from './components/supplier/Supplier';
-import SupplierCreate from './components/supplier/SupplierCreate';
-import SupplierEdit from './components/supplier/SupplierEdit';
+import Supplier from "./components/supplier/Supplier";
+import SupplierCreate from "./components/supplier/SupplierCreate";
+import SupplierEdit from "./components/supplier/SupplierEdit";
 
 // Brand
-import Brand from './components/brand/Brand';
-import BrandCreate from './components/brand/BrandCreate';
-import BrandEdit from './components/brand/BrandEdit';
+import Brand from "./components/brand/Brand";
+import BrandCreate from "./components/brand/BrandCreate";
+import BrandEdit from "./components/brand/BrandEdit";
 
 // Brand
-import Category from './components/category/Category';
-import CategoryCreate from './components/category/CategoryCreate';
-import CategoryEdit from './components/category/CategoryEdit'
+import Category from "./components/category/Category";
+import CategoryCreate from "./components/category/CategoryCreate";
+import CategoryEdit from "./components/category/CategoryEdit";
 
 // Affiliates
 import Affiliate from "./components/affiliate/Affiliate";
@@ -46,7 +45,6 @@ import InvoiceAdd from "./components/invoice/InvoiceAdd";
 import InvoiceTemplate from "./components/invoice/InvoiceTemplate";
 import PageNotFound from "./components/layouts/PageNotFound";
 
-
 class App extends Component {
   render() {
     return (
@@ -60,24 +58,23 @@ class App extends Component {
                   {/* products */}
                   <Route path="/" exact component={Home} />
                   <Route path="/product" exact component={Product} />
-                  <Route path="/product/add" component={ProductAdd} />
-                  <Route path="/product/:id" exact component={ProductShow}/>
-                  <Route path="/product/:id/edit" component={ProductEdit}/>
-                  
+                  <Route path="/product/create" component={ProductCreate} />
+                  <Route path="/product/:id/edit" component={ProductEdit} />
+
                   {/* suppliers */}
                   <Route path="/supplier" exact component={Supplier} />
                   <Route path="/supplier/create" component={SupplierCreate} />
-                  <Route path="/supplier/:id/edit" component={SupplierEdit}/>
+                  <Route path="/supplier/:id/edit" component={SupplierEdit} />
 
                   {/* brands */}
                   <Route path="/brand" exact component={Brand} />
                   <Route path="/brand/create" component={BrandCreate} />
-                  <Route path="/brand/:id/edit" component={BrandEdit}/>
+                  <Route path="/brand/:id/edit" component={BrandEdit} />
 
                   {/* category */}
                   <Route path="/category" exact component={Category} />
                   <Route path="/category/create" component={CategoryCreate} />
-                  <Route path="/category/:id/edit" component={CategoryEdit}/>
+                  <Route path="/category/:id/edit" component={CategoryEdit} />
 
                   {/* affliates */}
                   <Route path="/affiliates" exact component={Affiliate} />
@@ -90,7 +87,7 @@ class App extends Component {
                     path="/affiliates/history"
                     component={AffiliatesHistory}
                   />
-                  
+
                   {/* customer */}
                   <Route path="/customer" exact component={Customer} />
                   <Route path="/customer/add" component={CustomerAdd} />
