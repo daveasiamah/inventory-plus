@@ -5,6 +5,7 @@ import Spinner from "../layouts/Spinner";
 import Pagination from "react-js-pagination";
 import ProductTable from "./ProductTable";
 import ProductSearch from "./ProductSearch";
+import Select from 'react-select';
 
 class Product extends Component {
     state = {
@@ -15,7 +16,12 @@ class Product extends Component {
         activePage: 1,
         itemsCountPerPage: 1,
         totalItemsCount: 10,
-        pageRangeDisplayed: 8
+        pageRangeDisplayed: 8,
+        options: [
+          { value: 'chocolate', label: 'Chocolate' },
+          { value: 'strawberry', label: 'Strawberry' },
+          { value: 'vanilla', label: 'Vanilla' }
+        ]
     };
 
     componentDidMount() {
@@ -92,6 +98,8 @@ class Product extends Component {
         return (
             <div>
                 <h1>Products</h1>
+
+                <Select options={this.state.options} />
 
                 <section className="row">
                     <div className="col-sm-12">

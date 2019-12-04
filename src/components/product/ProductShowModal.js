@@ -118,7 +118,7 @@ class ProductShowModal extends Component {
 											</p>
 											<p>
 												<strong>Material Tags:</strong>{" "}
-												{material_tags}
+												{material_tags == ''  ? 'No Tags.' : material_tags}
 											</p>
 										</div>
 

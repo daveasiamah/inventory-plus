@@ -3,6 +3,7 @@ import "../layouts/styles/Product.css";
 import PropTypes from 'prop-types';
 import { Redirect, Link } from 'react-router-dom';
 import Spinner from "../layouts/Spinner";
+import Select from 'react-select';
 import axios from "axios";
 
 class ProductCreate extends Component {	
@@ -19,7 +20,6 @@ class ProductCreate extends Component {
 		    dimension_width: "",
 		    dimension_height: "",
 		    color: "",
-		    specs_category: "",
 		    material_tags: [],
 		    fitting_type: "",
 		    fitting_qty: "",
@@ -93,7 +93,6 @@ class ProductCreate extends Component {
 			    dimension_width: this.state.dimension_width,
 			    dimension_height: this.state.dimension_height,
 			    color: this.state.color,
-			    specs_category: this.state.specs_category,
 			    material_tags: this.state.material_tags,
 			    fitting_type: this.state.fitting_type,
 			    fitting_qty: this.state.fitting_qty,
@@ -186,7 +185,6 @@ class ProductCreate extends Component {
 			dimension_width,
 			dimension_height,
 			color,
-			specs_category,
 			material_tags,
 			fitting_type,
 			fitting_qty,
@@ -228,7 +226,7 @@ class ProductCreate extends Component {
 							</div>
 					  	}
 					</div>
-
+					
 			        <form
 			          id="addProduct"
 			          encType="multipart/form-data"
@@ -425,23 +423,6 @@ class ProductCreate extends Component {
 			                  </div>
 			                </div>
 
-			                <div className="form-group row">
-			                  <label className="col-md-3 label-control">Category</label>
-			                  <div className="col-md-9">
-			                    <select
-			                      id="specs_category"
-			                      name="specs_category"
-			                      className="form-control"
-			                      onChange={this.handleInputChange}
-			                      value={specs_category}
-			                    >
-			                      <option value="">Choose Category</option>
-			                      <option value="Category 1">Category 1</option>
-			                      <option value="Category 2">Category 2</option>
-			                      <option value="Category 3">Category 3</option>
-			                    </select>
-			                  </div>
-			                </div>
 
 			                <div className="form-group row">
 			                    <label className="col-md-3 label-control">
