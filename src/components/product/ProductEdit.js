@@ -8,10 +8,11 @@ class ProductEdit extends Component {
 	state = {
 		id: this.props.match.params.id,
 		singleProduct: [],
+		product_image_display: null,
+		product_image_new: null,
 		loading: false,
 		redirect: false,
-		product_image_display: "",
-		product_image_new: null
+		errors: null
 	};
 
 	componentDidMount() {
@@ -103,15 +104,22 @@ class ProductEdit extends Component {
 			}
 		);
 
-		this.setState({ singleProduct: [], loading: false, redirect: true });
+		switch(res.data.status){
+	    	case 0:
+	    		this.setState({errors: res.data.errors})
+	    		break;
+			case 1:
+				this.setState({ loading: false, redirect: true});
+				break;
+			default:
+				break;
+		 }
+
+		this.setState({loading: false});
 	};
 
-	renderRedirect = () => {
-		if (this.state.redirect) {
-			return <Redirect to="/product" />;
-		}
-	};
 
+	// handle input change
 	handleInputChange = e =>
 		this.setState({
 			singleProduct: {
@@ -119,9 +127,9 @@ class ProductEdit extends Component {
 				[e.target.name]: e.target.value
 			}
 		});
-
+	
+	// handleinputfile
 	handleFileChange = e => {
-		// this.setState({ product_image_new: e.target.files[0] })
 		this.setState({
 			singleProduct: {
 				...this.state.singleProduct,
@@ -132,7 +140,8 @@ class ProductEdit extends Component {
 			product_image_display: URL.createObjectURL(e.target.files[0])
 		});
 	};
-
+	
+	// onsubmit
 	onFormSubmit = e => {
 		e.preventDefault();
 
@@ -221,6 +230,20 @@ class ProductEdit extends Component {
 					<div className="mb-2">
 						<h2>Edit Product</h2>
 					</div>
+
+					<div>
+						{this.state.errors && 
+					  		<div className="alert alert-danger alert-dismissible fade show" role="alert">
+						  		{this.state.errors.map((error,i) => (
+									<li key={i}>{error}</li>
+								)) }
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							    	<span aria-hidden="true">&times;</span>
+							  	</button>
+							</div>
+					  	}
+					</div>
+
 					<form
 						id="addProduct"
 						encType="multipart/form-data"
@@ -842,12 +865,7 @@ class ProductEdit extends Component {
 								<div className="col-md-4">
 									<img
 										id="imagePreview"
-										src={
-											this.state.product_image_display
-												? this.state
-														.product_image_display
-												: "/square.jpg"
-										}
+										src={this.state.product_image_display  ? this.state.product_image_display : product_image}
 										alt="image"
 										className="img-fluid"
 									/>

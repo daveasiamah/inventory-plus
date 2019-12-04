@@ -216,7 +216,8 @@ class ProductCreate extends Component {
 			return (
 				<div>
 			        <h2 className="mb-2">Add New Product</h2>
-					<div>{this.state.errors && 
+					<div>
+						{this.state.errors && 
 					  		<div className="alert alert-danger alert-dismissible fade show" role="alert">
 						  		{this.state.errors.map((error,i) => (
 									<li key={i}>{error}</li>
@@ -701,7 +702,7 @@ class ProductCreate extends Component {
 			              <div className="col-md-4">
 			                <img
 			                  id="imagePreview"
-			                  src={this.state.product_image_display ? this.state.product_image_display : '/square.jpg'}
+			                  src={this.state.product_image_display ? this.state.product_image_display : '/noimage.jpg'}
 			                  alt="image"
 			                  className="img-fluid"
 			                />

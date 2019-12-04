@@ -130,7 +130,7 @@ class Product extends Component {
                                                         Low Stock
                                                     </div>
                                                     <img
-                                                        src="square.jpg"
+                                                        src="/square.jpg"
                                                         className="img-fluid"
                                                     />
                                                 </div>
@@ -140,7 +140,7 @@ class Product extends Component {
                                                         Out of Stock
                                                     </div>
                                                     <img
-                                                        src="square.jpg"
+                                                        src="/square.jpg"
                                                         className="img-fluid"
                                                     />
                                                 </div>
@@ -150,7 +150,7 @@ class Product extends Component {
                                                         Total Items
                                                     </div>
                                                     <img
-                                                        src="square.jpg"
+                                                        src="/square.jpg"
                                                         className="img-fluid"
                                                     />
                                                 </div>
@@ -160,7 +160,7 @@ class Product extends Component {
                                                         Others
                                                     </div>
                                                     <img
-                                                        src="square.jpg"
+                                                        src="/square.jpg"
                                                         className="img-fluid"
                                                     />
                                                 </div>
