@@ -127,15 +127,18 @@ class BrandEdit extends Component {
 						<h2>Edit Brand</h2>
 					</div>
 					
-					<div>{this.state.errors && this.state.errors.map((error, i) => (
+					<div>
+						{this.state.errors && 
 					  		<div className="alert alert-danger alert-dismissible fade show" role="alert">
-								<li key={i}>{error}</li>
+						  		{this.state.errors.map((error,i) => (
+									<li key={i}>{error}</li>
+								)) }
 								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 							    	<span aria-hidden="true">&times;</span>
 							  	</button>
 							</div>
-					  	)) }
-					 </div>
+					  	}
+					</div>
 
 					<form onKeyPress={e => {if (e.key === "Enter") e.preventDefault()}}
 				          onSubmit={e => this.onFormSubmit(e)}>
