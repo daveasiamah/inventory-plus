@@ -3,6 +3,7 @@ import axios from "axios";
 import Spinner from "../layouts/Spinner";
 import PropTypes from "prop-types";
 import { Redirect, Link } from "react-router-dom";
+import Select from "react-select";
 
 class ProductEdit extends Component {
 	state = {
@@ -10,6 +11,10 @@ class ProductEdit extends Component {
 		singleProduct: [],
 		product_image_display: null,
 		product_image_new: null,
+		isSearchable: true,
+		name_brands: [],
+		name_categories: [],
+		name_suppliers: [],
 		loading: false,
 		redirect: false,
 		errors: null
@@ -18,6 +23,7 @@ class ProductEdit extends Component {
 	componentDidMount() {
 		// this.props.getSingleProduct(this.state.id)
 		this.getSingleProduct(this.state.id);
+		this.getSelectAll();
 	}
 
 	// fetch the single item
@@ -76,7 +82,6 @@ class ProductEdit extends Component {
 		data.append("dimension_width", singleProduct.dimension_width);
 		data.append("dimension_height", singleProduct.dimension_height);
 		data.append("color", singleProduct.color);
-		data.append("specs_category", singleProduct.specs_category);
 		data.append("material_tags", singleProduct.material_tags);
 		data.append("fitting_type", singleProduct.fitting_type);
 		data.append("fitting_qty", singleProduct.fitting_qty);
@@ -104,20 +109,19 @@ class ProductEdit extends Component {
 			}
 		);
 
-		switch(res.data.status){
-	    	case 0:
-	    		this.setState({errors: res.data.errors})
-	    		break;
+		switch (res.data.status) {
+			case 0:
+				this.setState({ errors: res.data.errors });
+				break;
 			case 1:
-				this.setState({ loading: false, redirect: true});
+				this.setState({ loading: false, redirect: true });
 				break;
 			default:
 				break;
-		 }
+		}
 
-		this.setState({loading: false});
+		this.setState({ loading: false });
 	};
-
 
 	// handle input change
 	handleInputChange = e =>
@@ -127,7 +131,7 @@ class ProductEdit extends Component {
 				[e.target.name]: e.target.value
 			}
 		});
-	
+
 	// handleinputfile
 	handleFileChange = e => {
 		this.setState({
@@ -140,7 +144,40 @@ class ProductEdit extends Component {
 			product_image_display: URL.createObjectURL(e.target.files[0])
 		});
 	};
-	
+
+	// handle the select options
+	handleSelectInput = selectedOption => {
+		// console.log(selectedOption);
+		this.setState({
+			singleProduct: {
+				...this.state.singleProduct,
+				[selectedOption.name]: selectedOption.value
+			}
+		});
+	};
+
+	// get all the select options
+	getSelectAll = async () => {
+		let res = await axios.get(
+			"http://inventory.test/api/admin/product/select/detail"
+		);
+
+		switch (res.data.status) {
+			case 0:
+				// nothing for now
+				break;
+			case 1:
+				this.setState({
+					name_brands: res.data.brands,
+					name_categories: res.data.categories,
+					name_suppliers: res.data.suppliers
+				});
+				break;
+			default:
+				break;
+		}
+	};
+
 	// onsubmit
 	onFormSubmit = e => {
 		e.preventDefault();
@@ -185,7 +222,7 @@ class ProductEdit extends Component {
 
 	render() {
 		// destructuring
-		console.log(this.state.singleProduct);
+		// console.log(this.state.singleProduct);
 		const {
 			sku,
 			product_name,
@@ -213,10 +250,38 @@ class ProductEdit extends Component {
 			customization_fee,
 			stock_alarm,
 			sales_price,
-			product_image
+			product_image,
+			isSearchable
 		} = this.state.singleProduct;
 
 		const url = `http://inventory.test/`;
+
+		let supplierOption = this.state.name_suppliers.map(supplier => {
+			return {
+				id: supplier._id,
+				value: supplier.name,
+				label: supplier.name,
+				name: "supplier"
+			};
+		});
+
+		let brandOption = this.state.name_brands.map(brand => {
+			return {
+				id: brand._id,
+				value: brand.name,
+				label: brand.name,
+				name: "brand"
+			};
+		});
+
+		let categoryOption = this.state.name_categories.map(category => {
+			return {
+				id: category._id,
+				value: category.name,
+				label: category.name,
+				name: "product_category"
+			};
+		});
 
 		if (this.state.loading) {
 			// loading spinner
@@ -232,16 +297,24 @@ class ProductEdit extends Component {
 					</div>
 
 					<div>
-						{this.state.errors && 
-					  		<div className="alert alert-danger alert-dismissible fade show" role="alert">
-						  		{this.state.errors.map((error,i) => (
+						{this.state.errors && (
+							<div
+								className="alert alert-danger alert-dismissible fade show"
+								role="alert"
+							>
+								{this.state.errors.map((error, i) => (
 									<li key={i}>{error}</li>
-								)) }
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-							    	<span aria-hidden="true">&times;</span>
-							  	</button>
+								))}
+								<button
+									type="button"
+									class="close"
+									data-dismiss="alert"
+									aria-label="Close"
+								>
+									<span aria-hidden="true">&times;</span>
+								</button>
 							</div>
-					  	}
+						)}
 					</div>
 
 					<form
@@ -302,28 +375,16 @@ class ProductEdit extends Component {
 											Brand
 										</label>
 										<div className="col-md-9">
-											<select
-												id="brand"
-												name="brand"
-												className="form-control"
+											<Select
+												defaultValue={brand}
+												defaultInputValue={brand}
+												placeholder="Select Brand..."
+												isSearchable={isSearchable}
 												onChange={
-													this.handleInputChange
+													this.handleSelectInput
 												}
-												value={brand}
-											>
-												<option value="">
-													Choose Brand
-												</option>
-												<option value="Brand 1">
-													Brand 1
-												</option>
-												<option value="Brand 2">
-													Brand 2
-												</option>
-												<option value="Brand 3">
-													Brand 3
-												</option>
-											</select>
+												options={brandOption}
+											/>
 										</div>
 									</div>
 
@@ -332,28 +393,16 @@ class ProductEdit extends Component {
 											Category
 										</label>
 										<div className="col-md-9">
-											<select
-												id="product_category"
-												name="product_category"
-												className="form-control"
+											<Select
+												defaultValue={product_category}
+												defaultInputValue={product_category}
+												placeholder="Select Category..."
+												isSearchable={isSearchable}
 												onChange={
-													this.handleInputChange
+													this.handleSelectInput
 												}
-												vaue={product_category}
-											>
-												<option value="">
-													Choose Category
-												</option>
-												<option value="Category 1">
-													Category 1
-												</option>
-												<option value="Category 2">
-													Category 2
-												</option>
-												<option value="Category 3">
-													Category 3
-												</option>
-											</select>
+												options={categoryOption}
+											/>
 										</div>
 									</div>
 
@@ -383,28 +432,16 @@ class ProductEdit extends Component {
 											Suppliers
 										</label>
 										<div className="col-md-9">
-											<select
-												id="supplier"
-												name="supplier"
-												className="form-control"
+											<Select
+												defaultValue={supplier}
+												defaultInputValue={supplier}
+												placeholder="Select Supplier..."
+												isSearchable={isSearchable}
 												onChange={
-													this.handleInputChange
+													this.handleSelectInput
 												}
-												value={supplier}
-											>
-												<option value="">
-													Choose Supplier
-												</option>
-												<option value="Supplier 1">
-													Supplier 1
-												</option>
-												<option value="Supplier 2">
-													Supplier 2
-												</option>
-												<option value="Supplier 3">
-													Supplier 3
-												</option>
-											</select>
+												options={supplierOption}
+											/>
 										</div>
 									</div>
 
@@ -865,7 +902,12 @@ class ProductEdit extends Component {
 								<div className="col-md-4">
 									<img
 										id="imagePreview"
-										src={this.state.product_image_display  ? this.state.product_image_display : product_image}
+										src={
+											this.state.product_image_display
+												? this.state
+														.product_image_display
+												: product_image
+										}
 										alt="image"
 										className="img-fluid"
 									/>
