@@ -40,8 +40,7 @@ class BrandTable extends Component {
 							<tr>
 								<th>Name</th>
 								<th>Description</th>
-								<th>Unit</th>
-								<th>Attributes</th>
+								<th>Supplier</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -50,8 +49,7 @@ class BrandTable extends Component {
 								<tr key={brand._id}>
 									<td>{brand.name}</td>
 									<td>{brand.description}</td>
-									<td>{brand.unit}</td>
-									<td>{brand.attributes}</td>
+									<td>{brand.supplier_name}</td>
 									<td>
 										<div className="btn-group">
 											<button 

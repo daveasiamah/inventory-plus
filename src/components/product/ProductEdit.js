@@ -8,7 +8,36 @@ import Select from "react-select";
 class ProductEdit extends Component {
 	state = {
 		id: this.props.match.params.id,
-		singleProduct: [],
+		singleProduct: {
+			sku: "",
+			product_name: "",
+			brand: "",
+			product_category: "",
+			description: "",
+			supplier: "",
+			barcode: "",
+			attributes: {
+				dimension_length: "",
+				dimension_width: "",
+				dimension_height: "",
+				color: "",
+				material_tags: [],
+				fitting_type: "",
+				fitting_qty: "",
+				weight_kg: "",
+				packing_length: "",
+				packing_width: "",
+				packing_height: ""
+			},
+			cost: "",
+			srp: "",
+			delivery_fee: "",
+			stock_overwrite: "",
+			customization_fee: "",
+			stock_alarm: "",
+			sales_price: "",
+			product_image: null
+		},
 		product_image_display: null,
 		product_image_new: null,
 		isSearchable: true,
@@ -43,18 +72,17 @@ class ProductEdit extends Component {
 				description: res.data.product.description,
 				supplier: res.data.product.supplier,
 				barcode: res.data.product.barcode,
-				dimension_length: res.data.product.dimension_length,
-				dimension_width: res.data.product.dimension_width,
-				dimension_height: res.data.product.dimension_height,
-				color: res.data.product.color,
-				specs_category: res.data.product.specs_category,
-				material_tags: res.data.product.material_tags.split(","),
-				fitting_type: res.data.product.fitting_type,
-				fitting_qty: res.data.product.fitting_qty,
-				weight_kg: res.data.product.weight_kg,
-				packing_length: res.data.product.packing_length,
-				packing_width: res.data.product.packing_width,
-				packing_height: res.data.product.packing_height,
+				dimension_length: res.data.product.attributes.dimension_length,
+				dimension_width: res.data.product.attributes.dimension_width,
+				dimension_height: res.data.product.attributes.dimension_height,
+				color: res.data.product.attributes.color,
+				material_tags: res.data.product.attributes.material_tags.split(","),
+				fitting_type: res.data.product.attributes.fitting_type,
+				fitting_qty: res.data.product.attributes.fitting_qty,
+				weight_kg: res.data.product.attributes.weight_kg,
+				packing_length: res.data.product.attributes.packing_length,
+				packing_width: res.data.product.attributes.packing_width,
+				packing_height: res.data.product.attributes.packing_height,
 				cost: res.data.product.cost,
 				srp: res.data.product.srp,
 				delivery_fee: res.data.product.delivery_fee,
@@ -235,7 +263,6 @@ class ProductEdit extends Component {
 			dimension_width,
 			dimension_height,
 			color,
-			specs_category,
 			material_tags,
 			fitting_type,
 			fitting_qty,
@@ -307,7 +334,7 @@ class ProductEdit extends Component {
 								))}
 								<button
 									type="button"
-									class="close"
+									className="close"
 									data-dismiss="alert"
 									aria-label="Close"
 								>
@@ -544,36 +571,6 @@ class ProductEdit extends Component {
 												</option>
 												<option value="Color 3">
 													Color 3
-												</option>
-											</select>
-										</div>
-									</div>
-
-									<div className="form-group row">
-										<label className="col-md-3 label-control">
-											Category
-										</label>
-										<div className="col-md-9">
-											<select
-												id="specs_category"
-												name="specs_category"
-												className="form-control"
-												onChange={
-													this.handleInputChange
-												}
-												value={specs_category}
-											>
-												<option value="">
-													Choose Category
-												</option>
-												<option value="Category 1">
-													Category 1
-												</option>
-												<option value="Category 2">
-													Category 2
-												</option>
-												<option value="Category 3">
-													Category 3
 												</option>
 											</select>
 										</div>

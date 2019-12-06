@@ -7,7 +7,8 @@ import ProductShowModal from './ProductShowModal';
 class ProductTable extends Component {
 	state = {
 		id: 0,
-		singleProduct: []
+		singleProduct: [],
+		attributes: []
 	};
 
 	conFirmMoveToArchives = () => {
@@ -22,8 +23,7 @@ class ProductTable extends Component {
 	getSingleProduct = async (id) => {
         let res = await axios.get(`http://inventory.test/api/admin/product/${id}`)
                             
-        this.setState({singleProduct: res.data.product });
-        // console.log(res.data.supplier)
+        this.setState({singleProduct: res.data.product, attributes: res.data.attributes });
     }
 	
 	showModal = (id) => {
@@ -103,7 +103,7 @@ class ProductTable extends Component {
 					tabIndex="-1"
 					role="dialog"
 				>
-					<div className="modal-dialog" role="document">
+					<div className="modal-dialog modal-sm" role="document">
 						<div className="modal-content">
 							<div className="modal-header">
 								<h5 className="modal-title"></h5>
@@ -127,7 +127,7 @@ class ProductTable extends Component {
 										data-dismiss="modal"
 										onClick={this.conFirmMoveToArchives}
 									>
-										<i className="la la-check"></i> Confirm
+										<i className="ft ft-check"></i> Confirm
 									</button>
 								</div>
 							</div>
@@ -136,7 +136,7 @@ class ProductTable extends Component {
 					</div>
 				</div>
 
-				<ProductShowModal singleProduct={this.state.singleProduct}/>
+				<ProductShowModal singleProduct={this.state.singleProduct} />
 			</Fragment>
 		);
 	}

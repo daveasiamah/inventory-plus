@@ -15,17 +15,19 @@ class ProductCreate extends Component {
 		description: "",
 		supplier: "",
 		barcode: "",
-		dimension_length: "",
-		dimension_width: "",
-		dimension_height: "",
-		color: "",
-		material_tags: [],
-		fitting_type: "",
-		fitting_qty: "",
-		weight_kg: "",
-		packing_length: "",
-		packing_width: "",
-		packing_height: "",
+		attributes: {
+			dimension_length: "",
+			dimension_width: "",
+			dimension_height: "",
+			color: "",
+			material_tags: [],
+			fitting_type: "",
+			fitting_qty: "",
+			weight_kg: "",
+			packing_length: "",
+			packing_width: "",
+			packing_height: ""
+		},
 		cost: "",
 		srp: "",
 		delivery_fee: "",
@@ -65,6 +67,39 @@ class ProductCreate extends Component {
 		this.setState({[selectedOption.name]: selectedOption.value })
 	};
 
+	// handle input attributes
+	handleInputattributes = e => {
+		this.setState({ attributes: { ...this.state.attributes, [e.target.name]: e.target.value }})
+	} 
+	
+	// Adding material tags
+	addTag = e => {
+		if (e.key === "Enter" && e.target.value !== "") {
+			const value = e.target.value;
+
+			// check the duplicate value in array
+			if (
+				this.state.attributes.material_tags.find(
+					tag => tag.toLowerCase() === value.toLowerCase()
+				)
+			) {
+				return;
+			}
+													
+			let newTag = this.state.attributes.material_tags.concat(value);
+			this.setState({ attributes: { ...this.state.attributes, material_tags: newTag }});
+			e.target.value = "";
+		}
+	};
+
+	removeTag = id => {
+		// console.log(id)
+		const tags = this.state.attributes.material_tags;
+		tags.splice(id, 1);
+		this.setState({ material_tags: tags });
+	};
+	
+
 	// get all the select options
 	getSelectAll = async () => {
 		let res = await axios.get(
@@ -87,32 +122,6 @@ class ProductCreate extends Component {
 		}
 	};
 
-	// Adding material tags
-	addTag = e => {
-		if (e.key === "Enter" && e.target.value !== "") {
-			const value = e.target.value;
-
-			// check the duplicate value in array
-			if (
-				this.state.material_tags.find(
-					tag => tag.toLowerCase() === value.toLowerCase()
-				)
-			) {
-				return;
-			}
-			let newTag = this.state.material_tags.concat(value);
-			this.setState({ material_tags: newTag });
-			e.target.value = "";
-		}
-	};
-
-	removeTag = id => {
-		// console.log(id)
-		const tags = this.state.material_tags;
-		tags.splice(id, 1);
-		this.setState({ material_tags: tags });
-	};
-
 	// on submit
 	onFormSubmit = e => {
 		e.preventDefault();
@@ -125,17 +134,17 @@ class ProductCreate extends Component {
 			description: this.state.description,
 			supplier: this.state.supplier,
 			barcode: this.state.barcode,
-			dimension_length: this.state.dimension_length,
-			dimension_width: this.state.dimension_width,
-			dimension_height: this.state.dimension_height,
-			color: this.state.color,
-			material_tags: this.state.material_tags,
-			fitting_type: this.state.fitting_type,
-			fitting_qty: this.state.fitting_qty,
-			weight_kg: this.state.weight_kg,
-			packing_length: this.state.packing_length,
-			packing_width: this.state.packing_width,
-			packing_height: this.state.packing_height,
+			dimension_length: this.state.attributes.dimension_length,
+			dimension_width: this.state.attributes.dimension_width,
+			dimension_height: this.state.attributes.dimension_height,
+			color: this.state.attributes.color,
+			material_tags: this.state.attributes.material_tags,
+			fitting_type: this.state.attributes.fitting_type,
+			fitting_qty: this.state.attributes.fitting_qty,
+			weight_kg: this.state.attributes.weight_kg,
+			packing_length: this.state.attributes.packing_length,
+			packing_width: this.state.attributes.packing_width,
+			packing_height: this.state.attributes.packing_height,
 			cost: this.state.cost,
 			srp: this.state.srp,
 			delivery_fee: this.state.delivery_fee,
@@ -145,7 +154,8 @@ class ProductCreate extends Component {
 			sales_price: this.state.sales_price,
 			product_image: this.state.product_image
 		};
-
+		
+		// console.log(data.attributes);
 		this.postProduct(data);
 	};
 
@@ -179,17 +189,18 @@ class ProductCreate extends Component {
 		data.append("stock_alarm", product.stock_alarm);
 		data.append("sales_price", product.sales_price);
 		data.append("product_image", product.product_image);
-
+		
 		let res = await axios.post(
 			`http://inventory.test/api/admin/product`,
 			data,
 			{
 				headers: {
-					"Content-Type": "multipart/form-data"
+					"Content-Type": "multipart/form-data",
+					// "Content-Type": "application/json",
 				}
 			}
 		);
-
+		
 		switch (res.data.status) {
 			case 0:
 				this.setState({ errors: res.data.errors });
@@ -214,6 +225,17 @@ class ProductCreate extends Component {
 			description,
 			supplier,
 			barcode,
+			cost,
+			srp,
+			delivery_fee,
+			stock_overwrite,
+			customization_fee,
+			stock_alarm,
+			sales_price,
+			product_image,
+			isSearchable } = this.state;
+
+		const {
 			dimension_length,
 			dimension_width,
 			dimension_height,
@@ -224,17 +246,7 @@ class ProductCreate extends Component {
 			weight_kg,
 			packing_length,
 			packing_width,
-			packing_height,
-			cost,
-			srp,
-			delivery_fee,
-			stock_overwrite,
-			customization_fee,
-			stock_alarm,
-			sales_price,
-			product_image,
-			isSearchable
-		} = this.state;
+			packing_height } = this.state.attributes
 
 		let supplierOption = this.state.name_suppliers.map(supplier => {
 			return { id: supplier._id, value: supplier.name, label: supplier.name , name: 'supplier'};
@@ -442,7 +454,7 @@ class ProductCreate extends Component {
 												className="form-control"
 												placeholder="L"
 												onChange={
-													this.handleInputChange
+													this.handleInputattributes
 												}
 												value={dimension_length}
 											/>
@@ -455,7 +467,7 @@ class ProductCreate extends Component {
 												className="form-control"
 												placeholder="W"
 												onChange={
-													this.handleInputChange
+													this.handleInputattributes
 												}
 												value={dimension_width}
 											/>
@@ -468,7 +480,7 @@ class ProductCreate extends Component {
 												className="form-control"
 												placeholder="H"
 												onChange={
-													this.handleInputChange
+													this.handleInputattributes
 												}
 												value={dimension_height}
 											/>
@@ -485,7 +497,7 @@ class ProductCreate extends Component {
 												name="color"
 												className="form-control"
 												onChange={
-													this.handleInputChange
+													this.handleInputattributes
 												}
 												value={color}
 											>
@@ -567,7 +579,7 @@ class ProductCreate extends Component {
 												name="fitting_type"
 												className="form-control"
 												onChange={
-													this.handleInputChange
+													this.handleInputattributes
 												}
 												value={fitting_type}
 											>
@@ -599,7 +611,7 @@ class ProductCreate extends Component {
 												className="form-control"
 												placeholder="0"
 												onChange={
-													this.handleInputChange
+													this.handleInputattributes
 												}
 												value={fitting_qty}
 											/>
@@ -620,7 +632,7 @@ class ProductCreate extends Component {
 												className="form-control"
 												placeholder="0"
 												onChange={
-													this.handleInputChange
+													this.handleInputattributes
 												}
 												value={weight_kg}
 											/>
@@ -639,7 +651,7 @@ class ProductCreate extends Component {
 												className="form-control"
 												placeholder="L"
 												onChange={
-													this.handleInputChange
+													this.handleInputattributes
 												}
 												value={packing_length}
 											/>
@@ -652,7 +664,7 @@ class ProductCreate extends Component {
 												className="form-control"
 												placeholder="W"
 												onChange={
-													this.handleInputChange
+													this.handleInputattributes
 												}
 												value={packing_width}
 											/>
@@ -665,7 +677,7 @@ class ProductCreate extends Component {
 												className="form-control"
 												placeholder="H"
 												onChange={
-													this.handleInputChange
+													this.handleInputattributes
 												}
 												value={packing_height}
 											/>

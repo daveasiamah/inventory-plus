@@ -2,11 +2,14 @@ import React, { Component, Fragments } from 'react';
 import axios from "axios";
 import Spinner from "../layouts/Spinner";
 import { Redirect, Link } from "react-router-dom";
+import Select from "react-select";
 
 class BrandEdit extends Component {
 	state = {
 		id: this.props.match.params.id,
 		singleBrand: [],
+		name_suppliers: [],
+		isSearchable: true,
 		loading: false,
 		redirect: false,
 		errors: null
@@ -14,21 +17,21 @@ class BrandEdit extends Component {
 	
 	componentDidMount() {
 		this.getSingleBrand(this.state.id);
+		this.getSelectAll();
 	}
 
 	getSingleBrand = async id => {
 		this.setState({ loading: true });
 
 		let res = await axios.get(`http://inventory.test/api/admin/brand/${id}`)
-								.catch(err => console.log(err));
-				
-		this.setState({singleBrand: {
+								
+		this.setState({ singleBrand: {
 				name: res.data.brand.name,
 				description: res.data.brand.description,
-				unit: res.data.brand.unit,
-				attributes: res.data.brand.attributes.split(","),
+				supplier_id: res.data.brand.supplier_id,
+				supplier_name: res.data.brand.supplier_name
 			},
-
+			
 			loading: false
 		});
 	}
@@ -37,7 +40,40 @@ class BrandEdit extends Component {
 	handleInputChange = (e) => {
 		this.setState({ singleBrand: { ...this.state.singleBrand, [e.target.name]: e.target.value}})
 	}
+
+	// handle the select options
+	handleSelectInput = selectedOption => {
+		console.log(selectedOption);
+		this.setState({
+			singleBrand: {
+				...this.state.singleBrand,
+				supplier_id: selectedOption.value,
+				supplier_name: selectedOption.label
+			}
+		});
+	};
 	
+
+	// get all the select options
+	getSelectAll = async () => {
+		let res = await axios.get(
+			"http://inventory.test/api/admin/product/select/detail"
+		);
+
+		switch (res.data.status) {
+			case 0:
+				// nothing for now
+				break;
+			case 1:
+				this.setState({
+					name_suppliers: res.data.suppliers
+				});
+				break;
+			default:
+				break;
+		}
+	};
+
 	// on submit
 	onFormSubmit = (e) => {
 		e.preventDefault();
@@ -51,8 +87,8 @@ class BrandEdit extends Component {
 		let updateData = {
 			name: brand.name,
 			description: brand.description,
-			unit: brand.unit,
-			attributes: brand.attributes.toString()
+			supplier_id: brand.supplier_id,
+			supplier_name: brand.supplier_name
 		}
 
 		let res = await axios.put(`http://inventory.test/api/admin/brand/${id}`, updateData)
@@ -74,45 +110,24 @@ class BrandEdit extends Component {
 		this.setState({ loading: false });
 	}
 	
-
-	// Adding brand attributes
-	addTag = e => {
-		if (e.key === "Enter" && e.target.value !== "") {
-			const value = e.target.value;
-
-			// check the duplicate value in array
-			if (
-				this.state.singleBrand.attributes.find(
-					tag => tag.toLowerCase() === value.toLowerCase()
-				)
-			) {
-				return;
-			}
-			let newTag = this.state.singleBrand.attributes.concat(value);
-			this.setState({
-				singleBrand: {
-					...this.state.singleBrand,
-					["attributes"]: newTag
-				}
-			});
-			e.target.value = "";
-		}
-	};
-
-	removeTag = id => {
-		// console.log(id)
-		const attributes = this.state.singleBrand.attributes;
-		attributes.splice(id, 1);
-		this.setState({ attributes: attributes });
-	};
-	
 	render() {
+
+		let supplierOption = this.state.name_suppliers.map(supplier => {
+			return {
+				id: supplier._id,
+				value: supplier._id,
+				label: supplier.name,
+				name: "supplier_id"
+			};
+		});
+
 		// console.log(this.state.singleSupplier)
 		const { 
 			name, 
 			description, 
-			unit, 
-			attributes } = this.state.singleBrand; 
+			suppler_id, 
+			supplier_name,
+			isSearchable } = this.state.singleBrand; 
 
 		if(this.state.loading){
 			// loading spinner
@@ -133,7 +148,7 @@ class BrandEdit extends Component {
 						  		{this.state.errors.map((error,i) => (
 									<li key={i}>{error}</li>
 								)) }
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<button type="button" className="close" data-dismiss="alert" aria-label="Close">
 							    	<span aria-hidden="true">&times;</span>
 							  	</button>
 							</div>
@@ -178,70 +193,18 @@ class BrandEdit extends Component {
 								<div className="form-group row">
 				                  <label className="col-md-3 label-control">Unit</label>
 				                  <div className="col-md-9">
-				                    <input
-				                      type="text"
-				                      id="unit"
-				                      name="unit"
-				                      className="form-control"
-				                      placeholder="unit"
-				                      value={unit}
-				                      onChange={this.handleInputChange}
-				                    />
+				                  		<Select
+											defaultValue={suppler_id}
+											defaultInputValue={supplier_name}
+											placeholder="Select Brand..."
+											isSearchable={isSearchable}
+											onChange={
+												this.handleSelectInput
+											}
+											options={supplierOption}
+										/>
 				                  </div>
 				                </div>
-								
-
-								<div className="form-group row">
-									<label className="col-md-3 label-control">
-										Attributes
-									</label>
-									<div className="col-md-9">
-										<div className="form-group">
-											<ul className="containerUl float">
-												{attributes ? (
-													attributes.map(
-														(tag, index) => (
-															<li
-																className="item float-item"
-																key={index}
-															>
-																<span className="badge badge-primary">
-																	{tag}
-																	<button
-																		type="button"
-																		className="btn btn-primary btn-sm"
-																		onClick={e =>
-																			this.removeTag(
-																				index
-																			)
-																		}
-																	>
-																		<i className="icon la la-times"></i>
-																	</button>
-																</span>
-															</li>
-														)
-													)
-												) : (
-													<span>No Tags</span>
-												)}
-											</ul>
-											<input
-												type="text"
-												className="form-control"
-												placeholder="Enter Attributes"
-												name="attributes"
-												onKeyUp={e =>
-													this.addTag(e)
-												}
-												onKeyPress={e => {
-													if (e.key === "Enter")
-														e.preventDefault();
-												}}
-											/>
-										</div>
-									</div>
-								</div>
 				             </div>
 
 				            </section>

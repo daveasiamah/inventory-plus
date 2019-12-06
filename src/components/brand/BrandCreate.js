@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import Spinner from "../layouts/Spinner";
+import Select from "react-select";
 import axios from 'axios';
 
 class BrandAdd extends Component {
@@ -8,15 +9,27 @@ class BrandAdd extends Component {
 	state = {
 		name: '',
 		description: '',
-		unit: '',
-		attributes: [],
+		supplier_id: '',
+		supplier_name: '',
+		name_suppliers: [],
+		isSearchable: true,
 		loading: false,
 		redirect: false,
 		errors: null,
 	}
+
+	componentDidMount() {
+		this.getSelectAll();
+	}
 	
 	// handle inputs
 	handleInputChange = (e) => this.setState({ ...this.state.brand,[e.target.name]: e.target.value });
+	
+	// handle the select options
+	handleSelectInput = selectedOption => {
+		console.log(selectedOption.value)
+		this.setState({ supplier_id: selectedOption.value, supplier_name: selectedOption.label })
+	};
 	
 	// on submit
 	onFormSubmit = (e)=> {
@@ -24,8 +37,8 @@ class BrandAdd extends Component {
 		let data = {
 			name: this.state.name,
 			description: this.state.description,
-			unit: this.state.unit,
-			attributes: this.state.attributes.toString()
+			supplier_id: this.state.supplier_id,
+			supplier_name: this.state.supplier_name,
 		}
 
 		this.brandPost(data);
@@ -49,41 +62,39 @@ class BrandAdd extends Component {
 		
 		this.setState({ loading: false });
 	}		
-
-	// Adding attributes
-	addTag = e => {
-	    if (e.key === "Enter" && e.target.value !== "") {
-	      const value = e.target.value;
-
-	      // check the duplicate value in array
-	      if (
-	        this.state.attributes.find(
-	          tag => tag.toLowerCase() === value.toLowerCase()
-	        )
-	      ) {
-	        return;
-	      }
-	      let newTag = this.state.attributes.concat(value);
-	      this.setState({ attributes: newTag });
-	      e.target.value = "";
-	    }
-	 };
 	
-	// remove attributes
-	removeTag = id => {
-	    // console.log(id)
-	    const tags = this.state.attributes;
-	    tags.splice(id, 1);
-	    this.setState({ attributes: tags });
+
+	// get all the select options
+	getSelectAll = async () => {
+		let res = await axios.get(
+			"http://inventory.test/api/admin/product/select/detail"
+		);
+
+		switch (res.data.status) {
+			case 0:
+				// nothing for now
+				break;
+			case 1:
+				this.setState({
+					name_suppliers: res.data.suppliers
+				});
+				break;
+			default:
+				break;
+		}
 	};
 	
+
 	render() {
 
 		const { 
 			name, 
 			description, 
-			unit, 
-			attributes } = this.state;
+			isSearchable } = this.state;
+
+		let supplierOption = this.state.name_suppliers.map(supplier => {
+			return { value: supplier._id, label: supplier.name , name: 'supplier_id'};
+		});
 
 		if(this.state.loading){
 			// load spinner
@@ -145,58 +156,18 @@ class BrandAdd extends Component {
 				                </div>
 								
 								<div className="form-group row">
-				                  <label className="col-md-3 label-control">Unit</label>
-				                  <div className="col-md-9">
-				                    <input
-				                      type="text"
-				                      id="unit"
-				                      name="unit"
-				                      className="form-control"
-				                      placeholder="unit"
-				                      value={unit}
-				                      onChange={this.handleInputChange}
-				                    />
-				                  </div>
-				                </div>
-
-
-								<div className="form-group row">
 				                    <label className="col-md-3 label-control">
-				                    	Attributes
+				                    	Supplier
 				                    </label>
 					                <div className="col-md-9">
-						                <div className="form-group">
-						                     <ul className="containerUl float">
-						                        {attributes ? (
-						                          attributes.map((attribute, index) => (
-						                            <li className="item float-item" key={index}>
-						                              <span className="badge badge-primary">
-						                                {attribute}
-						                                <button
-						                                  type="button"
-						                                  className="btn btn-primary btn-sm"
-						                                  onClick={e => this.removeTag(index)}
-						                                >
-						                                  <i className="icon la la-times"></i>
-						                                </button>
-						                              </span>
-						                            </li>
-						                          ))
-						                        ) : (
-						                          <span>No Tags</span>
-						                        )}
-						                    </ul>
-						                    <input
-						                        type="text"
-						                        className="form-control"
-						                        placeholder="Enter Attributes"
-						                        name="attributes"
-						                        onKeyUp={e => this.addTag(e)}
-						                        onKeyPress={e => {
-						                          if (e.key === "Enter") e.preventDefault();
-						                        }}
-							                />
-							            </div>
+										<Select
+											placeholder="Select Supplier..."
+											isSearchable={isSearchable}
+											onChange={
+												this.handleSelectInput
+											}
+											options={supplierOption}
+										/>
 					                 </div>
 								</div>
 				             </div>

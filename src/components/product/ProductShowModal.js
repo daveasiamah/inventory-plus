@@ -12,18 +12,7 @@ class ProductShowModal extends Component {
 			description,
 			supplier,
 			barcode,
-			dimension_length,
-			dimension_width,
-			dimension_height,
-			color,
-			specs_category,
-			material_tags,
-			fitting_type,
-			fitting_qty,
-			weight_kg,
-			packing_length,
-			packing_width,
-			packing_height,
+			attributes,
 			cost,
 			srp,
 			delivery_fee,
@@ -35,6 +24,7 @@ class ProductShowModal extends Component {
 			created_at,
 			updated_at
 		} = this.props.singleProduct;
+		
 
 		if (this.props.singleProduct != null) {
 			return (
@@ -91,7 +81,9 @@ class ProductShowModal extends Component {
 												<strong>Barcode:</strong>{" "}
 												{barcode}
 											</p>
-											<p>
+	
+
+{/*											<p>
 												<strong>
 													Dimension Length:
 												</strong>{" "}
@@ -111,10 +103,6 @@ class ProductShowModal extends Component {
 											</p>
 											<p>
 												<strong>Color:</strong> {color}
-											</p>
-											<p>
-												<strong>Specs Category:</strong>{" "}
-												{specs_category}
 											</p>
 											<p>
 												<strong>Material Tags:</strong>{" "}
@@ -148,7 +136,7 @@ class ProductShowModal extends Component {
 											<p>
 												<strong>Packing Height:</strong>{" "}
 												{packing_height}
-											</p>
+											</p>*/}
 											<p>
 												<strong>Cost:</strong> {cost}
 											</p>
