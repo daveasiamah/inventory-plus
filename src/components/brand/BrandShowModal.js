@@ -1,88 +1,50 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types';
-import Spinner from "../layouts/Spinner";
-import axios from 'axios';
+import React, { Component } from 'react';
+import { Modal, Button } from 'react-bootstrap';
 
 class BrandShowModal extends Component {
 	
-
 	render() {
-
 		const { 
-			name, 
-			description,  
-			created_at,
-			updated_at } = this.props.singleBrand; 
+			singleBrand: {
+				name, 
+				description, 
+				created_at, 
+				updated_at 
+			}, 
+			show, 
+			onHide 
+		} = this.props;
 
-		if(this.props.singleBrand != null){
-			return (
-				<div
-					id="show-modal"
-					className="modal fade"
-					tabIndex="-1"
-					role="dialog"
-					>
-					<div className="modal-dialog" role="document">
-						<div className="modal-content">
-							<div className="modal-header">
-								<h5 className="modal-title"><strong>Complete Information</strong></h5>
-								<button
-									type="button"
-									className="close"
-									data-dismiss="modal"
-									aria-label="Close"
-								>
-									<span aria-hidden="true">×</span>
-								</button>
-
-							</div>
-							<div className="modal-body">
-								<div className="container">
-									<p><strong>Name:</strong> {name}</p>
-									<p><strong>Description:</strong> {description}</p>
-									<hr/>
-									<p>Created at: {created_at}</p>
-									<p>Updated at: {updated_at}</p>
-								</div>
-							</div>
-							<div className="modal-footer"></div>
-						</div>
-					</div>
-				</div>
-			)
-		}else{
-			return(
-				<div
-					id="show-modal"
-					className="modal fade"
-					tabIndex="-1"
-					role="dialog"
-					>
-					<div className="modal-dialog" role="document">
-						<div className="modal-content">
-							<div className="modal-header">
-								<h5 className="modal-title"><strong>Complete Information</strong></h5>
-								<button
-									type="button"
-									className="close"
-									data-dismiss="modal"
-									aria-label="Close"
-								>
-									<span aria-hidden="true">×</span>
-								</button>
-
-							</div>
-							<div className="modal-body">
-								<div className="container">
-										<Spinner/>
-								</div>
-							</div>
-							<div className="modal-footer"></div>
-						</div>
-					</div>
-				</div>
-			)
-		}
+		return (
+	      <Modal 
+	      	className="modal-container"
+	      	show={show} 
+	      	onHide={onHide}
+	      	animation={true}
+	      >
+	        <Modal.Header closeButton>
+	          <Modal.Title>Brand Information</Modal.Title>
+	        </Modal.Header>
+			
+	        <Modal.Body>
+	      		<div>
+	      			<h4>Name: {name}</h4>
+	      			<h4>Description: {description}</h4>
+	      			<hr />
+	      			<div>Created at: {created_at}</div>
+	      			<div>Updated at: {updated_at}</div>
+	      		</div>
+	        </Modal.Body>
+	        <Modal.Footer>
+	              <Button 
+	              	variant="danger btn-sm" 
+	              	onClick={this.props.onHide}
+	              >
+		            Close
+		          </Button>
+	        </Modal.Footer>
+	      </Modal>
+		)
 	}
 }
 

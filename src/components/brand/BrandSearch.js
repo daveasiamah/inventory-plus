@@ -4,7 +4,6 @@ import BrandCreateModal from './BrandCreateModal';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-
 export class SupplierSearch extends Component {
 	state = {
 		search: '',

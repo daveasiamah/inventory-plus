@@ -12,7 +12,6 @@ class BrandCreateModal extends Component {
 	}
 
 	static propTypes = {
-		show: PropTypes.func.isRequired,
 		onHide: PropTypes.func.isRequired,
 		getBrands: PropTypes.func.isRequired,
 	};
@@ -71,7 +70,7 @@ class BrandCreateModal extends Component {
 	        >
 
 	          <Modal.Header closeButton>
-	            <Modal.Title>Modal title</Modal.Title>
+	            <Modal.Title>Create New</Modal.Title>
 	          </Modal.Header>
 
 	          <Modal.Body>
@@ -98,8 +97,7 @@ class BrandCreateModal extends Component {
 								  	}
 								</div>
 
-								<form onKeyPress={e => {if (e.key === "Enter") e.preventDefault()}}
-							          onSubmit={e => this.onFormSubmit(e)}>
+								<form onSubmit={e => this.onFormSubmit(e)}>
 						            <section className="row">
 						              <div className="col-sm-12">
 						                <div className="form-group row">
@@ -139,11 +137,12 @@ class BrandCreateModal extends Component {
 							              <div className="form-group">
 							                <Button
 												type="button"
-												className="btn btn-sm btn-danger mr-1"
+												className="btn btn-sm btn-danger"
 												onClick={this.props.onHide}
 											>
 											 Cancel
 											</Button>
+											{" "}
 							                <button type="submit" className="btn btn-primary btn-sm">
 							                  Save
 							                </button>

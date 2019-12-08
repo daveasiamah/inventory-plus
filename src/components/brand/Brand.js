@@ -96,6 +96,7 @@ class Brand extends Component {
                                     brands={this.state.brands}
                                     totalCount={this.state.totalCount}
                                     moveToArchives={this.moveToArchives}
+                                    getBrands={this.getBrands}
                                 />
 
                                {this.state.totalCount > 10 && (
