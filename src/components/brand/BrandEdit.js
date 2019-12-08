@@ -8,8 +8,6 @@ class BrandEdit extends Component {
 	state = {
 		id: this.props.match.params.id,
 		singleBrand: [],
-		name_suppliers: [],
-		isSearchable: true,
 		loading: false,
 		redirect: false,
 		errors: null
@@ -17,7 +15,6 @@ class BrandEdit extends Component {
 	
 	componentDidMount() {
 		this.getSingleBrand(this.state.id);
-		this.getSelectAll();
 	}
 
 	getSingleBrand = async id => {
@@ -27,9 +24,7 @@ class BrandEdit extends Component {
 								
 		this.setState({ singleBrand: {
 				name: res.data.brand.name,
-				description: res.data.brand.description,
-				supplier_id: res.data.brand.supplier_id,
-				supplier_name: res.data.brand.supplier_name
+				description: res.data.brand.description
 			},
 			
 			loading: false
@@ -41,38 +36,6 @@ class BrandEdit extends Component {
 		this.setState({ singleBrand: { ...this.state.singleBrand, [e.target.name]: e.target.value}})
 	}
 
-	// handle the select options
-	handleSelectInput = selectedOption => {
-		console.log(selectedOption);
-		this.setState({
-			singleBrand: {
-				...this.state.singleBrand,
-				supplier_id: selectedOption.value,
-				supplier_name: selectedOption.label
-			}
-		});
-	};
-	
-
-	// get all the select options
-	getSelectAll = async () => {
-		let res = await axios.get(
-			"http://inventory.test/api/admin/product/select/detail"
-		);
-
-		switch (res.data.status) {
-			case 0:
-				// nothing for now
-				break;
-			case 1:
-				this.setState({
-					name_suppliers: res.data.suppliers
-				});
-				break;
-			default:
-				break;
-		}
-	};
 
 	// on submit
 	onFormSubmit = (e) => {
@@ -86,9 +49,7 @@ class BrandEdit extends Component {
 	updateSingleBrand = async (brand, id) => {
 		let updateData = {
 			name: brand.name,
-			description: brand.description,
-			supplier_id: brand.supplier_id,
-			supplier_name: brand.supplier_name
+			description: brand.description
 		}
 
 		let res = await axios.put(`http://inventory.test/api/admin/brand/${id}`, updateData)
@@ -112,22 +73,10 @@ class BrandEdit extends Component {
 	
 	render() {
 
-		let supplierOption = this.state.name_suppliers.map(supplier => {
-			return {
-				id: supplier._id,
-				value: supplier._id,
-				label: supplier.name,
-				name: "supplier_id"
-			};
-		});
-
 		// console.log(this.state.singleSupplier)
 		const { 
 			name, 
-			description, 
-			suppler_id, 
-			supplier_name,
-			isSearchable } = this.state.singleBrand; 
+			description } = this.state.singleBrand; 
 
 		if(this.state.loading){
 			// loading spinner
@@ -187,22 +136,6 @@ class BrandEdit extends Component {
 				                      value={description}
 				                      onChange={this.handleInputChange}
 				                    ></textarea>
-				                  </div>
-				                </div>
-								
-								<div className="form-group row">
-				                  <label className="col-md-3 label-control">Unit</label>
-				                  <div className="col-md-9">
-				                  		<Select
-											defaultValue={suppler_id}
-											defaultInputValue={supplier_name}
-											placeholder="Select Brand..."
-											isSearchable={isSearchable}
-											onChange={
-												this.handleSelectInput
-											}
-											options={supplierOption}
-										/>
 				                  </div>
 				                </div>
 				             </div>

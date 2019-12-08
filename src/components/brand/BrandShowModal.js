@@ -10,9 +10,7 @@ class BrandShowModal extends Component {
 
 		const { 
 			name, 
-			description, 
-			supplier_id,
-			supplier_name, 
+			description,  
 			created_at,
 			updated_at } = this.props.singleBrand; 
 
@@ -42,7 +40,6 @@ class BrandShowModal extends Component {
 								<div className="container">
 									<p><strong>Name:</strong> {name}</p>
 									<p><strong>Description:</strong> {description}</p>
-									<p><strong>Supplier:</strong> {supplier_name}</p>
 									<hr/>
 									<p>Created at: {created_at}</p>
 									<p>Updated at: {updated_at}</p>
@@ -55,7 +52,7 @@ class BrandShowModal extends Component {
 			)
 		}else{
 			return(
-					<div
+				<div
 					id="show-modal"
 					className="modal fade"
 					tabIndex="-1"

@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import BrandShowModal from './BrandShowModal';
+import BrandCreateModal from './BrandCreateModal';
+
 
 class BrandTable extends Component {
 	state = {
 		id: 0,
 		singleBrand: [],
+		showModal: false
 	}
 
 	static propTypes = {
@@ -35,12 +38,13 @@ class BrandTable extends Component {
 		return (
 			<Fragment>
 				<div className="table-responsive">
-					<table className="table table-striped table-hover">
+					<table className="table table-striped table-hover table-bordered">
 						<thead>
 							<tr>
 								<th>Name</th>
 								<th>Description</th>
-								<th>Supplier</th>
+								<th>Created at</th>
+								<th>Updated at</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -48,8 +52,9 @@ class BrandTable extends Component {
 							{this.props.brands.map(brand => (
 								<tr key={brand._id}>
 									<td>{brand.name}</td>
-									<td>{brand.description}</td>
-									<td>{brand.supplier_name}</td>
+									<td width="30%">{brand.description}</td>
+									<td>{brand.created_at}</td>
+									<td>{brand.updated_at}</td>
 									<td>
 										<div className="btn-group">
 											<button 
@@ -125,7 +130,6 @@ class BrandTable extends Component {
 					</div>
 				</div>
 
-				<BrandShowModal singleBrand={this.state.singleBrand}/>
 			</Fragment>
 		)
 	}

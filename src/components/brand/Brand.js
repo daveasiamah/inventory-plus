@@ -83,7 +83,7 @@ class Brand extends Component {
                 </div>
                 
                 <section className="row">
-                    <BrandSearch searchSupplier={this.searchBrand}/>
+                    <BrandSearch searchSupplier={this.searchBrand} getBrands={this.getBrands}/>
                 </section>    
 
 				<section className="row">

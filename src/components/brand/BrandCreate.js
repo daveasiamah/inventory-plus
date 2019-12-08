@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import Spinner from "../layouts/Spinner";
-import Select from "react-select";
 import axios from 'axios';
 
 class BrandAdd extends Component {
@@ -9,36 +8,20 @@ class BrandAdd extends Component {
 	state = {
 		name: '',
 		description: '',
-		supplier_id: '',
-		supplier_name: '',
-		name_suppliers: [],
-		isSearchable: true,
 		loading: false,
 		redirect: false,
 		errors: null,
 	}
 
-	componentDidMount() {
-		this.getSelectAll();
-	}
-	
 	// handle inputs
 	handleInputChange = (e) => this.setState({ ...this.state.brand,[e.target.name]: e.target.value });
-	
-	// handle the select options
-	handleSelectInput = selectedOption => {
-		console.log(selectedOption.value)
-		this.setState({ supplier_id: selectedOption.value, supplier_name: selectedOption.label })
-	};
-	
+
 	// on submit
 	onFormSubmit = (e)=> {
 		e.preventDefault();
 		let data = {
 			name: this.state.name,
 			description: this.state.description,
-			supplier_id: this.state.supplier_id,
-			supplier_name: this.state.supplier_name,
 		}
 
 		this.brandPost(data);
@@ -55,6 +38,7 @@ class BrandAdd extends Component {
 									break;
 								case 1:
 									this.setState({ loading: false, redirect: true });
+									this.props.onHide();
 									break;
 								default:
 									break;
@@ -64,37 +48,11 @@ class BrandAdd extends Component {
 	}		
 	
 
-	// get all the select options
-	getSelectAll = async () => {
-		let res = await axios.get(
-			"http://inventory.test/api/admin/product/select/detail"
-		);
-
-		switch (res.data.status) {
-			case 0:
-				// nothing for now
-				break;
-			case 1:
-				this.setState({
-					name_suppliers: res.data.suppliers
-				});
-				break;
-			default:
-				break;
-		}
-	};
-	
-
 	render() {
 
 		const { 
 			name, 
-			description, 
-			isSearchable } = this.state;
-
-		let supplierOption = this.state.name_suppliers.map(supplier => {
-			return { value: supplier._id, label: supplier.name , name: 'supplier_id'};
-		});
+			description } = this.state;
 
 		if(this.state.loading){
 			// load spinner
@@ -154,22 +112,6 @@ class BrandAdd extends Component {
 				                    ></textarea>
 				                  </div>
 				                </div>
-								
-								<div className="form-group row">
-				                    <label className="col-md-3 label-control">
-				                    	Supplier
-				                    </label>
-					                <div className="col-md-9">
-										<Select
-											placeholder="Select Supplier..."
-											isSearchable={isSearchable}
-											onChange={
-												this.handleSelectInput
-											}
-											options={supplierOption}
-										/>
-					                 </div>
-								</div>
 				             </div>
 				            </section>
 				        </div>
