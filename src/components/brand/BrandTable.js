@@ -127,6 +127,8 @@ class BrandTable extends Component {
 					show={this.state.editModal}
 					onHide={this.modalClose.bind(this, 'edit')}
 					id={this.state.id}
+					singleBrand={this.state.singleBrand}
+					getBrands={this.props.getBrands}
 				/>
 
 				<BrandDeleteModal 

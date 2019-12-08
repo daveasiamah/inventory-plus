@@ -18,7 +18,8 @@ class BrandShowModal extends Component {
 		return (
 	      <Modal 
 	      	className="modal-container"
-	      	show={show} 
+	      	show={show}
+	      	size="sm"
 	      	onHide={onHide}
 	      	animation={true}
 	      >
@@ -28,8 +29,8 @@ class BrandShowModal extends Component {
 			
 	        <Modal.Body>
 	      		<div>
-	      			<h4>Name: {name}</h4>
-	      			<h4>Description: {description}</h4>
+	      			<div><strong>Name: </strong>{name}</div>
+	      			<div><strong>Description: </strong>{description}</div>
 	      			<hr />
 	      			<div>Created at: {created_at}</div>
 	      			<div>Updated at: {updated_at}</div>
@@ -40,7 +41,7 @@ class BrandShowModal extends Component {
 	              	variant="danger btn-sm" 
 	              	onClick={this.props.onHide}
 	              >
-		            Close
+		          	  Close
 		          </Button>
 	        </Modal.Footer>
 	      </Modal>

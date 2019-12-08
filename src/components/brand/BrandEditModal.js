@@ -4,39 +4,43 @@ import axios from 'axios';
 
 class BrandEditModal extends Component {
 	state = {
-		id: this.props.id,
-		editBrand: [],	
+		id: null,
+		editBrand: [],
 		loading: false,
 		errors: null
 	}
 	
-	componentDidMount() {
-		this.setState({ id: this.props.id });
+	componentWillReceiveProps(nextProps) {
+		if(this.props.singleBrand !== nextProps.singleBrand){
+			this.setState({editBrand: nextProps.singleBrand})
+		}
+
+		if(this.props.id !== nextProps.id){
+			this.setState({id: nextProps.id})
+		}
 	}
 
 	// handle inputs
-	handleInputChange = (e) => this.setState({ editBrand:{ ...this.state.editBrand, [e.target.name]: e.target.value} });
+	handleInputChange = (e) => {
+		this.setState({ 
+				editBrand:{ ...this.state.editBrand,[e.target.name]: e.target.value} 
+			});
+		// this.setState({[e.target.name]: e.target.value})
+	}
 
 	// on submit
 	onFormSubmit = (e) => {
 		e.preventDefault();
-		let brand = this.state.editBrand;
+		let data = this.state.editBrand;
 		let id = this.state.id;
-		// console.log(brand);
-		// this.updateSingleBrand(brand, id);
+		
+		this.updateSingleBrand(data, id);
 	}
-
-
-	// get the brand base on id
-	getSingleBrand = async (id) => {
-        let res = await axios.get(`http://inventory.test/api/admin/brand/${id}`)
-                            
-        this.setState({editBrand: res.data.brand });
-        // console.log(res.data.supplier)
-    }
 
     // update single supplier
 	updateSingleBrand = async (brand, id) => {
+		this.setState({ loading: true });
+
 		let updateData = {
 			name: brand.name,
 			description: brand.description
@@ -49,10 +53,14 @@ class BrandEditModal extends Component {
 									break;
 								case 1:
 									this.setState({
-										singleBrand: [], 
-										loading: false, 
-										redirect: true 
+										editBrand: [], 
+										loading: false,
+										errors: null
 									});
+									// hide the modal
+									this.props.onHide();
+									// load the data
+									this.props.getBrands();
 									break;
 								default:
 									break;
@@ -64,8 +72,6 @@ class BrandEditModal extends Component {
 	render() {
 		
 		const { name, description } = this.state.editBrand;
-
-		console.log(this.state.id);	
 
 		return (
 			<Modal className="modal-container" 
