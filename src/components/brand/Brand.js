@@ -54,7 +54,6 @@ class Brand extends Component {
                         )
     }
 
-
     // search 
     searchBrand = async (search) => {
         this.setState({ loading: true});

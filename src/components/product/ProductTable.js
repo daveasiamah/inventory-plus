@@ -1,14 +1,16 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
+import { Modal, Button } from 'react-bootstrap';
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import ProductShowModal from './ProductShowModal';
 
 class ProductTable extends Component {
 	state = {
 		id: 0,
 		singleProduct: [],
-		attributes: []
+		showModal: false,
+		editModal: false,
+		deleteModal: false
 	};
 
 	conFirmMoveToArchives = () => {
@@ -23,13 +25,43 @@ class ProductTable extends Component {
 	getSingleProduct = async (id) => {
         let res = await axios.get(`http://inventory.test/api/admin/product/${id}`)
                             
-        this.setState({singleProduct: res.data.product, attributes: res.data.attributes });
+        this.setState({singleProduct: res.data.product });
     }
 	
-	showModal = (id) => {
-		this.getSingleProduct(id);
+		// show modal
+	modalOpen = (status, id) => { 
+		switch(status){
+			case 'show':
+				this.setState({showModal: true});
+				this.getSingleProduct(id);
+				break;
+			case 'edit':
+				this.setState({editModal: true, id: id});
+				this.getSingleProduct(id);
+				break;
+			case 'delete':
+				this.setState({deleteModal: true, id: id});
+			default:
+				// do nothing
+				break;
+		}
 	}
-
+	
+	// hide modal
+	modalClose = (status) => {
+	  	switch(status){
+			case 'show':
+				this.setState({showModal: false});
+				break;
+			case 'edit':
+				this.setState({editModal: false});
+			case 'delete':
+				this.setState({deleteModal: false});
+			default:
+				break;
+		}
+	}
+	
 	render() {
 		const { products } = this.props;
 
@@ -63,14 +95,12 @@ class ProductTable extends Component {
 									<td>{product.status ? "Yes" : "No"}</td>
 									<td>
 										<div className="btn-group">
-											<button 
-												onClick={() => this.showModal(product._id)}
-												className="btn btn-sm btn-info btn-sm"
-												data-toggle="modal"
-												data-target="#show-modal"
-												>
+											<Link
+												to={`/product/${product._id}`}
+												className="btn btn-sm btn-info"
+											>
 												<i className="ft ft-eye"></i>
-											</button>
+											</Link>
 											<Link
 												to={`/product/${product._id}/edit`}
 												className="btn btn-sm btn-warning"
@@ -120,10 +150,10 @@ class ProductTable extends Component {
 								<h4 align="center">
 									Do you want to delete this item?
 								</h4>
-								<div align="center" className="mt-3">
+								<div align="center" className="mt-1">
 									<button
 										type="button"
-										className="btn btn-info"
+										className="btn btn-primary"
 										data-dismiss="modal"
 										onClick={this.conFirmMoveToArchives}
 									>
@@ -135,8 +165,6 @@ class ProductTable extends Component {
 						</div>
 					</div>
 				</div>
-
-				<ProductShowModal singleProduct={this.state.singleProduct} />
 			</Fragment>
 		);
 	}

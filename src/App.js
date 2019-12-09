@@ -8,6 +8,7 @@ import Home from "./components/admin/Home";
 // Product
 import Product from "./components/product/Product";
 import ProductCreate from "./components/product/ProductCreate";
+import ProductShow from "./components/product/ProductShow";
 import ProductEdit from "./components/product/ProductEdit";
 
 // Supplier
@@ -57,6 +58,7 @@ class App extends Component {
                   <Route path="/" exact component={Home} />
                   <Route path="/product" exact component={Product} />
                   <Route path="/product/create" component={ProductCreate} />
+                  <Route path="/product/:id" exact component={ProductShow} />
                   <Route path="/product/:id/edit" component={ProductEdit} />
 
                   {/* suppliers */}

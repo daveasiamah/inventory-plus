@@ -1,10 +1,13 @@
-import React, { Component } from "react";
-import { Modal, Button } from 'react-bootstrap';
+import React, { Component, Fragment } from 'react';
 import axios from "axios";
+import Spinner from "../layouts/Spinner";
+import PropTypes from "prop-types";
+import { Redirect, Link } from "react-router-dom";
 
-class ProductShowModal extends Component {
-	
+class ProductShow extends Component {
+
 	state = {
+		id: this.props.match.params.id,
 		singleProduct: {
 			sku: "",
 			product_name: "",
@@ -36,17 +39,14 @@ class ProductShowModal extends Component {
 			product_image: null,
 			created_at: '',
 			updated_at: ''
-		}
+		},
+		loading: false,
+		redirect: false,
+		errors: null
 	};
 	
-	
-	componentWillReceiveProps(nextProps) {
-		if(this.props.id !== nextProps.id){
-			this.setState({ id: nextProps.id})
-		}
-	}
-
 	componentDidMount() {
+		// this.props.getSingleProduct(this.state.id)
 		this.getSingleProduct(this.state.id);
 	}
 
@@ -92,10 +92,9 @@ class ProductShowModal extends Component {
 			loading: false
 		});
 	};
-	
 
 	render() {
-		// destructuring
+
 		const {
 			sku,
 			product_name,
@@ -127,22 +126,27 @@ class ProductShowModal extends Component {
 			updated_at
 		} = this.state.singleProduct;
 
-		return (
-			<Modal 
-		      	className="modal-container"
-		      	show={this.props.show}
-		      	size="lg"
-		      	onHide={this.props.onHide}
-		      	animation={true}
-		      >
-		        <Modal.Header closeButton>
-		          <Modal.Title>Product Information</Modal.Title>
-		        </Modal.Header>
-				
-		        <Modal.Body>
-					<div className="container">
+		if(this.state.loading){
+			// loader
+			return <Spinner />
+		}else{
+
+			return (
+				<Fragment>
+					<h2> 					
+
+					<Link 
+						to='/product' 
+						className='btn btn-sm btn-primary mr-1'
+					>
+					<i className="la la-angle-double-left"></i>
+					</Link>
+						Product Information: 
+					</h2> 
+
+					<div className="card card-body">
 						<div className="row">
-							<div className="col-md-6">
+							<div className="col-md-4">
 								<p>
 									<strong>SKU:</strong> {sku}
 								</p>
@@ -172,8 +176,6 @@ class ProductShowModal extends Component {
 									{barcode}
 								</p>
 
-
-
 								<p>
 									<strong>
 										Dimension Length:
@@ -199,19 +201,21 @@ class ProductShowModal extends Component {
 									<strong>Material Tags:</strong>{" "}
 									{material_tags == ''  ? 'No Tags.' : material_tags}
 								</p>
-							</div>
 
-							<div className="col-md-6">
 								<p>
 									<strong>Fitting Type:</strong>{" "}
 									{fitting_type}
 								</p>
+							</div>
+
+							<div className="col-md-4">
 								<p>
 									<strong>
 										Fitting Quantity:
 									</strong>{" "}
 									{fitting_qty}
 								</p>
+
 								<p>
 									<strong>Weight (Kg):</strong>{" "}
 									{weight_kg}
@@ -227,7 +231,7 @@ class ProductShowModal extends Component {
 								<p>
 									<strong>Packing Height:</strong>{" "}
 									{packing_height}
-								</p>*/}
+								</p>
 								<p>
 									<strong>Cost:</strong> {cost}
 								</p>
@@ -260,29 +264,23 @@ class ProductShowModal extends Component {
 								</p>
 							</div>
 
-							<div className="col-md-12">
-								<img src={product_image} 
-									className="img-fluid rounded mx-auto d-block w-50"
+							<div className="col-md-4">
+								<h4>Product Image:</h4>
+								<img 
+									src={product_image} 
+									className="img-fluid rounded mx-auto d-block w-70"
 								/>
 							</div>
-
 						</div>
-							<hr />
-							<p><strong>Created at:</strong> {created_at}</p>
-							<p><strong>Updated at:</strong> {updated_at}</p>
+						
+						<hr />
+						<p><strong>Created at:</strong> {created_at}</p>
+						<p><strong>Updated at:</strong> {updated_at}</p>
 					</div>
-		        </Modal.Body>
-		        <Modal.Footer>
-		              <Button 
-		              	variant="danger btn-sm" 
-		              	onClick={this.props.onHide}
-		              >
-			          	  Close
-			          </Button>
-		        </Modal.Footer>
-		      </Modal>
-		);
+				</Fragment>
+			)
+		}
 	}
 }
 
-export default ProductShowModal;
+export default ProductShow;
