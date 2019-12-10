@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
+import '../layouts/styles/iziToast.css';
+import iziToast from 'izitoast';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -33,7 +35,22 @@ class CategoryCreate extends Component {
 		this.categoryPost(data);
 	};
 	
-	
+	// alert message
+    toast = (message) => {
+        iziToast.show({
+            title: 'Success',
+            icon: 'ico-success',
+            message: message,
+            iconColor: 'rgb(0, 255, 184)',
+            theme: 'dark',
+            progressBarColor: 'rgb(0, 255, 184)',
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft',
+            transitionOut: 'fadeOut',
+            timeout: 4000,
+        });
+    }
+
 	// post the data
 	categoryPost = async (category) => {
 		this.setState({ loading: true });
@@ -54,6 +71,8 @@ class CategoryCreate extends Component {
 									this.props.onHide();
 									// get the new category
 									this.props.getCategory();
+									// alert message
+									this.toast(res.data.message);
 									break;
 								default:
 									break;

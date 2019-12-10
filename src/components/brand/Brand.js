@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import Spinner from "../layouts/Spinner";
 import axios from 'axios';
 import Pagination from "react-js-pagination";
-import BrandTable from './BrandTable';
-import BrandSearch from './BrandSearch';
 import '../layouts/styles/iziToast.css';
 import iziToast from 'izitoast';
+import BrandTable from './BrandTable';
+import BrandSearch from './BrandSearch';
 
 
 class Brand extends Component {
@@ -22,19 +22,24 @@ class Brand extends Component {
 	}
 
 	componentDidMount() {
-
 		this.getBrands();
-
-        this.alert();
 	}
-    	
-    alert = () => {
-        iziToast.success({
-            title: 'Success',
-            'message': 'Data has been Inserted'
-        })
-    }
     
+    // alert message
+    toast = (message) => {
+        iziToast.show({
+            title: 'Success',
+            icon: 'ico-success',
+            message: message,
+            iconColor: 'rgb(0, 255, 184)',
+            theme: 'dark',
+            progressBarColor: 'rgb(0, 255, 184)',
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft',
+            transitionOut: 'fadeOut',
+            timeout: 4000,
+        });
+    }
 
 	// fetch all brands
     getBrands = async () => {
@@ -53,6 +58,8 @@ class Brand extends Component {
             `http://inventory.test/api/admin/brand/archives/${id}`);
         // fetch the new updated data
         this.getBrands();
+        // alert message
+        this.toast(res.data.message);
     };
     
     // pagination links

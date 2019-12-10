@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import { Redirect, Link } from "react-router-dom";
 import Spinner from "../layouts/Spinner";
 import Select from "react-select";
+import '../layouts/styles/iziToast.css';
+import iziToast from 'izitoast';
 import axios from "axios";
 
 class ProductCreate extends Component {
@@ -51,7 +53,25 @@ class ProductCreate extends Component {
 		this.getSelectAll();
 	}
 
+	 // alert message
+    toast = (message) => {
+        iziToast.show({
+            title: 'Success',
+            icon: 'ico-success',
+            message: message,
+            iconColor: 'rgb(0, 255, 184)',
+            theme: 'dark',
+            progressBarColor: 'rgb(0, 255, 184)',
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft',
+            transitionOut: 'fadeOut',
+            timeout: 4000,
+        });
+    }
+
+	// handle inputs
 	handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
+	// handle image input
 	handleFileChange = e => {
 		// show the image e
 		this.setState({
@@ -207,6 +227,8 @@ class ProductCreate extends Component {
 				break;
 			case 1:
 				this.setState({ loading: false, redirect: true });
+				// alert message 
+				this.toast(res.data.message);
 				break;
 			default:
 				break;

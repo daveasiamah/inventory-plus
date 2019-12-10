@@ -81,7 +81,6 @@ class SupplierTable extends Component {
 								<th>Landline</th>
 								<th>Mobile</th>
 								<th>Fax</th>
-								<th>Contact Person</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -93,7 +92,6 @@ class SupplierTable extends Component {
 									<td>{supplier.landline}</td>
 									<td>{supplier.mobile}</td>
 									<td>{supplier.fax}</td>
-									<td>{supplier.contact_person}</td>
 									<td>
 										<div className="btn-group">
 											<button

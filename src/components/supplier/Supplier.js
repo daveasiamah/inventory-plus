@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import Spinner from "../layouts/Spinner";
 import axios from 'axios';
 import Pagination from "react-js-pagination";
+import '../layouts/styles/iziToast.css';
+import iziToast from 'izitoast';
 import SupplierTable from './SupplierTable';
 import SupplierSearch from './SupplierSearch';
 
@@ -21,6 +23,22 @@ class Supplier extends Component {
 	componentDidMount() {
 		this.getSuppliers();
 	}
+
+    // alert message
+    toast = (message) => {
+        iziToast.show({
+            title: 'Success',
+            icon: 'ico-success',
+            message: message,
+            iconColor: 'rgb(0, 255, 184)',
+            theme: 'dark',
+            progressBarColor: 'rgb(0, 255, 184)',
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft',
+            transitionOut: 'fadeOut',
+            timeout: 4000,
+        });
+    }
     	
 	// fetch all suppliers
     getSuppliers = async () => {
@@ -39,6 +57,8 @@ class Supplier extends Component {
             `http://inventory.test/api/admin/supplier/archives/${id}`);
         // fetch the new updated data
         this.getSuppliers();
+        // alert message
+        this.toast(res.data.message);
     };
     
     // pagination links

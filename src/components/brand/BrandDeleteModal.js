@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
+
 class BrandDeleteModal extends Component {
 	render() {
 		const { id, conFirmMoveToArchives } = this.props;

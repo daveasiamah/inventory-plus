@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Spinner from "../layouts/Spinner";
 import Pagination from "react-js-pagination";
+import '../layouts/styles/iziToast.css';
+import iziToast from 'izitoast';
 import ProductTable from "./ProductTable";
 import ProductSearch from "./ProductSearch";
 
@@ -21,6 +23,23 @@ class Product extends Component {
     componentDidMount() {
         this.getProducts();
     }
+
+    // alert message
+    toast = (message) => {
+        iziToast.show({
+            title: 'Success',
+            icon: 'ico-success',
+            message: message,
+            iconColor: 'rgb(0, 255, 184)',
+            theme: 'dark',
+            progressBarColor: 'rgb(0, 255, 184)',
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft',
+            transitionOut: 'fadeOut',
+            timeout: 4000,
+        });
+    }
+
 
     // fetch all items
     getProducts = async () => {
@@ -52,7 +71,8 @@ class Product extends Component {
         );
         // fetch the new updated data
         this.getProducts();
-        console.log(res.data);
+        // alert  message
+        this.toast(res.data.message);
     };
 
     // pagination links

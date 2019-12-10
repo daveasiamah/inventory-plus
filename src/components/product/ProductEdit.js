@@ -3,6 +3,8 @@ import axios from "axios";
 import Spinner from "../layouts/Spinner";
 import PropTypes from "prop-types";
 import { Redirect, Link } from "react-router-dom";
+import '../layouts/styles/iziToast.css';
+import iziToast from 'izitoast';
 import Select from "react-select";
 
 class ProductEdit extends Component {
@@ -54,6 +56,22 @@ class ProductEdit extends Component {
 		this.getSingleProduct(this.state.id);
 		this.getSelectAll();
 	}
+
+    // alert message
+    toast = (message) => {
+        iziToast.show({
+            title: 'Success',
+            icon: 'ico-success',
+            message: message,
+            iconColor: 'rgb(0, 255, 184)',
+            theme: 'dark',
+            progressBarColor: 'rgb(0, 255, 184)',
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft',
+            transitionOut: 'fadeOut',
+            timeout: 4000,
+        });
+    }
 
 	// fetch the single item
 	getSingleProduct = async id => {
@@ -143,6 +161,8 @@ class ProductEdit extends Component {
 				break;
 			case 1:
 				this.setState({ loading: false, redirect: true });
+				// alert message
+				this.toast(res.data.message);
 				break;
 			default:
 				break;

@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import Spinner from "../layouts/Spinner";
 import axios from 'axios';
 import Pagination from "react-js-pagination";
+import '../layouts/styles/iziToast.css';
+import iziToast from 'izitoast';
 import CategoryTable from './CategoryTable';
 import CategorySearch from './CategorySearch';
 
@@ -22,6 +24,22 @@ class Category extends Component {
 		this.getCategory();
 	}
     	
+    // alert message
+    toast = (message) => {
+        iziToast.show({
+            title: 'Success',
+            icon: 'ico-success',
+            message: message,
+            iconColor: 'rgb(0, 255, 184)',
+            theme: 'dark',
+            progressBarColor: 'rgb(0, 255, 184)',
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft',
+            transitionOut: 'fadeOut',
+            timeout: 4000,
+        });
+    }
+
 	// fetch all brands
     getCategory = async () => {
         this.setState({ loading: true });
@@ -39,6 +57,8 @@ class Category extends Component {
             `http://inventory.test/api/admin/category/archives/${id}`);
         // fetch the new updated data
         this.getCategory();
+        // alert message
+        this.toast(res.data.message);
     };
     
     // pagination links

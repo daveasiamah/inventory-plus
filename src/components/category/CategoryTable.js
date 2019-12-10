@@ -85,7 +85,17 @@ class CategoryTable extends Component {
 							{this.props.categories.map(category => (
 								<tr key={category._id}>
 									<td>{category.name}</td>
-									<td>{category.parent_category}</td>
+									<td
+										className={
+											category.parent_category == ""
+												? "text-danger"
+												: null
+										}
+									>
+										{category.parent_category == ""
+											? "None"
+											: category.parent_category}
+									</td>
 									<td>{category.description}</td>
 									<td>{category.created_at}</td>
 									<td>{category.updated_at}</td>
@@ -137,7 +147,7 @@ class CategoryTable extends Component {
 
 				<CategoryEditModal
 					show={this.state.editModal}
-					onHide={this.modalClose.bind(this, 'edit')}
+					onHide={this.modalClose.bind(this, "edit")}
 					id={this.state.id}
 					singleCategory={this.state.singleCategory}
 					getCategory={this.props.getCategory}

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Modal, Button } from "react-bootstrap";
+import '../layouts/styles/iziToast.css';
+import iziToast from 'izitoast';
 import axios from "axios";
 
 class BrandEditModal extends Component {
@@ -40,6 +42,22 @@ class BrandEditModal extends Component {
 		this.updateSingleBrand(data, id);
 	};
 
+	// alert message
+	toast = (message) => {
+		iziToast.show({
+			title: 'Success',
+			icon: 'ico-success',
+			message: message,
+			iconColor: 'rgb(0, 255, 184)',
+            theme: 'dark',
+            progressBarColor: 'rgb(0, 255, 184)',
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft',
+            transitionOut: 'fadeOut',
+            timeout: 4000,
+		});
+	}
+
 	// update single supplier
 	updateSingleBrand = async (brand, id) => {
 		this.setState({ loading: true });
@@ -67,6 +85,8 @@ class BrandEditModal extends Component {
 				this.props.onHide();
 				// load the data
 				this.props.getBrands();
+				// alert message
+				this.toast(res.data.message);
 				break;
 			default:
 				break;
