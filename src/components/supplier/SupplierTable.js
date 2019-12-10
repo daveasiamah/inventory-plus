@@ -1,38 +1,75 @@
-import React, { Component, Fragment }  from 'react';
-import PropTypes from 'prop-types';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import SupplierShowModal from './SupplierShowModal';
+import React, { Component, Fragment } from "react";
+import PropTypes from "prop-types";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { Modal, Button } from "react-bootstrap";
+import SupplierShowModal from "./SupplierShowModal";
+import SupplierEditModal from './SupplierEditModal';
+import SupplierDeleteModal from "./SupplierDeleteModal";
 
 class SupplierTable extends Component {
 	state = {
 		id: 0,
 		singleSupplier: [],
 		isOpen: false,
-	}
+		showModal: false,
+		editModal: false,
+		deleteModal: false
+	};
 
 	static propTypes = {
 		suppliers: PropTypes.array.isRequired,
-		moveToArchives: PropTypes.func.isRequired,
+		moveToArchives: PropTypes.func.isRequired
 	};
 
-	getSingleSupplier = async (id) => {
-        let res = await axios.get(`http://inventory.test/api/admin/supplier/${id}`)
-                             
-        this.setState({singleSupplier: res.data.supplier });
-        // console.log(res.data.supplier)
-    }
-	
+	getSingleSupplier = async id => {
+		let res = await axios.get(
+			`http://inventory.test/api/admin/supplier/${id}`
+		);
+
+		this.setState({ singleSupplier: res.data.supplier });
+		// console.log(res.data.supplier)
+	};
+
 	conFirmMoveToArchives = () => {
 		this.props.moveToArchives(this.state.id);
 	};
 
-	showModal = (id) => {
-		this.getSingleSupplier(id);
-	}
-	
-	render() {
+	// show modal
+	modalOpen = (status, id) => {
+		switch (status) {
+			case "show":
+				this.setState({ showModal: true });
+				this.getSingleSupplier(id);
+				break;
+			case "edit":
+				this.setState({ editModal: true, id: id });
+				this.getSingleSupplier(id);
+				break;
+			case "delete":
+				this.setState({ deleteModal: true, id: id });
+			default:
+				// do nothing
+				break;
+		}
+	};
 
+	// hide modal
+	modalClose = status => {
+		switch (status) {
+			case "show":
+				this.setState({ showModal: false });
+				break;
+			case "edit":
+				this.setState({ editModal: false });
+			case "delete":
+				this.setState({ deleteModal: false });
+			default:
+				break;
+		}
+	};
+
+	render() {
 		return (
 			<Fragment>
 				<div className="table-responsive">
@@ -59,32 +96,36 @@ class SupplierTable extends Component {
 									<td>{supplier.contact_person}</td>
 									<td>
 										<div className="btn-group">
-											<button 
-												onClick={() => this.showModal(supplier._id)}
+											<button
 												className="btn btn-sm btn-info btn-sm"
-												data-toggle="modal"
-												data-target="#show-modal"
-												>
+												onClick={this.modalOpen.bind(
+													this,
+													"show",
+													supplier._id
+												)}
+											>
 												<i className="ft ft-eye"></i>
 											</button>
-											<Link
-												to={`/supplier/${supplier._id}/edit`}
-												className="btn btn-sm btn-warning btn-sm"
-											>
-											<i className="ft ft-edit"></i>
-											</Link>
 											<button
+												className="btn btn-sm btn-warning btn-sm"
+												onClick={this.modalOpen.bind(
+													this,
+													"edit",
+													supplier._id
+												)}
+											>
+												<i className="ft ft-edit"></i>
+											</button>
+											<Button
 												className="btn btn-sm btn-danger btn-sm"
-												data-toggle="modal"
-												data-target="#delete-modal"
-												onClick={() =>
-													this.setState({
-														id: supplier._id
-													})
-												}
+												onClick={this.modalOpen.bind(
+													this,
+													"delete",
+													supplier._id
+												)}
 											>
 												<i className="ft ft-x"></i>
-											</button>
+											</Button>
 										</div>
 									</td>
 								</tr>
@@ -132,10 +173,29 @@ class SupplierTable extends Component {
 					</div>
 				</div>
 
-				<SupplierShowModal singleSupplier={this.state.singleSupplier}/>
+				<SupplierShowModal
+					show={this.state.showModal}
+					onHide={this.modalClose.bind(this, "show")}
+					singleSupplier={this.state.singleSupplier}
+				/>
+
+				<SupplierEditModal
+					show={this.state.editModal}
+					onHide={this.modalClose.bind(this, "edit")}
+					id={this.state.id}
+					singleSupplier={this.state.singleSupplier}
+					getSuppliers={this.props.getSuppliers}
+				/>
+
+				<SupplierDeleteModal
+					show={this.state.deleteModal}
+					onHide={this.modalClose.bind(this, "delete")}
+					id={this.state.id}
+					conFirmMoveToArchives={this.conFirmMoveToArchives}
+				/>
 			</Fragment>
-		)
+		);
 	}
 }
 
-export default SupplierTable
+export default SupplierTable;

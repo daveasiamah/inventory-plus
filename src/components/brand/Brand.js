@@ -77,7 +77,6 @@ class Brand extends Component {
 				<div className="row mt-2">
                    <div className="col-sm-12">
                       <h3 className="pull-left">Total: {this.state.totalCount}</h3>
-                       
                    </div>
                 </div>
                 

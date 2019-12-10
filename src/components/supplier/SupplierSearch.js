@@ -1,4 +1,6 @@
 import React, { Component, Fragment } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import SupplierCreateModal from './SupplierCreateModal';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -10,8 +12,18 @@ export class SupplierSearch extends Component {
 
 	static propTypes = {
 		searchSupplier: PropTypes.func,
+		getSuppliers: PropTypes.func.isRequired
 
 	}
+
+	open = () => {
+	  this.setState({showModal: true});
+	}
+
+	close = () => {
+	  this.setState({showModal: false});
+	}
+
 	// handle search
     handleSearchChange = (e) => {
         this.setState({ [e.target.name]: e.target.value});
@@ -42,10 +54,17 @@ export class SupplierSearch extends Component {
 				</div>
 
 				<div className="col-auto">
-					<Link to={'/supplier/create'} className="btn btn-primary btn-sm pull-right mb-2">
-						Create New
-					</Link>
+					<Button 
+						onClick={this.open}
+						className="btn btn-sm btn-primary"
+					>Create New</Button>
 				</div>
+				
+				<SupplierCreateModal 
+					show={this.state.showModal} 
+					onHide={this.close}
+					getSuppliers={this.props.getSuppliers}
+				/>
 			</Fragment>
 		)
 	}

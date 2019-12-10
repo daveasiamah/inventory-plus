@@ -13,8 +13,6 @@ import ProductEdit from "./components/product/ProductEdit";
 
 // Supplier
 import Supplier from "./components/supplier/Supplier";
-import SupplierCreate from "./components/supplier/SupplierCreate";
-import SupplierEdit from "./components/supplier/SupplierEdit";
 
 // Brand
 import Brand from "./components/brand/Brand";
@@ -62,9 +60,7 @@ class App extends Component {
                   <Route path="/product/:id/edit" component={ProductEdit} />
 
                   {/* suppliers */}
-                  <Route path="/supplier" exact component={Supplier} />
-                  <Route path="/supplier/create" component={SupplierCreate} />
-                  <Route path="/supplier/:id/edit" component={SupplierEdit} />
+                  <Route path="/supplier" exact component={Supplier} /> 
 
                   {/* brands */}
                   <Route path="/brand" exact component={Brand} />

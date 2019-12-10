@@ -54,7 +54,6 @@ class Supplier extends Component {
                         )
     }
 
-
     // search 
     searchSupplier = async (search) => {
         this.setState({ loading: true});
@@ -83,7 +82,7 @@ class Supplier extends Component {
                 </div>
                 
                 <section className="row">
-                    <SupplierSearch searchSupplier={this.searchSupplier}/>
+                    <SupplierSearch searchSupplier={this.searchSupplier} getSuppliers={this.getSuppliers}/>
                 </section>    
 
 				<section className="row">
@@ -96,6 +95,7 @@ class Supplier extends Component {
                                     suppliers={this.state.suppliers}
                                     totalCount={this.state.totalCount}
                                     moveToArchives={this.moveToArchives}
+                                    getSuppliers={this.getSuppliers}
                                 />
 
                                {this.state.totalCount > 10 && (
