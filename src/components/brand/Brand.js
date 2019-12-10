@@ -5,6 +5,9 @@ import axios from 'axios';
 import Pagination from "react-js-pagination";
 import BrandTable from './BrandTable';
 import BrandSearch from './BrandSearch';
+import '../layouts/styles/iziToast.css';
+import iziToast from 'izitoast';
+
 
 class Brand extends Component {
 		
@@ -19,9 +22,20 @@ class Brand extends Component {
 	}
 
 	componentDidMount() {
+
 		this.getBrands();
+
+        this.alert();
 	}
     	
+    alert = () => {
+        iziToast.success({
+            title: 'Success',
+            'message': 'Data has been Inserted'
+        })
+    }
+    
+
 	// fetch all brands
     getBrands = async () => {
         this.setState({ loading: true });

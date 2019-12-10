@@ -47,7 +47,7 @@ class CategoryEditModal extends Component {
 		let updateData = {
 			name: category.name,
 			parent_category: category.parent_category,
-			description: category.description,
+			description: category.description
 		};
 
 		let res = await axios.put(
@@ -141,7 +141,7 @@ class CategoryEditModal extends Component {
 													name="name"
 													className="form-control"
 													placeholder="Name"
-													value={name}
+													value={name || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -160,7 +160,9 @@ class CategoryEditModal extends Component {
 													name="parent_category"
 													className="form-control"
 													placeholder="Parent Category"
-													value={parent_category}
+													value={
+														parent_category || ""
+													}
 													onChange={
 														this.handleInputChange
 													}
@@ -179,7 +181,7 @@ class CategoryEditModal extends Component {
 													rows="3"
 													className="form-control"
 													placeholder="Description"
-													value={description}
+													value={description || ""}
 													onChange={
 														this.handleInputChange
 													}

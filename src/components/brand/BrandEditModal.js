@@ -140,7 +140,7 @@ class BrandEditModal extends Component {
 													name="name"
 													className="form-control"
 													placeholder="Name"
-													value={name}
+													value={name || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -159,7 +159,7 @@ class BrandEditModal extends Component {
 													rows="3"
 													className="form-control"
 													placeholder="Description"
-													value={description}
+													value={description || ""}
 													onChange={
 														this.handleInputChange
 													}

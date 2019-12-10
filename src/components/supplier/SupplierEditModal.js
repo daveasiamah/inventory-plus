@@ -153,7 +153,7 @@ class SupplierEdit extends Component {
 													name="name"
 													className="form-control"
 													placeholder="Name"
-													value={name}
+													value={name || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -172,7 +172,7 @@ class SupplierEdit extends Component {
 													name="business_name"
 													className="form-control"
 													placeholder="Business Name"
-													value={business_name}
+													value={business_name || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -191,7 +191,7 @@ class SupplierEdit extends Component {
 													rows="2"
 													className="form-control"
 													placeholder="Address"
-													value={address}
+													value={address || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -210,7 +210,7 @@ class SupplierEdit extends Component {
 													name="landline"
 													className="form-control"
 													placeholder="Landline"
-													value={landline}
+													value={landline || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -229,7 +229,7 @@ class SupplierEdit extends Component {
 													name="fax"
 													className="form-control"
 													placeholder="Fax"
-													value={fax}
+													value={fax || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -248,7 +248,7 @@ class SupplierEdit extends Component {
 													name="email"
 													className="form-control"
 													placeholder="Email"
-													value={email}
+													value={email || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -267,7 +267,7 @@ class SupplierEdit extends Component {
 													name="mobile"
 													placeholder="Mobile"
 													className="form-control"
-													value={mobile}
+													value={mobile || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -286,7 +286,7 @@ class SupplierEdit extends Component {
 													name="contact_person"
 													placeholder="Contact Person"
 													className="form-control"
-													value={contact_person}
+													value={contact_person || ""}
 													onChange={
 														this.handleInputChange
 													}
