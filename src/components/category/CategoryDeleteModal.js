@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-class BrandDeleteModal extends Component {
+class CategoryDeleteModal extends Component {
 	render() {
 		const { id, conFirmMoveToArchives } = this.props;
 		
@@ -33,4 +33,4 @@ class BrandDeleteModal extends Component {
 	}
 }
 
-export default BrandDeleteModal;
+export default CategoryDeleteModal;

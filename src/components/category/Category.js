@@ -83,7 +83,10 @@ class Category extends Component {
                 </div>
                 
                 <section className="row">
-                    <CategorySearch searchCategory={this.searchCategory}/>
+                    <CategorySearch 
+                        searchCategory={this.searchCategory}
+                        getCategory={this.getCategory}
+                    />
                 </section>    
 
 				<section className="row">
@@ -96,6 +99,7 @@ class Category extends Component {
                                     categories={this.state.categories}
                                     totalCount={this.state.totalCount}
                                     moveToArchives={this.moveToArchives}
+                                    getCategory={this.getCategory}
                                 />
 
                                {this.state.totalCount > 10 && (

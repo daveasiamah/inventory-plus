@@ -17,10 +17,8 @@ import Supplier from "./components/supplier/Supplier";
 // Brand
 import Brand from "./components/brand/Brand";
 
-// Brand
+// Category
 import Category from "./components/category/Category";
-import CategoryCreate from "./components/category/CategoryCreate";
-import CategoryEdit from "./components/category/CategoryEdit";
 
 // Affiliates
 import Affiliate from "./components/affiliate/Affiliate";
@@ -67,8 +65,6 @@ class App extends Component {
 
                   {/* category */}
                   <Route path="/category" exact component={Category} />
-                  <Route path="/category/create" component={CategoryCreate} />
-                  <Route path="/category/:id/edit" component={CategoryEdit} />
 
                   {/* affliates */}
                   <Route path="/affiliates" exact component={Affiliate} />

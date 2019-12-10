@@ -38,8 +38,7 @@ export class SupplierSearch extends Component {
     }
 
 	render() {
-
-		const { name, description } = this.state;
+		
 		return (
 			<Fragment>
 				<div className="col-auto mr-auto">

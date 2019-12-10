@@ -1,17 +1,35 @@
 import React, { Component, Fragment } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import CategoryCreateModal from './CategoryCreateModal';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 
 export class CategorySearch extends Component {
 	state = {
-		search: ''
+		search: '',
+		showModal: false,
+		loading: false,
 	}
 
 	static propTypes = {
 		searchCategory: PropTypes.func,
-
+		getCategory: PropTypes.func.isRequired,
 	}
+
+	open = () => {
+	  this.setState({showModal: true});
+	}
+
+	close = () => {
+	  this.setState({showModal: false});
+	}
+
+	// handle search
+    handleSearchChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value});
+    }
+
 	// handle search
     handleSearchChange = (e) => {
         this.setState({ [e.target.name]: e.target.value});
@@ -42,10 +60,17 @@ export class CategorySearch extends Component {
 				</div>
 
 				<div className="col-auto">
-					<Link to={'/category/create'} className="btn btn-primary btn-sm pull-right mb-2">
-						Create New
-					</Link>
+					<Button 
+						onClick={this.open}
+						className="btn btn-sm btn-primary"
+					>Create New</Button>
 				</div>
+				
+				<CategoryCreateModal 
+					show={this.state.showModal} 
+					onHide={this.close}
+					getCategory={this.props.getCategory}
+				/>
 			</Fragment>
 		)
 	}

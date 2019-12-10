@@ -1,21 +1,23 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import { Redirect, Link } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-class BrandCreateModal extends Component {
+class CategoryCreate extends Component {
+	
 	state = {
 		loading: false,
 		errors: null,
 		name: '',
+		parent_category: '',
 		description: '',
 	}
-
+	
 	static propTypes = {
-		onHide: PropTypes.func.isRequired,
-		getBrands: PropTypes.func.isRequired,
-	};
-
+		getCategory: PropTypes.func.isRequired,
+	}
+	
 	// handle inputs
 	handleInputChange = (e) => this.setState({[e.target.name]: e.target.value });
 
@@ -24,56 +26,62 @@ class BrandCreateModal extends Component {
 		e.preventDefault();
 		let data = {
 			name: this.state.name,
+			parent_category: this.state.parent_category,
 			description: this.state.description,
 		}
 
-		this.brandPost(data);
+		this.categoryPost(data);
 	};
 	
+	
 	// post the data
-	brandPost = async (brand) => {
+	categoryPost = async (category) => {
 		this.setState({ loading: true });
 
-		let res = await axios.post(`http://inventory.test/api/admin/brand`, brand)
+		let res = await axios.post(`http://inventory.test/api/admin/category`, category)
 							switch(res.data.status){
 								case 0:
 									this.setState({ errors: res.data.errors })
 									break;
 								case 1:
 									this.setState({ 
-										loading: false,  
 										name: '',
+										parent_category: '',
 										description: '',
 										errors: null
 									});
 									// hide the modal
 									this.props.onHide();
-									// get the new brands
-									this.props.getBrands();
+									// get the new category
+									this.props.getCategory();
 									break;
 								default:
 									break;
 							}
 		
 		this.setState({ loading: false });
-	}	
+	}		
 
+	
 	render() {
 
-		const { name, description } = this.state; 
+		const { 
+			name, 
+			parent_category,
+			description } = this.state;
 
 		return (
 			<Modal className="modal-container" 
 	          show={this.props.show} 
 	          onHide={this.props.onHide}
-	          animation={true} 
+	          animation={true}
 	        >
 
-	          <Modal.Header closeButton>
-	            <Modal.Title>Create New</Modal.Title>
-	          </Modal.Header>
+	          	<Modal.Header closeButton>
+	            	<Modal.Title>Create New</Modal.Title>
+	         	</Modal.Header>
 
-	          <Modal.Body>
+	          	<Modal.Body>
            			{ this.state.loading ? 
 							<div>
 								<h3 
@@ -101,8 +109,8 @@ class BrandCreateModal extends Component {
 						            <section className="row">
 						              <div className="col-sm-12">
 						                <div className="form-group row">
-							                <label className="col-md-3 label-control">Name:</label>
-							                <div className="col-md-9">
+							                <label className="col-md-4 label-control">Name:</label>
+							                <div className="col-md-8">
 							                    <input
 							                      type="text"
 							                      id="name"
@@ -115,9 +123,24 @@ class BrandCreateModal extends Component {
 							                </div>
 						                </div>
 
+						            	<div className="form-group row">
+							                <label className="col-md-4 label-control">Parent Category:</label>
+							                <div className="col-md-8">
+							                    <input
+							                      type="text"
+							                      id="parent_category"
+							                      name="parent_category"
+							                      className="form-control"
+							                      placeholder="Parent Category"
+							                      value={parent_category}
+							                      onChange={this.handleInputChange}
+							                    />
+							                </div>
+						                </div>
+
 						                <div className="form-group row">
-							                <label className="col-md-3 label-control">Description:</label>
-							                <div className="col-md-9">
+							                <label className="col-md-4 label-control">Description:</label>
+							                <div className="col-md-8">
 							                    <textarea
 							                      id="description"
 							                      name="description"
@@ -152,10 +175,10 @@ class BrandCreateModal extends Component {
 								</form>
 							</div>
 						}	
-	          </Modal.Body>   
+	          	</Modal.Body>   
 	    	</Modal> 
-		)
+	    )
 	}
 }
 
-export default BrandCreateModal;
+export default CategoryCreate;
