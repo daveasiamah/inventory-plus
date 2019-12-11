@@ -3,14 +3,15 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
-import SupplierShowModal from "./SupplierShowModal";
-import SupplierEditModal from './SupplierEditModal';
-import SupplierDeleteModal from "./SupplierDeleteModal";
+import AgentShowModal from "./AgentShowModal";
+import AgentEditModal from './AgentEditModal';
+import AgentDeleteModal from "./AgentDeleteModal";
 
-class SupplierTable extends Component {
+class AgentTable extends Component {
+
 	state = {
 		id: 0,
-		singleSupplier: [],
+		singleAgent: [],
 		isOpen: false,
 		showModal: false,
 		editModal: false,
@@ -18,17 +19,16 @@ class SupplierTable extends Component {
 	};
 
 	static propTypes = {
-		suppliers: PropTypes.array.isRequired,
+		agents: PropTypes.array.isRequired,
 		moveToArchives: PropTypes.func.isRequired
 	};
 
-	getSingleSupplier = async id => {
+	getSingleAgent = async id => {
 		let res = await axios.get(
-			`http://inventory.test/api/admin/supplier/${id}`
+			`http://inventory.test/api/admin/agent/${id}`
 		);
 
-		this.setState({ singleSupplier: res.data.supplier });
-		// console.log(res.data.supplier)
+		this.setState({ singleAgent: res.data.agent });
 	};
 
 	conFirmMoveToArchives = () => {
@@ -40,11 +40,11 @@ class SupplierTable extends Component {
 		switch (status) {
 			case "show":
 				this.setState({ showModal: true });
-				this.getSingleSupplier(id);
+				this.getSingleAgent(id);
 				break;
 			case "edit":
 				this.setState({ editModal: true, id: id });
-				this.getSingleSupplier(id);
+				this.getSingleAgent(id);
 				break;
 			case "delete":
 				this.setState({ deleteModal: true, id: id });
@@ -85,13 +85,13 @@ class SupplierTable extends Component {
 							</tr>
 						</thead>
 						<tbody>
-							{this.props.suppliers.map(supplier => (
-								<tr key={supplier._id}>
-									<td>{supplier.name}</td>
-									<td>{supplier.email}</td>
-									<td>{supplier.landline}</td>
-									<td>{supplier.mobile}</td>
-									<td>{supplier.fax}</td>
+							{this.props.agents.map(agent => (
+								<tr key={agent._id}>
+									<td>{agent.name}</td>
+									<td>{agent.email}</td>
+									<td>{agent.landline}</td>
+									<td>{agent.mobile}</td>
+									<td>{agent.fax}</td>
 									<td>
 										<div className="btn-group">
 											<button
@@ -99,7 +99,7 @@ class SupplierTable extends Component {
 												onClick={this.modalOpen.bind(
 													this,
 													"show",
-													supplier._id
+													agent._id
 												)}
 											>
 												<i className="ft ft-eye"></i>
@@ -109,7 +109,7 @@ class SupplierTable extends Component {
 												onClick={this.modalOpen.bind(
 													this,
 													"edit",
-													supplier._id
+													agent._id
 												)}
 											>
 												<i className="ft ft-edit"></i>
@@ -119,7 +119,7 @@ class SupplierTable extends Component {
 												onClick={this.modalOpen.bind(
 													this,
 													"delete",
-													supplier._id
+													agent._id
 												)}
 											>
 												<i className="ft ft-x"></i>
@@ -171,21 +171,21 @@ class SupplierTable extends Component {
 					</div>
 				</div>
 
-				<SupplierShowModal
+				<AgentShowModal
 					show={this.state.showModal}
 					onHide={this.modalClose.bind(this, "show")}
-					singleSupplier={this.state.singleSupplier}
+					singleAgent={this.state.singleAgent}
 				/>
 
-				<SupplierEditModal
+				<AgentEditModal
 					show={this.state.editModal}
 					onHide={this.modalClose.bind(this, "edit")}
 					id={this.state.id}
-					singleSupplier={this.state.singleSupplier}
-					getSuppliers={this.props.getSuppliers}
+					singleAgent={this.state.singleAgent}
+					getAgents={this.props.getAgents}
 				/>
 
-				<SupplierDeleteModal
+				<AgentDeleteModal
 					show={this.state.deleteModal}
 					onHide={this.modalClose.bind(this, "delete")}
 					id={this.state.id}
@@ -196,4 +196,4 @@ class SupplierTable extends Component {
 	}
 }
 
-export default SupplierTable;
+export default AgentTable;

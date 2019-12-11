@@ -5,13 +5,13 @@ import axios from 'axios';
 import Pagination from "react-js-pagination";
 import '../layouts/styles/iziToast.css';
 import iziToast from 'izitoast';
-import CustomerTable from './CustomerTable';
-import CustomerSearch from './CustomerSearch';
+import AgentTable from './AgentTable';
+import AgentSearch from './AgentSearch';
 
-class Customer extends Component {
+class Agent extends Component {
 		
 	state = {
-		customers: [],
+		agents: [],
         totalCount: '',
 		loading: false,
         activePage: 1,
@@ -21,7 +21,7 @@ class Customer extends Component {
 	}
 
 	componentDidMount() {
-		this.getCustomers();
+		this.getAgents();
 	}
 
     // alert message
@@ -40,13 +40,13 @@ class Customer extends Component {
         });
     }
     	
-	// fetch all customers
-    getCustomers = async () => {
+	// fetch all suppliers
+    getAgents = async () => {
         this.setState({ loading: true });
-        let res = await axios.get(`http://inventory.test/api/admin/customer`);
+        let res = await axios.get(`http://inventory.test/api/admin/agent`);
             this.setState({ 
-                customers: res.data.customers.data, 
-                totalCount: res.data.customers.total,
+                agents: res.data.agents.data, 
+                totalCount: res.data.agents.total,
                 loading: false 
             });
     };
@@ -54,9 +54,9 @@ class Customer extends Component {
     // update archives: 1 if deleted
     moveToArchives = async id => {
         let res = await axios.put(
-            `http://inventory.test/api/admin/customer/archives/${id}`);
+            `http://inventory.test/api/admin/agent/archives/${id}`);
         // fetch the new updated data
-        this.getCustomers();
+        this.getAgents();
         // alert message
         this.toast(res.data.message);
     };
@@ -64,27 +64,27 @@ class Customer extends Component {
     // pagination links
     handlePageChange = (pageNumber) => {
         // this.setState({activePage: pageNumber});
-        axios.get(`http://inventory.test/api/admin/customer?page=${pageNumber}`)
+        axios.get(`http://inventory.test/api/admin/agent?page=${pageNumber}`)
                     .then(res => this.setState({
-                                customers: res.data.customers.data,
-                                activePage: res.data.customers.current_page,
-                                itemsCountPerPage: res.data.customers.per_page,
-                                totalItemsCount: res.data.customers.total,
+                                agents: res.data.agents.data,
+                                activePage: res.data.agents.current_page,
+                                itemsCountPerPage: res.data.agents.per_page,
+                                totalItemsCount: res.data.agents.total,
                             })
                         )
     }
 
     // search 
-    searchCustomer = async (search) => {
+    searchAgent = async (search) => {
         this.setState({ loading: true});
 
-        let res = await axios.post(`http://inventory.test/api/admin/customer/search`, {
+        let res = await axios.post(`http://inventory.test/api/admin/agent/search`, {
             search: search
         });
         
         this.setState({
-             customers: res.data.customers.data,
-             totalCount: res.data.customers.total,
+             agents: res.data.agents.data,
+             totalCount: res.data.agents.total,
              loading: false     
         });        
     }
@@ -92,7 +92,7 @@ class Customer extends Component {
 	render() {
 		return (
 			<div>
-				<h1>Customer</h1>
+				<h1>Agents</h1>
 
 				<div className="row mt-2">
                    <div className="col-sm-12">
@@ -102,20 +102,20 @@ class Customer extends Component {
                 </div>
                 
                 <section className="row">
-                    <CustomerSearch searchCustomer={this.searchCustomer} getCustomers={this.getCustomers}/>
+                    <AgentSearch searchAgent={this.searchAgent} getAgents={this.getAgents}/>
                 </section>    
 
 				<section className="row">
                     <div className="col-sm-12">
                         {this.state.loading ? (
                             <Spinner />
-                        ) : this.state.customers.length  > 0 ? (
+                        ) : this.state.agents.length  > 0 ? (
                             <Fragment>
-                                <CustomerTable
-                                    customers={this.state.customers}
+                                <AgentTable
+                                    agents={this.state.agents}
                                     totalCount={this.state.totalCount}
                                     moveToArchives={this.moveToArchives}
-                                    getCustomers={this.getCustomers}
+                                    getAgents={this.getAgents}
                                 />
 
                                {this.state.totalCount > 10 && (
@@ -144,4 +144,4 @@ class Customer extends Component {
 	}
 }
 
-export default Customer;
+export default Agent

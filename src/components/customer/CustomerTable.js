@@ -3,14 +3,14 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
-import SupplierShowModal from "./SupplierShowModal";
-import SupplierEditModal from './SupplierEditModal';
-import SupplierDeleteModal from "./SupplierDeleteModal";
+import CustomerShowModal from "./CustomerShowModal";
+import CustomerEditModal from './CustomerEditModal';
+import CustomerDeleteModal from "./CustomerDeleteModal";
 
-class SupplierTable extends Component {
+class CustomerTable extends Component {
 	state = {
 		id: 0,
-		singleSupplier: [],
+		singleCustomer: [],
 		isOpen: false,
 		showModal: false,
 		editModal: false,
@@ -18,18 +18,17 @@ class SupplierTable extends Component {
 	};
 
 	static propTypes = {
-		suppliers: PropTypes.array.isRequired,
+		customers: PropTypes.array.isRequired,
 		moveToArchives: PropTypes.func.isRequired
 	};
 
-	getSingleSupplier = async id => {
+	getSingleCustomer = async id => {
 		let res = await axios.get(
-			`http://inventory.test/api/admin/supplier/${id}`
+			`http://inventory.test/api/admin/customer/${id}`
 		);
 
-		this.setState({ singleSupplier: res.data.supplier });
-		// console.log(res.data.supplier)
-	};
+		this.setState({ singleCustomer: res.data.customer });
+	}
 
 	conFirmMoveToArchives = () => {
 		this.props.moveToArchives(this.state.id);
@@ -40,11 +39,11 @@ class SupplierTable extends Component {
 		switch (status) {
 			case "show":
 				this.setState({ showModal: true });
-				this.getSingleSupplier(id);
+				this.getSingleCustomer(id);
 				break;
 			case "edit":
 				this.setState({ editModal: true, id: id });
-				this.getSingleSupplier(id);
+				this.getSingleCustomer(id);
 				break;
 			case "delete":
 				this.setState({ deleteModal: true, id: id });
@@ -85,13 +84,13 @@ class SupplierTable extends Component {
 							</tr>
 						</thead>
 						<tbody>
-							{this.props.suppliers.map(supplier => (
-								<tr key={supplier._id}>
-									<td>{supplier.name}</td>
-									<td>{supplier.email}</td>
-									<td>{supplier.landline}</td>
-									<td>{supplier.mobile}</td>
-									<td>{supplier.fax}</td>
+							{this.props.customers.map(customer => (
+								<tr key={customer._id}>
+									<td>{customer.name}</td>
+									<td>{customer.email}</td>
+									<td>{customer.landline}</td>
+									<td>{customer.mobile}</td>
+									<td>{customer.fax}</td>
 									<td>
 										<div className="btn-group">
 											<button
@@ -99,7 +98,7 @@ class SupplierTable extends Component {
 												onClick={this.modalOpen.bind(
 													this,
 													"show",
-													supplier._id
+													customer._id
 												)}
 											>
 												<i className="ft ft-eye"></i>
@@ -109,7 +108,7 @@ class SupplierTable extends Component {
 												onClick={this.modalOpen.bind(
 													this,
 													"edit",
-													supplier._id
+													customer._id
 												)}
 											>
 												<i className="ft ft-edit"></i>
@@ -119,7 +118,7 @@ class SupplierTable extends Component {
 												onClick={this.modalOpen.bind(
 													this,
 													"delete",
-													supplier._id
+													customer._id
 												)}
 											>
 												<i className="ft ft-x"></i>
@@ -171,21 +170,21 @@ class SupplierTable extends Component {
 					</div>
 				</div>
 
-				<SupplierShowModal
+				<CustomerShowModal
 					show={this.state.showModal}
 					onHide={this.modalClose.bind(this, "show")}
-					singleSupplier={this.state.singleSupplier}
+					singleCustomer={this.state.singleCustomer}
 				/>
 
-				<SupplierEditModal
+				<CustomerEditModal
 					show={this.state.editModal}
 					onHide={this.modalClose.bind(this, "edit")}
 					id={this.state.id}
-					singleSupplier={this.state.singleSupplier}
-					getSuppliers={this.props.getSuppliers}
+					singleCustomer={this.state.singleCustomer}
+					getCustomers={this.props.getCustomers}
 				/>
 
-				<SupplierDeleteModal
+				<CustomerDeleteModal
 					show={this.state.deleteModal}
 					onHide={this.modalClose.bind(this, "delete")}
 					id={this.state.id}
@@ -196,4 +195,4 @@ class SupplierTable extends Component {
 	}
 }
 
-export default SupplierTable;
+export default CustomerTable;

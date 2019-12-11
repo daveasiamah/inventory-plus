@@ -33,8 +33,10 @@ export class SupplierSearch extends Component {
  	onSearchSubmit = (e) => {
         e.preventDefault();
 
-		this.props.searchSupplier(this.state.search)
-		this.setState({search: ' '});
+		if(e.target.value !== ''){
+			this.props.searchSupplier(this.state.search)
+			this.setState({search: ' '});
+		}
     }
 
 	render() {

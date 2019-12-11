@@ -6,7 +6,7 @@ import '../layouts/styles/iziToast.css';
 import iziToast from 'izitoast';
 import axios from "axios";
 
-class SupplierCreateModal extends Component {
+class AgentCreateModal extends Component {
 	state = {
 		loading: false,
 		errors: null,
@@ -22,7 +22,7 @@ class SupplierCreateModal extends Component {
 
 	static propTypes = {
 		onHide: PropTypes.func.isRequired,
-		getSuppliers: PropTypes.func.isRequired
+		getAgents: PropTypes.func.isRequired
 	};
 
 	// alert message
@@ -58,15 +58,15 @@ class SupplierCreateModal extends Component {
 			contact_person: this.state.contact_person
 		};
 
-		this.supplierPost(data);
+		this.agentPost(data);
 	};
 
 	// post the data
-	supplierPost = async brand => {
+	agentPost = async brand => {
 		this.setState({ loading: true });
 
 		let res = await axios.post(
-			`http://inventory.test/api/admin/supplier`,
+			`http://inventory.test/api/admin/agent`,
 			brand
 		);
 		switch (res.data.status) {
@@ -88,8 +88,8 @@ class SupplierCreateModal extends Component {
 				});
 				// hide the modal
 				this.props.onHide();
-				// get th new suppliers
-				this.props.getSuppliers();
+				// get th new agents
+				this.props.getAgents();
 				// alert message
 				this.toast(res.data.message);
 				break;
@@ -340,4 +340,4 @@ class SupplierCreateModal extends Component {
 	}
 }
 
-export default SupplierCreateModal;
+export default AgentCreateModal;

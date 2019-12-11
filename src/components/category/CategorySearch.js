@@ -39,8 +39,10 @@ export class CategorySearch extends Component {
  	onSearchSubmit = (e) => {
         e.preventDefault();
 
-		this.props.searchCategory(this.state.search)
-		this.setState({search: ' '});
+		if(e.target.value !== ''){
+			this.props.searchCategory(this.state.search)
+			this.setState({search: ' '});
+		}
     }
 
 	render() {

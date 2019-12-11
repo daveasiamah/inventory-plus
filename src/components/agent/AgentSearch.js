@@ -1,17 +1,28 @@
 import React, { Component, Fragment } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import AgentCreateModal from './AgentCreateModal';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-
-export class ProductSearch extends Component {
+export class AgentSearch extends Component {
 	state = {
 		search: ''
 	}
 
 	static propTypes = {
-		searchProduct: PropTypes.func,
+		searchAgents: PropTypes.func,
+		getAgents: PropTypes.func.isRequired
 
 	}
+
+	open = () => {
+	  this.setState({showModal: true});
+	}
+
+	close = () => {
+	  this.setState({showModal: false});
+	}
+
 	// handle search
     handleSearchChange = (e) => {
         this.setState({ [e.target.name]: e.target.value});
@@ -22,7 +33,7 @@ export class ProductSearch extends Component {
         e.preventDefault();
 
 		if(e.target.value !== ''){
-			this.props.searchProduct(this.state.search)
+			this.props.searchAgent(this.state.search)
 			this.setState({search: ' '});
 		}
     }
@@ -44,13 +55,20 @@ export class ProductSearch extends Component {
 				</div>
 
 				<div className="col-auto">
-					<Link to={'/product/create'} className="btn btn-primary btn-sm pull-right mb-2">
-						Create New
-					</Link>
+					<Button 
+						onClick={this.open}
+						className="btn btn-sm btn-primary"
+					>Create New</Button>
 				</div>
+				
+				<AgentCreateModal 
+					show={this.state.showModal} 
+					onHide={this.close}
+					getAgents={this.props.getAgents}
+				/>
 			</Fragment>
 		)
 	}
 }
 
-export default ProductSearch;
+export default AgentSearch;

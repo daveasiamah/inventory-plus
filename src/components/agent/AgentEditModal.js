@@ -1,29 +1,27 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragments } from "react";
+import axios from "axios";
 import { Redirect, Link } from "react-router-dom";
-import PropTypes from "prop-types";
 import { Modal, Button } from "react-bootstrap";
 import '../layouts/styles/iziToast.css';
 import iziToast from 'izitoast';
-import axios from "axios";
 
-class SupplierCreateModal extends Component {
+class AgentEdit extends Component {
 	state = {
+		id: null,
+		editAgent: [],
 		loading: false,
-		errors: null,
-		name: "",
-		business_name: "",
-		address: "",
-		landline: "",
-		fax: "",
-		email: "",
-		mobile: "",
-		contact_person: ""
+		errors: null
 	};
 
-	static propTypes = {
-		onHide: PropTypes.func.isRequired,
-		getSuppliers: PropTypes.func.isRequired
-	};
+	componentWillReceiveProps(nextProps) {
+		if (this.props.singleAgent !== nextProps.singleAgent) {
+			this.setState({ editAgent: nextProps.singleAgent });
+		}
+
+		if (this.props.id !== nextProps.id) {
+			this.setState({ id: nextProps.id });
+		}
+	}
 
 	// alert message
     toast = (message) => {
@@ -42,32 +40,42 @@ class SupplierCreateModal extends Component {
     }
 
 	// handle inputs
-	handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
+	handleInputChange = e => {
+		this.setState({
+			editAgent: {
+				...this.state.editAgent,
+				[e.target.name]: e.target.value
+			}
+		});
+	};
 
 	// on submit
 	onFormSubmit = e => {
 		e.preventDefault();
-		let data = {
-			name: this.state.name,
-			business_name: this.state.business_name,
-			address: this.state.address,
-			landline: this.state.landline,
-			fax: this.state.fax,
-			email: this.state.email,
-			mobile: this.state.mobile,
-			contact_person: this.state.contact_person
-		};
+		let agent = this.state.editAgent;
+		let id = this.state.id;
 
-		this.supplierPost(data);
+		this.updateEditAgent(agent, id);
 	};
 
-	// post the data
-	supplierPost = async brand => {
+	// update single agent
+	updateEditAgent = async (agent, id) => {
 		this.setState({ loading: true });
 
-		let res = await axios.post(
-			`http://inventory.test/api/admin/supplier`,
-			brand
+		let updateData = {
+			name: agent.name,
+			business_name: agent.business_name,
+			address: agent.address,
+			landline: agent.landline,
+			fax: agent.fax,
+			email: agent.email,
+			mobile: agent.mobile,
+			contact_person: agent.contact_person
+		};
+
+		let res = await axios.put(
+			`http://inventory.test/api/admin/agent/${id}`,
+			updateData
 		);
 		switch (res.data.status) {
 			case 0:
@@ -75,21 +83,14 @@ class SupplierCreateModal extends Component {
 				break;
 			case 1:
 				this.setState({
+					editAgent: [],
 					loading: false,
-					name: "",
-					business_name: "",
-					address: "",
-					landline: "",
-					fax: "",
-					email: "",
-					mobile: "",
-					contact_person: "",
 					errors: null
 				});
 				// hide the modal
 				this.props.onHide();
-				// get th new suppliers
-				this.props.getSuppliers();
+				// load the data
+				this.props.getAgents();
 				// alert message
 				this.toast(res.data.message);
 				break;
@@ -109,8 +110,9 @@ class SupplierCreateModal extends Component {
 			fax,
 			email,
 			mobile,
-			contact_person
-		} = this.state;
+			contact_person,
+			archives
+		} = this.state.editAgent;
 
 		return (
 			<Modal
@@ -118,9 +120,10 @@ class SupplierCreateModal extends Component {
 				show={this.props.show}
 				onHide={this.props.onHide}
 				animation={true}
+				size="md"
 			>
 				<Modal.Header closeButton>
-					<Modal.Title>Create New</Modal.Title>
+					<Modal.Title>Edi Supplier</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>
@@ -143,7 +146,7 @@ class SupplierCreateModal extends Component {
 										))}
 										<button
 											type="button"
-											className="close"
+											class="close"
 											data-dismiss="alert"
 											aria-label="Close"
 										>
@@ -169,7 +172,7 @@ class SupplierCreateModal extends Component {
 													name="name"
 													className="form-control"
 													placeholder="Name"
-													value={name}
+													value={name || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -179,7 +182,7 @@ class SupplierCreateModal extends Component {
 
 										<div className="form-group row">
 											<label className="col-md-4 label-control">
-												Business Name:
+												Business Name
 											</label>
 											<div className="col-md-8">
 												<input
@@ -188,7 +191,7 @@ class SupplierCreateModal extends Component {
 													name="business_name"
 													className="form-control"
 													placeholder="Business Name"
-													value={business_name}
+													value={business_name || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -198,7 +201,7 @@ class SupplierCreateModal extends Component {
 
 										<div className="form-group row">
 											<label className="col-md-4 label-control">
-												Address:
+												Address
 											</label>
 											<div className="col-md-8">
 												<textarea
@@ -206,8 +209,8 @@ class SupplierCreateModal extends Component {
 													name="address"
 													rows="2"
 													className="form-control"
-													placeholder="Address..."
-													value={address}
+													placeholder="Address"
+													value={address || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -217,7 +220,7 @@ class SupplierCreateModal extends Component {
 
 										<div className="form-group row">
 											<label className="col-md-4 label-control">
-												Landline:
+												Landline
 											</label>
 											<div className="col-md-8">
 												<input
@@ -226,7 +229,7 @@ class SupplierCreateModal extends Component {
 													name="landline"
 													className="form-control"
 													placeholder="Landline"
-													value={landline}
+													value={landline || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -236,7 +239,7 @@ class SupplierCreateModal extends Component {
 
 										<div className="form-group row">
 											<label className="col-md-4 label-control">
-												Fax:
+												Fax
 											</label>
 											<div className="col-md-8">
 												<input
@@ -245,7 +248,7 @@ class SupplierCreateModal extends Component {
 													name="fax"
 													className="form-control"
 													placeholder="Fax"
-													value={fax}
+													value={fax || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -255,7 +258,7 @@ class SupplierCreateModal extends Component {
 
 										<div className="form-group row">
 											<label className="col-md-4 label-control">
-												Email:
+												Email
 											</label>
 											<div className="col-md-8">
 												<input
@@ -264,7 +267,7 @@ class SupplierCreateModal extends Component {
 													name="email"
 													className="form-control"
 													placeholder="Email"
-													value={email}
+													value={email || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -274,16 +277,16 @@ class SupplierCreateModal extends Component {
 
 										<div className="form-group row">
 											<label className="col-md-4 label-control">
-												Mobile:
+												Mobile
 											</label>
 											<div className="col-md-8">
 												<input
 													type="text"
 													id="mobile"
 													name="mobile"
-													className="form-control"
 													placeholder="Mobile"
-													value={mobile}
+													className="form-control"
+													value={mobile || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -293,16 +296,16 @@ class SupplierCreateModal extends Component {
 
 										<div className="form-group row">
 											<label className="col-md-4 label-control">
-												Contact Person:
+												Contact Person
 											</label>
 											<div className="col-md-8">
 												<input
 													type="text"
 													id="contact_person"
 													name="contact_person"
-													className="form-control"
 													placeholder="Contact Person"
-													value={contact_person}
+													className="form-control"
+													value={contact_person || ""}
 													onChange={
 														this.handleInputChange
 													}
@@ -340,4 +343,4 @@ class SupplierCreateModal extends Component {
 	}
 }
 
-export default SupplierCreateModal;
+export default AgentEdit;

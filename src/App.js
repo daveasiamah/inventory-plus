@@ -20,19 +20,11 @@ import Brand from "./components/brand/Brand";
 // Category
 import Category from "./components/category/Category";
 
-// Affiliates
-import Affiliate from "./components/affiliate/Affiliate";
-import AffiliateAdd from "./components/affiliate/AffiliateAdd";
-import AffiliatesCommission from "./components/affiliate/AffiliatesCommission";
-import AffiliatesHistory from "./components/affiliate/AffiliatesHistory";
-
 // Customer
 import Customer from "./components/customer/Customer";
-import CustomerAdd from "./components/customer/CustomerAdd";
-import CustomerHistory from "./components/customer/CustomerHistory";
 
-// Inventory
-import Inventory from "./components/inventory/Inventory";
+// Agent
+import Agent from "./components/agent/Agent";
 
 // Invoice
 import Invoice from "./components/invoice/Invoice";
@@ -50,41 +42,27 @@ class App extends Component {
             <div className="content-wrapper">
               <div className="content-body">
                 <Switch>
-                  {/* products */}
+                  {/* Products */}
                   <Route path="/" exact component={Home} />
                   <Route path="/product" exact component={Product} />
                   <Route path="/product/create" component={ProductCreate} />
                   <Route path="/product/:id" exact component={ProductShow} />
                   <Route path="/product/:id/edit" component={ProductEdit} />
 
-                  {/* suppliers */}
+                  {/* Supplier */}
                   <Route path="/supplier" exact component={Supplier} /> 
 
-                  {/* brands */}
+                  {/* Brand */}
                   <Route path="/brand" exact component={Brand} />
 
-                  {/* category */}
+                  {/* Category */}
                   <Route path="/category" exact component={Category} />
 
-                  {/* affliates */}
-                  <Route path="/affiliates" exact component={Affiliate} />
-                  <Route path="/affiliates/add" component={AffiliateAdd} />
-                  <Route
-                    path="/affiliates/commissions"
-                    component={AffiliatesCommission}
-                  />
-                  <Route
-                    path="/affiliates/history"
-                    component={AffiliatesHistory}
-                  />
-
-                  {/* customer */}
+                  {/* Customer */}
                   <Route path="/customer" exact component={Customer} />
-                  <Route path="/customer/add" component={CustomerAdd} />
-                  <Route path="/customer/history" component={CustomerHistory} />
 
-                  {/* inventory */}
-                  <Route path="/inventory" exact component={Inventory} />
+                  {/* Agent */}
+                  <Route path="/agent" exact component={Agent} />
 
                   {/* invoice */}
                   <Route path="/invoice" exact component={Invoice} />

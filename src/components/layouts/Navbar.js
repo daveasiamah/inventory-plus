@@ -94,13 +94,15 @@ const Navbar = () => {
                                 <i className="la la-folder"></i><span className="menu-title" data-i18n="">Inventory</span>
                             </Link>
                         </li>
+                        <li className=" nav-item">
+                            <Link to="/agent">
+                                <i className="la la-users"></i><span className="menu-title" data-i18n="">Agents</span>
+                            </Link>
+                        </li>
                         <li className=" nav-item"><a href="#"><i className="la la-users"></i><span className="menu-title" data-i18n="">Customers</span></a>
                             <ul className="menu-content">
                                 <li>
                                     <Link className="menu-item" to="/customer" data-i18n="nav.starter_kit.fixed_layout">Customers</Link>
-                                </li>
-                                <li>
-                                    <Link className="menu-item" to="/customer/add" data-i18n="nav.starter_kit.fixed_layout">Add Customer</Link>
                                 </li>
                                 <li>
                                     <Link className="menu-item" to="/customer/history" data-i18n="nav.starter_kit.boxed_layout">History</Link>

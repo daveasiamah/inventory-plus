@@ -68,7 +68,7 @@ class ProductTable extends Component {
 		return (
 			<Fragment>
 				<div className="table-responsive">
-					<table className="table table-striped table-hover">
+					<table className="table table-striped table-hover table-bordered">
 						<thead>
 							<tr>
 								<th>SKU</th>
