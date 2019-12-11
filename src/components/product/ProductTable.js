@@ -3,6 +3,7 @@ import axios from "axios";
 import { Modal, Button } from 'react-bootstrap';
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import ProductDeleteModal from './ProductDeleteModal';
 
 class ProductTable extends Component {
 	state = {
@@ -47,20 +48,39 @@ class ProductTable extends Component {
 		}
 	}
 	
-	// hide modal
-	modalClose = (status) => {
-	  	switch(status){
-			case 'show':
-				this.setState({showModal: false});
+	// show modal
+	modalOpen = (status, id) => {
+		switch (status) {
+			case "show":
+				this.setState({ showModal: true });
+				this.getSingleAgent(id);
 				break;
-			case 'edit':
-				this.setState({editModal: false});
-			case 'delete':
-				this.setState({deleteModal: false});
+			case "edit":
+				this.setState({ editModal: true, id: id });
+				this.getSingleAgent(id);
+				break;
+			case "delete":
+				this.setState({ deleteModal: true, id: id });
+			default:
+				// do nothing
+				break;
+		}
+	};
+
+	// hide modal
+	modalClose = status => {
+		switch (status) {
+			case "show":
+				this.setState({ showModal: false });
+				break;
+			case "edit":
+				this.setState({ editModal: false });
+			case "delete":
+				this.setState({ deleteModal: false });
 			default:
 				break;
 		}
-	}
+	};
 	
 	render() {
 		const { products } = this.props;
@@ -107,18 +127,16 @@ class ProductTable extends Component {
 											>
 												<i className="ft ft-edit"></i>
 											</Link>
-											<button
-												className="btn btn-sm btn-danger"
-												data-toggle="modal"
-												data-target="#delete-modal"
-												onClick={() =>
-													this.setState({
-														id: product._id
-													})
-												}
+											<Button
+												className="btn btn-sm btn-danger btn-sm"
+												onClick={this.modalOpen.bind(
+													this,
+													"delete",
+													product._id
+												)}
 											>
 												<i className="ft ft-x"></i>
-											</button>
+											</Button>
 										</div>
 									</td>
 								</tr>
@@ -126,45 +144,14 @@ class ProductTable extends Component {
 						</tbody>
 					</table>
 				</div>
-
-				<div
-					id="delete-modal"
-					className="modal fade"
-					tabIndex="-1"
-					role="dialog"
-				>
-					<div className="modal-dialog modal-sm" role="document">
-						<div className="modal-content">
-							<div className="modal-header">
-								<h5 className="modal-title"></h5>
-								<button
-									type="button"
-									className="close"
-									data-dismiss="modal"
-									aria-label="Close"
-								>
-									<span aria-hidden="true">×</span>
-								</button>
-							</div>
-							<div className="modal-body">
-								<h4 align="center">
-									Do you want to delete this item?
-								</h4>
-								<div align="center" className="mt-1">
-									<button
-										type="button"
-										className="btn btn-primary"
-										data-dismiss="modal"
-										onClick={this.conFirmMoveToArchives}
-									>
-										<i className="ft ft-check"></i> Confirm
-									</button>
-								</div>
-							</div>
-							<div className="modal-footer"></div>
-						</div>
-					</div>
-				</div>
+				
+				<ProductDeleteModal 
+					show={this.state.deleteModal}
+					onHide={this.modalClose.bind(this, "delete")}
+					id={this.state.id}
+					conFirmMoveToArchives={this.conFirmMoveToArchives}
+				/>
+				
 			</Fragment>
 		);
 	}

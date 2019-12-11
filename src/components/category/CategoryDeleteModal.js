@@ -19,9 +19,9 @@ class CategoryDeleteModal extends Component {
 			
 	        <Modal.Body>
 	      		<div align="center">
-	      			<h3>Are you sure?</h3>
+	      			<h4>Are you sure?</h4>
 	      		<Button 
-	      			className="btn btn-primary my-2"
+	      			className="btn btn-primary mb-2 mt-1"
 	      			onClick={conFirmMoveToArchives}>
 	            	Confirm
 	         	</Button>

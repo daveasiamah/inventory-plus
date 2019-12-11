@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-class SupplierDeleteModal extends Component {
+class ProductDeleteModal extends Component {
+
 	render() {
 		const { id, conFirmMoveToArchives } = this.props;
 		
@@ -18,14 +19,13 @@ class SupplierDeleteModal extends Component {
 	        </Modal.Header>
 			
 	        <Modal.Body>
-	        
 	      		<div align="center">
 	      			<h4>Are you sure?</h4>
-	      		<Button 
-	      			className="btn btn-primary mb-2 mt-1"
-	      			onClick={conFirmMoveToArchives}>
-	            	Confirm
-	         	</Button>
+		      		<Button 
+		      			className="btn btn-primary my-1"
+		      			onClick={conFirmMoveToArchives}>
+		            	Confirm
+		         	</Button>
 	      		</div>
 
 	        </Modal.Body>
@@ -34,4 +34,4 @@ class SupplierDeleteModal extends Component {
 	}
 }
 
-export default SupplierDeleteModal;
+export default ProductDeleteModal;
