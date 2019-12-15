@@ -1,11 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from "react";
 import axios from "axios";
 import Spinner from "../layouts/Spinner";
 import PropTypes from "prop-types";
 import { Redirect, Link } from "react-router-dom";
 
 class ProductShow extends Component {
-
 	state = {
 		id: this.props.match.params.id,
 		singleProduct: {
@@ -35,16 +34,17 @@ class ProductShow extends Component {
 			stock_overwrite: "",
 			customization_fee: "",
 			stock_alarm: "",
+			stocks: "",
 			sales_price: "",
 			product_image: null,
-			created_at: '',
-			updated_at: ''
+			created_at: "",
+			updated_at: ""
 		},
 		loading: false,
 		redirect: false,
 		errors: null
 	};
-	
+
 	componentDidMount() {
 		// this.props.getSingleProduct(this.state.id)
 		this.getSingleProduct(this.state.id);
@@ -71,7 +71,9 @@ class ProductShow extends Component {
 				dimension_width: res.data.product.attributes.dimension_width,
 				dimension_height: res.data.product.attributes.dimension_height,
 				color: res.data.product.attributes.color,
-				material_tags: res.data.product.attributes.material_tags.split(","),
+				material_tags: res.data.product.attributes.material_tags.split(
+					","
+				),
 				fitting_type: res.data.product.attributes.fitting_type,
 				fitting_qty: res.data.product.attributes.fitting_qty,
 				weight_kg: res.data.product.attributes.weight_kg,
@@ -84,6 +86,7 @@ class ProductShow extends Component {
 				stock_overwrite: res.data.product.stock_overwrite,
 				customization_fee: res.data.product.customization_fee,
 				stock_alarm: res.data.product.stock_alarm,
+				stocks: res.data.product.stocks,
 				sales_price: res.data.product.sales_price,
 				product_image: res.data.product.product_image,
 				created_at: res.data.product.created_at,
@@ -94,7 +97,6 @@ class ProductShow extends Component {
 	};
 
 	render() {
-
 		const {
 			sku,
 			product_name,
@@ -120,30 +122,31 @@ class ProductShow extends Component {
 			stock_overwrite,
 			customization_fee,
 			stock_alarm,
+			stocks,
 			sales_price,
 			product_image,
 			created_at,
 			updated_at
 		} = this.state.singleProduct;
 
-		if(this.state.loading){
+		if (this.state.loading) {
 			// loader
-			return <Spinner />
-		}else{
-
+			return <Spinner />;
+		} else {
 			return (
 				<Fragment>
-					<h2> 					
-
-					<Link 
-						to='/product' 
-						className='btn btn-sm btn-primary mr-1'
-					>
-					<i className="la la-angle-double-left"></i>
-					</Link>
-						Product Information: 
-					</h2> 
-
+					<h2>
+						<Link
+							to="/product"
+							className="btn btn-sm btn-primary mb-1"
+						>
+						Back
+						</Link>
+					</h2>
+					<h2>
+						<i className="ft-clipboard"></i> Product Information:
+					</h2>{" "}
+					<hr />
 					<div className="card card-body">
 						<div className="row">
 							<div className="col-md-4">
@@ -158,40 +161,29 @@ class ProductShow extends Component {
 									<strong>Brand:</strong> {brand}
 								</p>
 								<p>
-									<strong>
-										Product Category:
-									</strong>{" "}
+									<strong>Product Category:</strong>{" "}
 									{product_category}
 								</p>
 								<p>
-									<strong>Description:</strong>{" "}
-									{description}
+									<strong>Description:</strong> {description}
 								</p>
 								<p>
-									<strong>Supplier:</strong>{" "}
-									{supplier}
+									<strong>Supplier:</strong> {supplier}
 								</p>
 								<p>
-									<strong>Barcode:</strong>{" "}
-									{barcode}
+									<strong>Barcode:</strong> {barcode}
 								</p>
 
 								<p>
-									<strong>
-										Dimension Length:
-									</strong>{" "}
+									<strong>Dimension Length:</strong>{" "}
 									{dimension_length}
 								</p>
 								<p>
-									<strong>
-										Dimension Width:
-									</strong>{" "}
+									<strong>Dimension Width:</strong>{" "}
 									{dimension_width}
 								</p>
 								<p>
-									<strong>
-										Dimension Height:
-									</strong>{" "}
+									<strong>Dimension Height:</strong>{" "}
 									{dimension_height}
 								</p>
 								<p>
@@ -199,7 +191,9 @@ class ProductShow extends Component {
 								</p>
 								<p>
 									<strong>Material Tags:</strong>{" "}
-									{material_tags == ''  ? 'No Tags.' : material_tags}
+									{material_tags == ""
+										? "No Tags."
+										: material_tags}
 								</p>
 
 								<p>
@@ -210,15 +204,12 @@ class ProductShow extends Component {
 
 							<div className="col-md-4">
 								<p>
-									<strong>
-										Fitting Quantity:
-									</strong>{" "}
+									<strong>Fitting Quantity:</strong>{" "}
 									{fitting_qty}
 								</p>
 
 								<p>
-									<strong>Weight (Kg):</strong>{" "}
-									{weight_kg}
+									<strong>Weight (Kg):</strong> {weight_kg}
 								</p>
 								<p>
 									<strong>Packing Length:</strong>{" "}
@@ -243,42 +234,43 @@ class ProductShow extends Component {
 									{delivery_fee}
 								</p>
 								<p>
-									<strong>
-										Stock Overwrite:
-									</strong>{" "}
+									<strong>Stock Overwrite:</strong>{" "}
 									{stock_overwrite}
 								</p>
 								<p>
-									<strong>
-										Customization Fee:
-									</strong>{" "}
+									<strong>Customization Fee:</strong>{" "}
 									{customization_fee}
 								</p>
 								<p>
-									<strong>Stock Alarm:</strong>{" "}
-									{stock_alarm}
+									<strong>Stock Alarm:</strong> {stock_alarm}
 								</p>
 								<p>
-									<strong>Sales Price:</strong>{" "}
-									{sales_price}
+									<strong>Stocks:</strong> {stocks}
+								</p>
+								<p>
+									<strong>Sales Price:</strong> {sales_price}
 								</p>
 							</div>
 
 							<div className="col-md-4">
 								<h4>Product Image:</h4>
-								<img 
-									src={product_image} 
+								<img
+									src={product_image}
 									className="img-fluid rounded mx-auto d-block w-70"
 								/>
 							</div>
 						</div>
-						
+
 						<hr />
-						<p><strong>Created at:</strong> {created_at}</p>
-						<p><strong>Updated at:</strong> {updated_at}</p>
+						<p>
+							<strong>Created at:</strong> {created_at}
+						</p>
+						<p>
+							<strong>Updated at:</strong> {updated_at}
+						</p>
 					</div>
 				</Fragment>
-			)
+			);
 		}
 	}
 }

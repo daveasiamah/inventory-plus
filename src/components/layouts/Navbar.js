@@ -76,12 +76,6 @@ const Navbar = () => {
                                 </li>
                                 <li><a className="menu-item" href="/category" data-i18n="nav.starter_kit.static_layout">Categories</a>
                                 </li>
-                                <li><a className="menu-item" href="#" data-i18n="nav.starter_kit.static_layout">Materials</a>
-                                </li>
-                                <li><a className="menu-item" href="#" data-i18n="nav.starter_kit.static_layout">Fittings</a>
-                                </li>
-                                <li><a className="menu-item" href="#" data-i18n="nav.starter_kit.static_layout">Colors</a>
-                                </li>
                             </ul>
                         </li>
                         <li className=" nav-item">

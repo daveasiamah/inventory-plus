@@ -171,7 +171,7 @@ class CategoryEditModal extends Component {
 
 										<div className="form-group row">
 											<label className="col-md-4 label-control">
-												Name:
+												Parent Category:
 											</label>
 											<div className="col-md-8">
 												<input

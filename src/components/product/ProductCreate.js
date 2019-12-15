@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import { Redirect, Link } from "react-router-dom";
 import Spinner from "../layouts/Spinner";
 import Select from "react-select";
-import '../layouts/styles/iziToast.css';
-import iziToast from 'izitoast';
+import "../layouts/styles/iziToast.css";
+import iziToast from "izitoast";
 import axios from "axios";
 
 class ProductCreate extends Component {
@@ -36,6 +36,7 @@ class ProductCreate extends Component {
 		stock_overwrite: "",
 		customization_fee: "",
 		stock_alarm: "",
+		stocks: "",
 		sales_price: "",
 		product_image: null,
 		product_image_display: "",
@@ -53,21 +54,21 @@ class ProductCreate extends Component {
 		this.getSelectAll();
 	}
 
-	 // alert message
-    toast = (message) => {
-        iziToast.show({
-            title: 'Success',
-            icon: 'ico-success',
-            message: message,
-            iconColor: 'rgb(0, 255, 184)',
-            theme: 'dark',
-            progressBarColor: 'rgb(0, 255, 184)',
-            position: 'bottomRight',
-            transitionIn: 'bounceInLeft',
-            transitionOut: 'fadeOut',
-            timeout: 4000,
-        });
-    }
+	// alert message
+	toast = message => {
+		iziToast.show({
+			title: "Success",
+			icon: "ico-success",
+			message: message,
+			iconColor: "rgb(0, 255, 184)",
+			theme: "dark",
+			progressBarColor: "rgb(0, 255, 184)",
+			position: "bottomRight",
+			transitionIn: "bounceInLeft",
+			transitionOut: "fadeOut",
+			timeout: 4000
+		});
+	};
 
 	// handle inputs
 	handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -80,18 +81,23 @@ class ProductCreate extends Component {
 		this.setState({ product_image: e.target.files[0] });
 		// console.log(this.state.product_image)
 	};
-	
+
 	// handle the select options
 	handleSelectInput = selectedOption => {
-		console.log(selectedOption)
-		this.setState({[selectedOption.name]: selectedOption.value })
+		console.log(selectedOption);
+		this.setState({ [selectedOption.name]: selectedOption.value });
 	};
 
 	// handle input attributes
 	handleInputattributes = e => {
-		this.setState({ attributes: { ...this.state.attributes, [e.target.name]: e.target.value }})
-	} 
-	
+		this.setState({
+			attributes: {
+				...this.state.attributes,
+				[e.target.name]: e.target.value
+			}
+		});
+	};
+
 	// Adding material tags
 	addTag = e => {
 		if (e.key === "Enter" && e.target.value !== "") {
@@ -105,9 +111,11 @@ class ProductCreate extends Component {
 			) {
 				return;
 			}
-													
+
 			let newTag = this.state.attributes.material_tags.concat(value);
-			this.setState({ attributes: { ...this.state.attributes, material_tags: newTag }});
+			this.setState({
+				attributes: { ...this.state.attributes, material_tags: newTag }
+			});
 			e.target.value = "";
 		}
 	};
@@ -118,7 +126,6 @@ class ProductCreate extends Component {
 		tags.splice(id, 1);
 		this.setState({ material_tags: tags });
 	};
-	
 
 	// get all the select options
 	getSelectAll = async () => {
@@ -169,12 +176,13 @@ class ProductCreate extends Component {
 			srp: this.state.srp,
 			delivery_fee: this.state.delivery_fee,
 			stock_overwrite: this.state.stock_overwrite,
+			stocks: this.state.stocks,
 			customization_fee: this.state.customization_fee,
 			stock_alarm: this.state.stock_alarm,
 			sales_price: this.state.sales_price,
 			product_image: this.state.product_image
 		};
-		
+
 		// console.log(data.attributes);
 		this.postProduct(data);
 	};
@@ -207,27 +215,28 @@ class ProductCreate extends Component {
 		data.append("stock_overwrite", product.stock_overwrite);
 		data.append("customization_fee", product.customization_fee);
 		data.append("stock_alarm", product.stock_alarm);
+		data.append("stocks", product.stocks);
 		data.append("sales_price", product.sales_price);
 		data.append("product_image", product.product_image);
-		
+
 		let res = await axios.post(
 			`http://inventory.test/api/admin/product`,
 			data,
 			{
 				headers: {
-					"Content-Type": "multipart/form-data",
+					"Content-Type": "multipart/form-data"
 					// "Content-Type": "application/json",
 				}
 			}
 		);
-		
+
 		switch (res.data.status) {
 			case 0:
 				this.setState({ errors: res.data.errors });
 				break;
 			case 1:
 				this.setState({ loading: false, redirect: true });
-				// alert message 
+				// alert message
 				this.toast(res.data.message);
 				break;
 			default:
@@ -247,39 +256,56 @@ class ProductCreate extends Component {
 			description,
 			supplier,
 			barcode,
+			attributes: {
+				dimension_length,
+				dimension_width,
+				dimension_height,
+				color,
+				material_tags,
+				fitting_type,
+				fitting_qty,
+				weight_kg,
+				packing_length,
+				packing_width,
+				packing_height
+			},
 			cost,
 			srp,
 			delivery_fee,
 			stock_overwrite,
 			customization_fee,
 			stock_alarm,
+			stocks,
 			sales_price,
 			product_image,
-			isSearchable } = this.state;
-
-		const {
-			dimension_length,
-			dimension_width,
-			dimension_height,
-			color,
-			material_tags,
-			fitting_type,
-			fitting_qty,
-			weight_kg,
-			packing_length,
-			packing_width,
-			packing_height } = this.state.attributes
+			isSearchable
+		} = this.state;
 
 		let supplierOption = this.state.name_suppliers.map(supplier => {
-			return { id: supplier._id, value: supplier.name, label: supplier.name , name: 'supplier'};
+			return {
+				id: supplier._id,
+				value: supplier.name,
+				label: supplier.name,
+				name: "supplier"
+			};
 		});
 
 		let brandOption = this.state.name_brands.map(brand => {
-			return { id: brand._id, value: brand.name, label: brand.name, name: 'brand' };
+			return {
+				id: brand._id,
+				value: brand.name,
+				label: brand.name,
+				name: "brand"
+			};
 		});
 
 		let categoryOption = this.state.name_categories.map(category => {
-			return { id: category._id, value: category.name, label: category.name, name: 'product_category' };
+			return {
+				id: category._id,
+				value: category.name,
+				label: category.name,
+				name: "product_category"
+			};
 		});
 
 		if (this.state.loading) {
@@ -458,7 +484,7 @@ class ProductCreate extends Component {
 						</div>
 
 						<h4 className="form-section">
-							<i className="ft-clipboard"></i> Specification
+							<i className="ft-clipboard"></i> Attributes
 						</h4>
 
 						<div className="card card-body">
@@ -514,7 +540,8 @@ class ProductCreate extends Component {
 											Color
 										</label>
 										<div className="col-md-9">
-											<select
+											<input
+												type="text"
 												id="color"
 												name="color"
 												className="form-control"
@@ -522,20 +549,8 @@ class ProductCreate extends Component {
 													this.handleInputattributes
 												}
 												value={color}
-											>
-												<option value="">
-													Choose Color
-												</option>
-												<option value="Color 1">
-													Color 1
-												</option>
-												<option value="Color 2">
-													Color 2
-												</option>
-												<option value="Color 3">
-													Color 3
-												</option>
-											</select>
+												placeholder="Color"
+											/>
 										</div>
 									</div>
 
@@ -596,7 +611,8 @@ class ProductCreate extends Component {
 											Fitting Type
 										</label>
 										<div className="col-md-9">
-											<select
+											<input
+												type="text"
 												id="fitting_type"
 												name="fitting_type"
 												className="form-control"
@@ -604,20 +620,8 @@ class ProductCreate extends Component {
 													this.handleInputattributes
 												}
 												value={fitting_type}
-											>
-												<option value="">
-													Choose Fitting
-												</option>
-												<option value="Fitting 1">
-													Fitting 1
-												</option>
-												<option value="Fitting 2">
-													Fitting 2
-												</option>
-												<option value="Fitting 3">
-													Fitting 3
-												</option>
-											</select>
+												placeholder="Fitting Type"
+											/>
 										</div>
 									</div>
 
@@ -625,7 +629,7 @@ class ProductCreate extends Component {
 										<label className="col-md-3 label-control">
 											Fitting Qty
 										</label>
-										<div className="col-md-6">
+										<div className="col-md-9">
 											<input
 												type="text"
 												id="fitting_qty"
@@ -646,7 +650,7 @@ class ProductCreate extends Component {
 										<label className="col-md-3 label-control">
 											Weight (Kg)
 										</label>
-										<div className="col-md-6">
+										<div className="col-md-3">
 											<input
 												type="text"
 												id="weight_kg"
@@ -834,6 +838,25 @@ class ProductCreate extends Component {
 
 									<div className="form-group row">
 										<label className="col-md-3 label-control">
+											Stocks
+										</label>
+										<div className="col-md-6">
+											<input
+												type="text"
+												id="stocks"
+												name="stocks"
+												className="form-control"
+												placeholder="0"
+												onChange={
+													this.handleInputChange
+												}
+												value={stocks}
+											/>
+										</div>
+									</div>
+
+									<div className="form-group row">
+										<label className="col-md-3 label-control">
 											Sales Price
 										</label>
 										<div className="col-md-6">
@@ -850,6 +873,7 @@ class ProductCreate extends Component {
 											/>
 										</div>
 									</div>
+
 								</div>
 							</section>
 						</div>

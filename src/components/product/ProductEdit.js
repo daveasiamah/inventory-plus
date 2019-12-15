@@ -37,6 +37,7 @@ class ProductEdit extends Component {
 			stock_overwrite: "",
 			customization_fee: "",
 			stock_alarm: "",
+			stocks: "",
 			sales_price: "",
 			product_image: null
 		},
@@ -107,6 +108,7 @@ class ProductEdit extends Component {
 				stock_overwrite: res.data.product.stock_overwrite,
 				customization_fee: res.data.product.customization_fee,
 				stock_alarm: res.data.product.stock_alarm,
+				stocks: res.data.product.stocks,
 				sales_price: res.data.product.sales_price,
 				product_image: res.data.product.product_image
 			},
@@ -141,6 +143,7 @@ class ProductEdit extends Component {
 		data.append("stock_overwrite", singleProduct.stock_overwrite);
 		data.append("customization_fee", singleProduct.customization_fee);
 		data.append("stock_alarm", singleProduct.stock_alarm);
+		data.append("stocks", singleProduct.stocks);
 		data.append("sales_price", singleProduct.sales_price);
 		data.append("product_image", singleProduct.product_image);
 		// console.table(singleProduct);
@@ -296,6 +299,7 @@ class ProductEdit extends Component {
 			stock_overwrite,
 			customization_fee,
 			stock_alarm,
+			stocks,
 			sales_price,
 			product_image,
 			isSearchable
@@ -339,7 +343,7 @@ class ProductEdit extends Component {
 		} else {
 			return (
 				<div>
-					<div className="mb-2">
+					<div className="mb-1">
 						<h2>Edit Product</h2>
 					</div>
 
@@ -515,7 +519,7 @@ class ProductEdit extends Component {
 						</div>
 
 						<h4 className="form-section">
-							<i className="ft-clipboard"></i> Specification
+							<i className="ft-clipboard"></i> Attributes
 						</h4>
 
 						<div className="card card-body">
@@ -571,7 +575,7 @@ class ProductEdit extends Component {
 											Color
 										</label>
 										<div className="col-md-9">
-											<select
+											<input
 												id="color"
 												name="color"
 												className="form-control"
@@ -579,20 +583,7 @@ class ProductEdit extends Component {
 													this.handleInputChange
 												}
 												value={color}
-											>
-												<option value="">
-													Choose Color
-												</option>
-												<option value="Color 1">
-													Color 1
-												</option>
-												<option value="Color 2">
-													Color 2
-												</option>
-												<option value="Color 3">
-													Color 3
-												</option>
-											</select>
+											/>
 										</div>
 									</div>
 
@@ -653,7 +644,7 @@ class ProductEdit extends Component {
 											Fitting Type
 										</label>
 										<div className="col-md-9">
-											<select
+											<input
 												id="fitting_type"
 												name="fitting_type"
 												className="form-control"
@@ -661,20 +652,7 @@ class ProductEdit extends Component {
 													this.handleInputChange
 												}
 												value={fitting_type}
-											>
-												<option value="">
-													Choose Fitting
-												</option>
-												<option value="Fitting 1">
-													Fitting 1
-												</option>
-												<option value="Fitting 2">
-													Fitting 2
-												</option>
-												<option value="Fitting 3">
-													Fitting 3
-												</option>
-											</select>
+											/>
 										</div>
 									</div>
 
@@ -682,7 +660,7 @@ class ProductEdit extends Component {
 										<label className="col-md-3 label-control">
 											Fitting Qty
 										</label>
-										<div className="col-md-6">
+										<div className="col-md-9">
 											<input
 												type="text"
 												id="fitting_qty"
@@ -696,6 +674,7 @@ class ProductEdit extends Component {
 											/>
 										</div>
 									</div>
+								
 								</div>
 
 								<div className="col-sm-6">
@@ -703,7 +682,7 @@ class ProductEdit extends Component {
 										<label className="col-md-3 label-control">
 											Weight (Kg)
 										</label>
-										<div className="col-md-6">
+										<div className="col-md-3">
 											<input
 												type="text"
 												id="weight_kg"
@@ -885,6 +864,25 @@ class ProductEdit extends Component {
 													this.handleInputChange
 												}
 												value={stock_alarm}
+											/>
+										</div>
+									</div>
+
+									<div className="form-group row">
+										<label className="col-md-3 label-control">
+											Stocks
+										</label>
+										<div className="col-md-6">
+											<input
+												type="text"
+												id="stocks"
+												name="stocks"
+												className="form-control"
+												placeholder="0"
+												onChange={
+													this.handleInputChange
+												}
+												value={stocks}
 											/>
 										</div>
 									</div>
