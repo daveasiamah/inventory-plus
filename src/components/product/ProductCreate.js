@@ -13,9 +13,9 @@ class ProductCreate extends Component {
 		sku: "",
 		product_name: "",
 		description: "",
-		brand_id: "",
-		category_id: "",
-		supplier_id: "",
+		brand_id: null,
+		category_id: null,
+		supplier_id: null,
 		barcode: "",
 		attributes: {
 			dimension_length: "",
@@ -84,8 +84,14 @@ class ProductCreate extends Component {
 
 	// handle the select options
 	handleSelectInput = selectedOption => {
-		console.log(selectedOption);
-		this.setState({ [selectedOption.name]: selectedOption.value });
+		// console.log(selectedOption);
+		this.setState({
+			[selectedOption.name]: {
+				label: selectedOption.label,
+				value: selectedOption.value,
+				name: selectedOption.name
+			}
+		});
 	};
 
 	// handle input attributes
@@ -156,10 +162,10 @@ class ProductCreate extends Component {
 		let data = {
 			sku: this.state.sku,
 			product_name: this.state.product_name,
-			brand_id: this.state.brand_id,
-			category_id: this.state.category_id,
 			description: this.state.description,
-			supplier_id: this.state.supplier_id,
+			brand_id: JSON.stringify(this.state.brand_id),
+			category_id: JSON.stringify(this.state.category_id),
+			supplier_id: JSON.stringify(this.state.supplier_id),
 			barcode: this.state.barcode,
 			dimension_length: this.state.attributes.dimension_length,
 			dimension_width: this.state.attributes.dimension_width,
@@ -870,7 +876,6 @@ class ProductCreate extends Component {
 											/>
 										</div>
 									</div>
-
 								</div>
 							</section>
 						</div>

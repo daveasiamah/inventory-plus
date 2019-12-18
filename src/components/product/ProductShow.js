@@ -10,10 +10,10 @@ class ProductShow extends Component {
 		singleProduct: {
 			sku: "",
 			product_name: "",
-			brand: "",
-			product_category: "",
+			brand_id: [],
+			category_id: [],
 			description: "",
-			supplier: "",
+			supplier_id: [],
 			barcode: "",
 			attributes: {
 				dimension_length: "",
@@ -40,6 +40,11 @@ class ProductShow extends Component {
 			created_at: "",
 			updated_at: ""
 		},
+		selectNames: {
+			brand_name: '',
+			supplier_name: '',
+			category_name: '',
+		},
 		loading: false,
 		redirect: false,
 		errors: null
@@ -49,6 +54,29 @@ class ProductShow extends Component {
 		// this.props.getSingleProduct(this.state.id)
 		this.getSingleProduct(this.state.id);
 	}
+	
+	// fetch the name
+	getSelectNames = async (supplier_id, brand_id, category_id) => {
+		// console.log(supplier_id,brand_id,category_id)
+		let res = await axios.post(
+			`http://inventory.test/api/admin/product/selectnames`,
+			{
+				supplier_id: supplier_id,
+				brand_id: brand_id,
+				category_id: category_id
+			}
+		);
+		
+		console.log(res.data);
+
+		this.setState({
+			selectNames: {
+				supplier_name: res.data.supplier[0].name,
+				brand_name: res.data.brand[0].name,
+				category_name: res.data.category[0].name
+			}
+		});
+	};
 
 	// fetch the single item
 	getSingleProduct = async id => {
@@ -62,10 +90,10 @@ class ProductShow extends Component {
 			singleProduct: {
 				sku: res.data.product.sku,
 				product_name: res.data.product.product_name,
-				brand: res.data.product.brand,
-				product_category: res.data.product.product_category,
 				description: res.data.product.description,
-				supplier: res.data.product.supplier,
+				brand_id: JSON.parse(res.data.product.brand_id),
+				category_id: JSON.parse(res.data.product.category_id),
+				supplier_id: JSON.parse(res.data.product.supplier_id),
 				barcode: res.data.product.barcode,
 				dimension_length: res.data.product.attributes.dimension_length,
 				dimension_width: res.data.product.attributes.dimension_width,
@@ -94,16 +122,19 @@ class ProductShow extends Component {
 			},
 			loading: false
 		});
+
+		// const { supplier_id, brand_id, category_id } = this.state.singleProduct;
+		// this.getSelectNames(supplier_id, brand_id, category_id );
 	};
 
 	render() {
 		const {
 			sku,
 			product_name,
-			brand,
-			product_category,
+			brand_id,
+			category_id,
 			description,
-			supplier,
+			supplier_id,
 			barcode,
 			dimension_length,
 			dimension_width,
@@ -158,17 +189,17 @@ class ProductShow extends Component {
 									{product_name}
 								</p>
 								<p>
-									<strong>Brand:</strong> {brand}
+									<strong>Brand:</strong> {brand_id.label}
 								</p>
 								<p>
-									<strong>Product Category:</strong>{" "}
-									{product_category}
+									<strong>Category:</strong>{" "}
+									{category_id.label}
 								</p>
 								<p>
 									<strong>Description:</strong> {description}
 								</p>
 								<p>
-									<strong>Supplier:</strong> {supplier}
+									<strong>Supplier:</strong> {supplier_id.label}
 								</p>
 								<p>
 									<strong>Barcode:</strong> {barcode}

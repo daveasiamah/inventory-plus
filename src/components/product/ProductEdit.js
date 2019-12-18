@@ -8,15 +8,14 @@ import iziToast from "izitoast";
 import Select from "react-select";
 
 class ProductEdit extends Component {
-
 	state = {
 		id: this.props.match.params.id,
 		singleProduct: {
 			sku: "",
 			product_name: "",
-			brand_id: "",
-			category_id: "",
-			supplier_id: "",
+			brand_id: [],
+			category_id: [],
+			supplier_id: [],
 			description: "",
 			barcode: "",
 			attributes: {
@@ -40,12 +39,12 @@ class ProductEdit extends Component {
 			stock_alarm: "",
 			stocks: "",
 			sales_price: "",
-			product_image: null,
+			product_image: null
 		},
 		selectNames: {
-			supplier_id: '',
-			brand_id: '',
-			category_id: '',
+			supplier_id: "",
+			brand_id: "",
+			category_id: ""
 		},
 		product_image_display: null,
 		product_image_new: null,
@@ -86,7 +85,7 @@ class ProductEdit extends Component {
 		let res = await axios.get(
 			`http://inventory.test/api/admin/product/${id}`
 		);
-	
+
 		console.log(res.data);
 
 		this.setState({
@@ -94,9 +93,9 @@ class ProductEdit extends Component {
 				sku: res.data.product.sku,
 				product_name: res.data.product.product_name,
 				description: res.data.product.description,
-				brand_id: res.data.product.brand_id,
-				category_id: res.data.product.category_id,
-				supplier_id: res.data.product.supplier_id,
+				brand_id: JSON.parse(res.data.product.brand_id),
+				category_id: JSON.parse(res.data.product.category_id),
+				supplier_id: JSON.parse(res.data.product.supplier_id),
 				barcode: res.data.product.barcode,
 				dimension_length: res.data.product.attributes.dimension_length,
 				dimension_width: res.data.product.attributes.dimension_width,
@@ -123,12 +122,6 @@ class ProductEdit extends Component {
 			},
 			loading: false
 		});
-
-		this.getSelectNames(
-			this.state.singleProduct.supplier_id,
-			this.state.singleProduct.brand_id,
-			this.state.singleProduct.category_id
-		);	
 	};
 
 	// update the data
@@ -137,9 +130,9 @@ class ProductEdit extends Component {
 		data.append("sku", singleProduct.sku);
 		data.append("product_name", singleProduct.product_name);
 		data.append("description", singleProduct.description);
-		data.append("brand_id", singleProduct.brand_id);
-		data.append("category_id", singleProduct.category_id);
-		data.append("supplier_id", singleProduct.supplier_id);
+		data.append("brand_id", JSON.stringify(singleProduct.brand_id));
+		data.append("category_id", JSON.stringify(singleProduct.category_id));
+		data.append("supplier_id", JSON.stringify(singleProduct.supplier_id));
 		data.append("barcode", singleProduct.barcode);
 		data.append("dimension_length", singleProduct.dimension_length);
 		data.append("dimension_width", singleProduct.dimension_width);
@@ -215,34 +208,17 @@ class ProductEdit extends Component {
 	handleSelectInput = selectedOption => {
 		// console.log(selectedOption);
 		this.setState({
-			singleProduct: {...this.state.singleProduct,[selectedOption.name]: selectedOption.value },
-			// selectNames: {...this.state.selectNames, [selectedOption.name]: {label: selectedOption.label, value: selectedOption.value, name: selectedOption.name}}
+			singleProduct: {
+				...this.state.singleProduct,
+				[selectedOption.name]: {
+					label: selectedOption.label,
+					value: selectedOption.value,
+					name: selectedOption.name
+				}
+			}
 		});
 	};
-	
-	// fetch the name
-	getSelectNames = async (supplier_id, brand_id, category_id) => {
-		// console.log(supplier_id,brand_id,category_id)
-		let res = await axios.post(
-			`http://inventory.test/api/admin/product/selectnames`,
-			{
-				supplier_id: supplier_id,
-				brand_id: brand_id,
-				category_id: category_id
-			}
-		);
-		
-		console.log(res.data);
 
-		this.setState({
-			selectNames: {
-				supplier_id: { label: res.data.supplier[0].name, value: res.data.supplier[0]._id, name: "supplier_id"},
-				brand_id: { label: res.data.brand[0].name, value: res.data.brand[0]._id, name: "brand_id"},
-				category_id: { label: res.data.category[0].name, value: res.data.category[0]._id, name: "category_id"}
-			}
-		});
-	};
-	
 	// get all the select options
 	getSelectAll = async () => {
 		let res = await axios.get(
@@ -346,24 +322,24 @@ class ProductEdit extends Component {
 
 		let supplierOption = this.state.name_suppliers.map(supplier => {
 			return {
-				value: supplier._id,
 				label: supplier.name,
+				value: supplier._id,
 				name: "supplier_id"
 			};
 		});
 
 		let brandOption = this.state.name_brands.map(brand => {
 			return {
-				value: brand._id,
 				label: brand.name,
+				value: brand._id,
 				name: "brand_id"
 			};
 		});
 
 		let categoryOption = this.state.name_categories.map(category => {
 			return {
-				value: category._id,
 				label: category.name,
+				value: category._id,
 				name: "category_id"
 			};
 		});
@@ -461,13 +437,15 @@ class ProductEdit extends Component {
 										</label>
 										<div className="col-md-9">
 											<Select
-												// value={this.state.selectNames.brand_id}
-												defaultValue={brand_id}
-												defaultInputValue={brand_id}
+												value={brand_id}
+												// defaultValue={brand_id}
+												// defaultInputValue={brand_id}
 												placeholder="Select Brand..."
 												isSearchable={isSearchable}
-												onChange={value => 
-													this.handleSelectInput(value)
+												onChange={value =>
+													this.handleSelectInput(
+														value
+													)
 												}
 												options={brandOption}
 											/>
@@ -480,8 +458,7 @@ class ProductEdit extends Component {
 										</label>
 										<div className="col-md-9">
 											<Select
-												defaultValue={category_id}
-												defaultInputValue={category_id}
+												value={category_id}
 												placeholder="Select Category..."
 												isSearchable={isSearchable}
 												onChange={
@@ -519,8 +496,7 @@ class ProductEdit extends Component {
 										</label>
 										<div className="col-md-9">
 											<Select
-												defaultValue={supplier_id}
-												defaultInputValue={supplier_id}
+												value={supplier_id}
 												placeholder="Select Supplier..."
 												isSearchable={isSearchable}
 												onChange={
