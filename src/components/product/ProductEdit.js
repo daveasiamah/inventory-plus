@@ -3,20 +3,21 @@ import axios from "axios";
 import Spinner from "../layouts/Spinner";
 import PropTypes from "prop-types";
 import { Redirect, Link } from "react-router-dom";
-import '../layouts/styles/iziToast.css';
-import iziToast from 'izitoast';
+import "../layouts/styles/iziToast.css";
+import iziToast from "izitoast";
 import Select from "react-select";
 
 class ProductEdit extends Component {
+
 	state = {
 		id: this.props.match.params.id,
 		singleProduct: {
 			sku: "",
 			product_name: "",
-			brand: "",
-			product_category: "",
+			brand_id: "",
+			category_id: "",
+			supplier_id: "",
 			description: "",
-			supplier: "",
 			barcode: "",
 			attributes: {
 				dimension_length: "",
@@ -39,7 +40,12 @@ class ProductEdit extends Component {
 			stock_alarm: "",
 			stocks: "",
 			sales_price: "",
-			product_image: null
+			product_image: null,
+		},
+		selectNames: {
+			supplier_id: '',
+			brand_id: '',
+			category_id: '',
 		},
 		product_image_display: null,
 		product_image_new: null,
@@ -53,26 +59,25 @@ class ProductEdit extends Component {
 	};
 
 	componentDidMount() {
-		// this.props.getSingleProduct(this.state.id)
 		this.getSingleProduct(this.state.id);
 		this.getSelectAll();
 	}
 
-    // alert message
-    toast = (message) => {
-        iziToast.show({
-            title: 'Success',
-            icon: 'ico-success',
-            message: message,
-            iconColor: 'rgb(0, 255, 184)',
-            theme: 'dark',
-            progressBarColor: 'rgb(0, 255, 184)',
-            position: 'bottomRight',
-            transitionIn: 'bounceInLeft',
-            transitionOut: 'fadeOut',
-            timeout: 4000,
-        });
-    }
+	// alert message
+	toast = message => {
+		iziToast.show({
+			title: "Success",
+			icon: "ico-success",
+			message: message,
+			iconColor: "rgb(0, 255, 184)",
+			theme: "dark",
+			progressBarColor: "rgb(0, 255, 184)",
+			position: "bottomRight",
+			transitionIn: "bounceInLeft",
+			transitionOut: "fadeOut",
+			timeout: 4000
+		});
+	};
 
 	// fetch the single item
 	getSingleProduct = async id => {
@@ -81,21 +86,25 @@ class ProductEdit extends Component {
 		let res = await axios.get(
 			`http://inventory.test/api/admin/product/${id}`
 		);
+	
+		console.log(res.data);
 
 		this.setState({
 			singleProduct: {
 				sku: res.data.product.sku,
 				product_name: res.data.product.product_name,
-				brand: res.data.product.brand,
-				product_category: res.data.product.product_category,
 				description: res.data.product.description,
-				supplier: res.data.product.supplier,
+				brand_id: res.data.product.brand_id,
+				category_id: res.data.product.category_id,
+				supplier_id: res.data.product.supplier_id,
 				barcode: res.data.product.barcode,
 				dimension_length: res.data.product.attributes.dimension_length,
 				dimension_width: res.data.product.attributes.dimension_width,
 				dimension_height: res.data.product.attributes.dimension_height,
 				color: res.data.product.attributes.color,
-				material_tags: res.data.product.attributes.material_tags.split(","),
+				material_tags: res.data.product.attributes.material_tags.split(
+					","
+				),
 				fitting_type: res.data.product.attributes.fitting_type,
 				fitting_qty: res.data.product.attributes.fitting_qty,
 				weight_kg: res.data.product.attributes.weight_kg,
@@ -114,6 +123,12 @@ class ProductEdit extends Component {
 			},
 			loading: false
 		});
+
+		this.getSelectNames(
+			this.state.singleProduct.supplier_id,
+			this.state.singleProduct.brand_id,
+			this.state.singleProduct.category_id
+		);	
 	};
 
 	// update the data
@@ -121,10 +136,10 @@ class ProductEdit extends Component {
 		const data = new FormData();
 		data.append("sku", singleProduct.sku);
 		data.append("product_name", singleProduct.product_name);
-		data.append("brand", singleProduct.brand);
-		data.append("product_category", singleProduct.product_category);
 		data.append("description", singleProduct.description);
-		data.append("supplier", singleProduct.supplier);
+		data.append("brand_id", singleProduct.brand_id);
+		data.append("category_id", singleProduct.category_id);
+		data.append("supplier_id", singleProduct.supplier_id);
 		data.append("barcode", singleProduct.barcode);
 		data.append("dimension_length", singleProduct.dimension_length);
 		data.append("dimension_width", singleProduct.dimension_width);
@@ -200,13 +215,34 @@ class ProductEdit extends Component {
 	handleSelectInput = selectedOption => {
 		// console.log(selectedOption);
 		this.setState({
-			singleProduct: {
-				...this.state.singleProduct,
-				[selectedOption.name]: selectedOption.value
+			singleProduct: {...this.state.singleProduct,[selectedOption.name]: selectedOption.value },
+			// selectNames: {...this.state.selectNames, [selectedOption.name]: {label: selectedOption.label, value: selectedOption.value, name: selectedOption.name}}
+		});
+	};
+	
+	// fetch the name
+	getSelectNames = async (supplier_id, brand_id, category_id) => {
+		// console.log(supplier_id,brand_id,category_id)
+		let res = await axios.post(
+			`http://inventory.test/api/admin/product/selectnames`,
+			{
+				supplier_id: supplier_id,
+				brand_id: brand_id,
+				category_id: category_id
+			}
+		);
+		
+		console.log(res.data);
+
+		this.setState({
+			selectNames: {
+				supplier_id: { label: res.data.supplier[0].name, value: res.data.supplier[0]._id, name: "supplier_id"},
+				brand_id: { label: res.data.brand[0].name, value: res.data.brand[0]._id, name: "brand_id"},
+				category_id: { label: res.data.category[0].name, value: res.data.category[0]._id, name: "category_id"}
 			}
 		});
 	};
-
+	
 	// get all the select options
 	getSelectAll = async () => {
 		let res = await axios.get(
@@ -235,6 +271,7 @@ class ProductEdit extends Component {
 
 		if (e.target.value !== "") {
 			let singleProduct = this.state.singleProduct;
+			let selectNames = this.state.selectNames;
 			let id = this.state.id;
 			this.updateSingleProduct(singleProduct, id);
 		}
@@ -277,10 +314,10 @@ class ProductEdit extends Component {
 		const {
 			sku,
 			product_name,
-			brand,
-			product_category,
 			description,
-			supplier,
+			brand_id,
+			category_id,
+			supplier_id,
 			barcode,
 			dimension_length,
 			dimension_width,
@@ -309,28 +346,25 @@ class ProductEdit extends Component {
 
 		let supplierOption = this.state.name_suppliers.map(supplier => {
 			return {
-				id: supplier._id,
-				value: supplier.name,
+				value: supplier._id,
 				label: supplier.name,
-				name: "supplier"
+				name: "supplier_id"
 			};
 		});
 
 		let brandOption = this.state.name_brands.map(brand => {
 			return {
-				id: brand._id,
-				value: brand.name,
+				value: brand._id,
 				label: brand.name,
-				name: "brand"
+				name: "brand_id"
 			};
 		});
 
 		let categoryOption = this.state.name_categories.map(category => {
 			return {
-				id: category._id,
-				value: category.name,
+				value: category._id,
 				label: category.name,
-				name: "product_category"
+				name: "category_id"
 			};
 		});
 
@@ -427,12 +461,13 @@ class ProductEdit extends Component {
 										</label>
 										<div className="col-md-9">
 											<Select
-												defaultValue={brand}
-												defaultInputValue={brand}
+												// value={this.state.selectNames.brand_id}
+												defaultValue={brand_id}
+												defaultInputValue={brand_id}
 												placeholder="Select Brand..."
 												isSearchable={isSearchable}
-												onChange={
-													this.handleSelectInput
+												onChange={value => 
+													this.handleSelectInput(value)
 												}
 												options={brandOption}
 											/>
@@ -445,8 +480,8 @@ class ProductEdit extends Component {
 										</label>
 										<div className="col-md-9">
 											<Select
-												defaultValue={product_category}
-												defaultInputValue={product_category}
+												defaultValue={category_id}
+												defaultInputValue={category_id}
 												placeholder="Select Category..."
 												isSearchable={isSearchable}
 												onChange={
@@ -484,8 +519,8 @@ class ProductEdit extends Component {
 										</label>
 										<div className="col-md-9">
 											<Select
-												defaultValue={supplier}
-												defaultInputValue={supplier}
+												defaultValue={supplier_id}
+												defaultInputValue={supplier_id}
 												placeholder="Select Supplier..."
 												isSearchable={isSearchable}
 												onChange={
@@ -674,7 +709,6 @@ class ProductEdit extends Component {
 											/>
 										</div>
 									</div>
-								
 								</div>
 
 								<div className="col-sm-6">

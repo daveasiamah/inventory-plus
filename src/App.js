@@ -26,10 +26,10 @@ import Customer from "./components/customer/Customer";
 // Agent
 import Agent from "./components/agent/Agent";
 
-// Invoice
-import Invoice from "./components/invoice/Invoice";
-import InvoiceAdd from "./components/invoice/InvoiceAdd";
-import InvoiceTemplate from "./components/invoice/InvoiceTemplate";
+// Purchase Order (PO)
+import PurchaseOrder from "./components/purchase_order/PO";
+import PurchaseOrderCreate from './components/purchase_order/POCreate';
+
 import PageNotFound from "./components/layouts/PageNotFound";
 
 class App extends Component {
@@ -64,13 +64,9 @@ class App extends Component {
                   {/* Agent */}
                   <Route path="/agent" exact component={Agent} />
 
-                  {/* invoice */}
-                  <Route path="/invoice" exact component={Invoice} />
-                  <Route path="/invoice/add" component={InvoiceAdd} />
-                  <Route
-                    path="/invoice/templates"
-                    component={InvoiceTemplate}
-                  />
+                  {/* purchase order (PO) */}
+                  <Route path="/po" exact component={PurchaseOrder} />
+
                   <Route component={PageNotFound} />
                 </Switch>
               </div>

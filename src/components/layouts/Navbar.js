@@ -115,6 +115,11 @@ const Navbar = () => {
                                 </li>
                             </ul>
                         </li>
+                        <li className=" nav-item">
+                            <Link to="/po">
+                                <i className="la la-clipboard"></i><span className="menu-title" data-i18n="">Purchase Order</span>
+                            </Link>
+                        </li>
                         <li className=" nav-item"><a href="#"><i className="la la-file-text"></i><span className="menu-title" data-i18n="">Invoices</span></a>
                             <ul className="menu-content">
                                 <li><Link className="menu-item" to="/invoice" data-i18n="nav.starter_kit.fixed_layout">Invoice</Link>

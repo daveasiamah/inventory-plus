@@ -12,10 +12,10 @@ class ProductCreate extends Component {
 	state = {
 		sku: "",
 		product_name: "",
-		brand: "",
-		product_category: "",
 		description: "",
-		supplier: "",
+		brand_id: "",
+		category_id: "",
+		supplier_id: "",
 		barcode: "",
 		attributes: {
 			dimension_length: "",
@@ -156,10 +156,10 @@ class ProductCreate extends Component {
 		let data = {
 			sku: this.state.sku,
 			product_name: this.state.product_name,
-			brand: this.state.brand,
-			product_category: this.state.product_category,
+			brand_id: this.state.brand_id,
+			category_id: this.state.category_id,
 			description: this.state.description,
-			supplier: this.state.supplier,
+			supplier_id: this.state.supplier_id,
 			barcode: this.state.barcode,
 			dimension_length: this.state.attributes.dimension_length,
 			dimension_width: this.state.attributes.dimension_width,
@@ -193,10 +193,10 @@ class ProductCreate extends Component {
 		const data = new FormData();
 		data.append("sku", product.sku);
 		data.append("product_name", product.product_name);
-		data.append("brand", product.brand);
-		data.append("product_category", product.product_category);
+		data.append("brand_id", product.brand_id);
+		data.append("category_id", product.category_id);
 		data.append("description", product.description);
-		data.append("supplier", product.supplier);
+		data.append("supplier_id", product.supplier_id);
 		data.append("barcode", product.barcode);
 		data.append("dimension_length", product.dimension_length);
 		data.append("dimension_width", product.dimension_width);
@@ -251,10 +251,10 @@ class ProductCreate extends Component {
 		const {
 			sku,
 			product_name,
-			brand,
-			product_category,
 			description,
-			supplier,
+			brand_id,
+			category_id,
+			supplier_id,
 			barcode,
 			attributes: {
 				dimension_length,
@@ -283,28 +283,25 @@ class ProductCreate extends Component {
 
 		let supplierOption = this.state.name_suppliers.map(supplier => {
 			return {
-				id: supplier._id,
-				value: supplier.name,
+				value: supplier._id,
 				label: supplier.name,
-				name: "supplier"
+				name: "supplier_id"
 			};
 		});
 
 		let brandOption = this.state.name_brands.map(brand => {
 			return {
-				id: brand._id,
-				value: brand.name,
+				value: brand._id,
 				label: brand.name,
-				name: "brand"
+				name: "brand_id"
 			};
 		});
 
 		let categoryOption = this.state.name_categories.map(category => {
 			return {
-				id: category._id,
-				value: category.name,
+				value: category._id,
 				label: category.name,
-				name: "product_category"
+				name: "category_id"
 			};
 		});
 
