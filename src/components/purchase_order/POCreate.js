@@ -9,21 +9,65 @@ import axios from "axios";
 
 class POCreate extends Component {
 	state = {
-		isSearchable: true,
+		supplier_id: '',
+		suppliers: [],
+		supplier: [],
+		// isSearchable: true,
 		errors: null,
 		redirect: false,
 		loading: false
 	};
 	
-	handleInput = (e) => {
-		
+	componentDidMount() {
+		this.getSelectAll();
 	}
+	
+	// get all the select options
+	getSelectAll = async () => {
+		let res = await axios.get(
+			"http://inventory.test/api/admin/po/suppliers"
+		);
+		
+		switch (res.data.status) {
+			case 0:
+				// nothing for now
+				break;
+			case 1:
+				this.setState({
+					suppliers: res.data.suppliers
+				});
+				break;
+			default:
+				break;
+		}
+	};
+
+	// handle inputs
+	handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
+	
+	// handle the select options
+	handleSelectSupplier = selectedOption => {
+		console.log(selectedOption);
+		// this.setState({
+		// 	[selectedOption.name]: selectedOption.value
+		// });
+	};
 
 	onFormSubmit = (e) => {
 		//
 	}
 
 	render() {
+
+		let supplierOption = this.state.suppliers.map(supplier => {
+			return {
+				value: supplier._id,
+				label: supplier.name,
+				name: "supplier_id"
+			};
+		});
+
+
 		if (this.state.loading) {
 			// loading
 			return <Spinner />;
@@ -55,14 +99,37 @@ class POCreate extends Component {
 						)}
 					</div>
 
-					<from
+					<form
 						id="createPO"
 						encType="multipart/form-data"
 						onKeyPress={e => {
 							if (e.key === "Enter") e.preventDefault();
 						}}
 						onSubmit={e => this.onFormSubmit(e)}
-					></from>
+					>
+
+						<div className="card card-body">
+							<div className="row">
+								<div className="col-md-6">
+									<div className="form-group row">
+										<label className="col-md-3 label-control">
+											Supplier
+										</label>
+										<div className="col-md-9">
+											<Select
+												placeholder="Select Supplier..."
+												isSearchable={this.state.isSearchable}
+												onChange={
+													this.handleSelectSupplier
+												}
+												options={this.supplierOption}
+											/>	
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
 				</div>
 			);
 		}

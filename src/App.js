@@ -23,12 +23,9 @@ import Category from "./components/category/Category";
 // Customer
 import Customer from "./components/customer/Customer";
 
-// Agent
-import Agent from "./components/agent/Agent";
-
 // Purchase Order (PO)
 import PurchaseOrder from "./components/purchase_order/PO";
-import PurchaseOrderCreate from './components/purchase_order/POCreate';
+import POCreate from './components/purchase_order/POCreate';
 
 import PageNotFound from "./components/layouts/PageNotFound";
 
@@ -61,11 +58,9 @@ class App extends Component {
                   {/* Customer */}
                   <Route path="/customer" exact component={Customer} />
 
-                  {/* Agent */}
-                  <Route path="/agent" exact component={Agent} />
-
                   {/* purchase order (PO) */}
                   <Route path="/po" exact component={PurchaseOrder} />
+                  <Route path="/po/create" component={POCreate}/>
 
                   <Route component={PageNotFound} />
                 </Switch>

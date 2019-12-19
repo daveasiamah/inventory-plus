@@ -113,7 +113,6 @@ class POTable extends Component {
 						</tbody>
 					</table>
 				</div>
-
 			</Fragment>
 		)
 	}
