@@ -83,7 +83,12 @@ class ProductTable extends Component {
 	};
 	
 	render() {
+
 		const { products } = this.props;
+
+		const { brand_id, category_id } = this.props.products;
+
+		console.log(this.props.products);
 
 		return (
 			<Fragment>
@@ -106,9 +111,9 @@ class ProductTable extends Component {
 							{products.map(product => (
 								<tr key={product._id}>
 									<td>{product.sku}</td>
-									<td>{product.brand}</td>
+									<td>{product.brand_id.label}</td>
 									<td>{product.product_name}</td>
-									<td>{product.product_category}</td>
+									<td>{product.category_id.label}</td>
 									<td>{product.srp}</td>
 									<td>{product.cost}</td>
 									<td>{product.stocks}</td>
