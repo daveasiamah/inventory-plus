@@ -13,9 +13,9 @@ class ProductCreate extends Component {
 		sku: "",
 		product_name: "",
 		description: "",
-		brand_id: null,
-		category_id: null,
-		supplier_id: null,
+		brand_id: [],
+		category_id: [],
+		supplier_id: [],
 		barcode: "",
 		attributes: {
 			dimension_length: "",
@@ -33,7 +33,6 @@ class ProductCreate extends Component {
 		cost: "",
 		srp: "",
 		delivery_fee: "",
-		stock_overwrite: "",
 		customization_fee: "",
 		stock_alarm: "",
 		stocks: "",
@@ -181,7 +180,6 @@ class ProductCreate extends Component {
 			cost: this.state.cost,
 			srp: this.state.srp,
 			delivery_fee: this.state.delivery_fee,
-			stock_overwrite: this.state.stock_overwrite,
 			stocks: this.state.stocks,
 			customization_fee: this.state.customization_fee,
 			stock_alarm: this.state.stock_alarm,
@@ -199,10 +197,10 @@ class ProductCreate extends Component {
 		const data = new FormData();
 		data.append("sku", product.sku);
 		data.append("product_name", product.product_name);
+		data.append("description", product.description);
 		data.append("brand_id", product.brand_id);
 		data.append("category_id", product.category_id);
-		data.append("description", product.description);
-		data.append("supplier_id", product.supplier_id);
+		data.append("supplier_id",product.supplier_id);
 		data.append("barcode", product.barcode);
 		data.append("dimension_length", product.dimension_length);
 		data.append("dimension_width", product.dimension_width);
@@ -218,7 +216,6 @@ class ProductCreate extends Component {
 		data.append("cost", product.cost);
 		data.append("srp", product.srp);
 		data.append("delivery_fee", product.delivery_fee);
-		data.append("stock_overwrite", product.stock_overwrite);
 		data.append("customization_fee", product.customization_fee);
 		data.append("stock_alarm", product.stock_alarm);
 		data.append("stocks", product.stocks);
@@ -278,7 +275,6 @@ class ProductCreate extends Component {
 			cost,
 			srp,
 			delivery_fee,
-			stock_overwrite,
 			customization_fee,
 			stock_alarm,
 			stocks,
@@ -394,7 +390,48 @@ class ProductCreate extends Component {
 											/>
 										</div>
 									</div>
+									
+									<div className="form-group row">
+										<label className="col-md-3 label-control">
+											Description
+										</label>
+										<div className="col-md-9">
+											<textarea
+												id="description"
+												name="description"
+												rows="2"
+												className="form-control"
+												placeholder="Description"
+												onChange={
+													this.handleInputChange
+												}
+												value={description}
+											></textarea>
+										</div>
+									</div>
 
+									<div className="form-group row">
+										<label className="col-md-3 label-control">
+											Barcode
+										</label>
+										<div className="col-md-9">
+											<input
+												type="text"
+												id="barcode"
+												name="barcode"
+												className="form-control"
+												placeholder="Barcode"
+												onChange={
+													this.handleInputChange
+												}
+												value={barcode}
+											/>
+										</div>
+									</div>
+
+								</div>
+
+								<div className="col-sm-6">
 									<div className="form-group row">
 										<label className="col-md-3 label-control">
 											Brand
@@ -429,27 +466,6 @@ class ProductCreate extends Component {
 
 									<div className="form-group row">
 										<label className="col-md-3 label-control">
-											Description
-										</label>
-										<div className="col-md-9">
-											<textarea
-												id="description"
-												name="description"
-												rows="2"
-												className="form-control"
-												placeholder="Description"
-												onChange={
-													this.handleInputChange
-												}
-												value={description}
-											></textarea>
-										</div>
-									</div>
-								</div>
-
-								<div className="col-sm-6">
-									<div className="form-group row">
-										<label className="col-md-3 label-control">
 											Suppliers
 										</label>
 										<div className="col-md-9">
@@ -460,25 +476,6 @@ class ProductCreate extends Component {
 													this.handleSelectInput
 												}
 												options={supplierOption}
-											/>
-										</div>
-									</div>
-
-									<div className="form-group row">
-										<label className="col-md-3 label-control">
-											Barcode
-										</label>
-										<div className="col-md-9">
-											<input
-												type="text"
-												id="barcode"
-												name="barcode"
-												className="form-control"
-												placeholder="Barcode"
-												onChange={
-													this.handleInputChange
-												}
-												value={barcode}
 											/>
 										</div>
 									</div>
@@ -540,9 +537,75 @@ class ProductCreate extends Component {
 
 									<div className="form-group row">
 										<label className="col-md-3 label-control">
+											Packing
+										</label>
+										<div className="col-md-3">
+											<input
+												type="text"
+												id="packing_length"
+												name="packing_length"
+												className="form-control"
+												placeholder="L"
+												onChange={
+													this.handleInputattributes
+												}
+												value={packing_length}
+											/>
+										</div>
+
+										<div className="col-md-3">
+											<input
+												type="text"
+												id="packing_width"
+												name="packing_width"
+												className="form-control"
+												placeholder="W"
+												onChange={
+													this.handleInputattributes
+												}
+												value={packing_width}
+											/>
+										</div>
+										<div className="col-md-3">
+											<input
+												type="text"
+												id="packing_height"
+												name="packing_height"
+												className="form-control"
+												placeholder="H"
+												onChange={
+													this.handleInputattributes
+												}
+												value={packing_height}
+											/>
+										</div>
+									</div>
+
+									<div className="form-group row">
+										<label className="col-md-3 label-control">
+											Weight (Kg)
+										</label>
+										<div className="col-md-6">
+											<input
+												type="text"
+												id="weight_kg"
+												name="weight_kg"
+												className="form-control"
+												placeholder="0"
+												onChange={
+													this.handleInputattributes
+												}
+												value={weight_kg}
+											/>
+										</div>
+									</div>
+
+
+									<div className="form-group row">
+										<label className="col-md-3 label-control">
 											Color
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-6">
 											<input
 												type="text"
 												id="color"
@@ -557,12 +620,16 @@ class ProductCreate extends Component {
 										</div>
 									</div>
 
+								</div>
+
+								<div className="col-sm-6">
+									
 									<div className="form-group row">
 										<label className="col-md-3 label-control">
 											Material Tags
 										</label>
 										<div className="col-md-9">
-											<div className="form-group">
+											<div className="form-group" id="materialTags">
 												<ul className="containerUl float">
 													{material_tags ? (
 														material_tags.map(
@@ -646,72 +713,7 @@ class ProductCreate extends Component {
 											/>
 										</div>
 									</div>
-								</div>
 
-								<div className="col-sm-6">
-									<div className="form-group row">
-										<label className="col-md-3 label-control">
-											Weight (Kg)
-										</label>
-										<div className="col-md-3">
-											<input
-												type="text"
-												id="weight_kg"
-												name="weight_kg"
-												className="form-control"
-												placeholder="0"
-												onChange={
-													this.handleInputattributes
-												}
-												value={weight_kg}
-											/>
-										</div>
-									</div>
-
-									<div className="form-group row">
-										<label className="col-md-3 label-control">
-											Packing
-										</label>
-										<div className="col-md-3">
-											<input
-												type="text"
-												id="packing_length"
-												name="packing_length"
-												className="form-control"
-												placeholder="L"
-												onChange={
-													this.handleInputattributes
-												}
-												value={packing_length}
-											/>
-										</div>
-										<div className="col-md-3">
-											<input
-												type="text"
-												id="packing_width"
-												name="packing_width"
-												className="form-control"
-												placeholder="W"
-												onChange={
-													this.handleInputattributes
-												}
-												value={packing_width}
-											/>
-										</div>
-										<div className="col-md-3">
-											<input
-												type="text"
-												id="packing_height"
-												name="packing_height"
-												className="form-control"
-												placeholder="H"
-												onChange={
-													this.handleInputattributes
-												}
-												value={packing_height}
-											/>
-										</div>
-									</div>
 								</div>
 							</section>
 						</div>
@@ -782,7 +784,7 @@ class ProductCreate extends Component {
 
 									<div className="form-group row">
 										<label className="col-md-3 label-control">
-											Customization Fee
+											Custom. Fee
 										</label>
 										<div className="col-md-9">
 											<input
@@ -801,24 +803,6 @@ class ProductCreate extends Component {
 								</div>
 
 								<div className="col-sm-6">
-									<div className="form-group row">
-										<label className="col-md-3 label-control">
-											Stock (overwrite)
-										</label>
-										<div className="col-md-6">
-											<input
-												type="text"
-												id="stock_overwrite"
-												name="stock_overwrite"
-												className="form-control"
-												placeholder="Stock (overwrite)"
-												onChange={
-													this.handleInputChange
-												}
-												value={stock_overwrite}
-											/>
-										</div>
-									</div>
 
 									<div className="form-group row">
 										<label className="col-md-3 label-control">

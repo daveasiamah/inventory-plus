@@ -45,6 +45,7 @@ class Product extends Component {
     getProducts = async () => {
         this.setState({ loading: true });
         let res = await axios.get(`http://inventory.test/api/admin/product`);
+        // console.log(res.data);
         this.setState({
             products: res.data.products.data,
             totalCount: res.data.products.total,

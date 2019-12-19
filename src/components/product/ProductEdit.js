@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import "../layouts/styles/Product.css";
 import Spinner from "../layouts/Spinner";
 import PropTypes from "prop-types";
 import { Redirect, Link } from "react-router-dom";
@@ -34,7 +35,6 @@ class ProductEdit extends Component {
 			cost: "",
 			srp: "",
 			delivery_fee: "",
-			stock_overwrite: "",
 			customization_fee: "",
 			stock_alarm: "",
 			stocks: "",
@@ -86,8 +86,6 @@ class ProductEdit extends Component {
 			`http://inventory.test/api/admin/product/${id}`
 		);
 
-		console.log(res.data);
-
 		this.setState({
 			singleProduct: {
 				sku: res.data.product.sku,
@@ -113,7 +111,6 @@ class ProductEdit extends Component {
 				cost: res.data.product.cost,
 				srp: res.data.product.srp,
 				delivery_fee: res.data.product.delivery_fee,
-				stock_overwrite: res.data.product.stock_overwrite,
 				customization_fee: res.data.product.customization_fee,
 				stock_alarm: res.data.product.stock_alarm,
 				stocks: res.data.product.stocks,
@@ -148,7 +145,6 @@ class ProductEdit extends Component {
 		data.append("cost", singleProduct.cost);
 		data.append("srp", singleProduct.srp);
 		data.append("delivery_fee", singleProduct.delivery_fee);
-		data.append("stock_overwrite", singleProduct.stock_overwrite);
 		data.append("customization_fee", singleProduct.customization_fee);
 		data.append("stock_alarm", singleProduct.stock_alarm);
 		data.append("stocks", singleProduct.stocks);
@@ -309,7 +305,6 @@ class ProductEdit extends Component {
 			cost,
 			srp,
 			delivery_fee,
-			stock_overwrite,
 			customization_fee,
 			stock_alarm,
 			stocks,
@@ -433,6 +428,49 @@ class ProductEdit extends Component {
 
 									<div className="form-group row">
 										<label className="col-md-3 label-control">
+											Description
+										</label>
+										<div className="col-md-9">
+											<textarea
+												id="description"
+												name="description"
+												rows="2"
+												className="form-control"
+												placeholder="Description"
+												onChange={
+													this.handleInputChange
+												}
+												value={description}
+											></textarea>
+										</div>
+									</div>
+
+									
+									<div className="form-group row">
+										<label className="col-md-3 label-control">
+											Barcode
+										</label>
+										<div className="col-md-9">
+											<input
+												type="text"
+												id="barcode"
+												name="barcode"
+												className="form-control"
+												placeholder="Barcode"
+												onChange={
+													this.handleInputChange
+												}
+												value={barcode}
+											/>
+										</div>
+									</div>
+
+								</div>
+
+								<div className="col-sm-6">
+
+									<div className="form-group row">
+										<label className="col-md-3 label-control">
 											Brand
 										</label>
 										<div className="col-md-9">
@@ -471,27 +509,6 @@ class ProductEdit extends Component {
 
 									<div className="form-group row">
 										<label className="col-md-3 label-control">
-											Description
-										</label>
-										<div className="col-md-9">
-											<textarea
-												id="description"
-												name="description"
-												rows="2"
-												className="form-control"
-												placeholder="Description"
-												onChange={
-													this.handleInputChange
-												}
-												value={description}
-											></textarea>
-										</div>
-									</div>
-								</div>
-
-								<div className="col-sm-6">
-									<div className="form-group row">
-										<label className="col-md-3 label-control">
 											Suppliers
 										</label>
 										<div className="col-md-9">
@@ -507,24 +524,6 @@ class ProductEdit extends Component {
 										</div>
 									</div>
 
-									<div className="form-group row">
-										<label className="col-md-3 label-control">
-											Barcode
-										</label>
-										<div className="col-md-9">
-											<input
-												type="text"
-												id="barcode"
-												name="barcode"
-												className="form-control"
-												placeholder="Barcode"
-												onChange={
-													this.handleInputChange
-												}
-												value={barcode}
-											/>
-										</div>
-									</div>
 								</div>
 							</section>
 						</div>
@@ -583,6 +582,70 @@ class ProductEdit extends Component {
 
 									<div className="form-group row">
 										<label className="col-md-3 label-control">
+											Packing
+										</label>
+										<div className="col-md-3">
+											<input
+												type="text"
+												id="packing_length"
+												name="packing_length"
+												className="form-control"
+												placeholder="L"
+												onChange={
+													this.handleInputChange
+												}
+												value={packing_length}
+											/>
+										</div>
+										<div className="col-md-3">
+											<input
+												type="text"
+												id="packing_width"
+												name="packing_width"
+												className="form-control"
+												placeholder="W"
+												onChange={
+													this.handleInputChange
+												}
+												value={packing_width}
+											/>
+										</div>
+										<div className="col-md-3">
+											<input
+												type="text"
+												id="packing_height"
+												name="packing_height"
+												className="form-control"
+												placeholder="H"
+												onChange={
+													this.handleInputChange
+												}
+												value={packing_height}
+											/>
+										</div>
+									</div>
+
+									<div className="form-group row">
+										<label className="col-md-3 label-control">
+											Weight (Kg)
+										</label>
+										<div className="col-md-3">
+											<input
+												type="text"
+												id="weight_kg"
+												name="weight_kg"
+												className="form-control"
+												placeholder="0"
+												onChange={
+													this.handleInputChange
+												}
+												value={weight_kg}
+											/>
+										</div>
+									</div>
+
+									<div className="form-group row">
+										<label className="col-md-3 label-control">
 											Color
 										</label>
 										<div className="col-md-9">
@@ -598,12 +661,16 @@ class ProductEdit extends Component {
 										</div>
 									</div>
 
+								</div>
+
+								<div className="col-sm-6">
+
 									<div className="form-group row">
 										<label className="col-md-3 label-control">
 											Material Tags
 										</label>
 										<div className="col-md-9">
-											<div className="form-group">
+											<div className="form-group" id="materialTags">
 												<ul className="containerUl float">
 													{material_tags ? (
 														material_tags.map(
@@ -685,72 +752,7 @@ class ProductEdit extends Component {
 											/>
 										</div>
 									</div>
-								</div>
 
-								<div className="col-sm-6">
-									<div className="form-group row">
-										<label className="col-md-3 label-control">
-											Weight (Kg)
-										</label>
-										<div className="col-md-3">
-											<input
-												type="text"
-												id="weight_kg"
-												name="weight_kg"
-												className="form-control"
-												placeholder="0"
-												onChange={
-													this.handleInputChange
-												}
-												value={weight_kg}
-											/>
-										</div>
-									</div>
-
-									<div className="form-group row">
-										<label className="col-md-3 label-control">
-											Packing
-										</label>
-										<div className="col-md-3">
-											<input
-												type="text"
-												id="packing_length"
-												name="packing_length"
-												className="form-control"
-												placeholder="L"
-												onChange={
-													this.handleInputChange
-												}
-												value={packing_length}
-											/>
-										</div>
-										<div className="col-md-3">
-											<input
-												type="text"
-												id="packing_width"
-												name="packing_width"
-												className="form-control"
-												placeholder="W"
-												onChange={
-													this.handleInputChange
-												}
-												value={packing_width}
-											/>
-										</div>
-										<div className="col-md-3">
-											<input
-												type="text"
-												id="packing_height"
-												name="packing_height"
-												className="form-control"
-												placeholder="H"
-												onChange={
-													this.handleInputChange
-												}
-												value={packing_height}
-											/>
-										</div>
-									</div>
 								</div>
 							</section>
 						</div>
@@ -840,24 +842,6 @@ class ProductEdit extends Component {
 								</div>
 
 								<div className="col-sm-6">
-									<div className="form-group row">
-										<label className="col-md-3 label-control">
-											Stock (overwrite)
-										</label>
-										<div className="col-md-6">
-											<input
-												type="text"
-												id="stock_overwrite"
-												name="stock_overwrite"
-												className="form-control"
-												placeholder="Stock (overwrite)"
-												onChange={
-													this.handleInputChange
-												}
-												value={stock_overwrite}
-											/>
-										</div>
-									</div>
 
 									<div className="form-group row">
 										<label className="col-md-3 label-control">

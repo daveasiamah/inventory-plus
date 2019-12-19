@@ -86,10 +86,6 @@ class ProductTable extends Component {
 
 		const { products } = this.props;
 
-		const { brand_id, category_id } = this.props.products;
-
-		console.log(this.props.products);
-
 		return (
 			<Fragment>
 				<div className="table-responsive">
@@ -103,7 +99,6 @@ class ProductTable extends Component {
 								<th>SRP</th>
 								<th>Cost</th>
 								<th>Stock</th>
-								<th>Active</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -117,7 +112,6 @@ class ProductTable extends Component {
 									<td>{product.srp}</td>
 									<td>{product.cost}</td>
 									<td>{product.stocks}</td>
-									<td>{product.status ? "Yes" : "No"}</td>
 									<td>
 										<div className="btn-group">
 											<Link

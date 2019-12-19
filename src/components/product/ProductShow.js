@@ -31,7 +31,6 @@ class ProductShow extends Component {
 			cost: "",
 			srp: "",
 			delivery_fee: "",
-			stock_overwrite: "",
 			customization_fee: "",
 			stock_alarm: "",
 			stocks: "",
@@ -85,7 +84,7 @@ class ProductShow extends Component {
 		let res = await axios.get(
 			`http://inventory.test/api/admin/product/${id}`
 		);
-
+	
 		this.setState({
 			singleProduct: {
 				sku: res.data.product.sku,
@@ -111,7 +110,6 @@ class ProductShow extends Component {
 				cost: res.data.product.cost,
 				srp: res.data.product.srp,
 				delivery_fee: res.data.product.delivery_fee,
-				stock_overwrite: res.data.product.stock_overwrite,
 				customization_fee: res.data.product.customization_fee,
 				stock_alarm: res.data.product.stock_alarm,
 				stocks: res.data.product.stocks,
@@ -122,9 +120,6 @@ class ProductShow extends Component {
 			},
 			loading: false
 		});
-
-		// const { supplier_id, brand_id, category_id } = this.state.singleProduct;
-		// this.getSelectNames(supplier_id, brand_id, category_id );
 	};
 
 	render() {
@@ -150,7 +145,6 @@ class ProductShow extends Component {
 			cost,
 			srp,
 			delivery_fee,
-			stock_overwrite,
 			customization_fee,
 			stock_alarm,
 			stocks,
@@ -264,10 +258,7 @@ class ProductShow extends Component {
 									<strong>Delivery Fee:</strong>{" "}
 									{delivery_fee}
 								</p>
-								<p>
-									<strong>Stock Overwrite:</strong>{" "}
-									{stock_overwrite}
-								</p>
+
 								<p>
 									<strong>Customization Fee:</strong>{" "}
 									{customization_fee}
