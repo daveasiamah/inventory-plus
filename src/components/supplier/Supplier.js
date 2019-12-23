@@ -6,7 +6,8 @@ import Pagination from "react-js-pagination";
 import '../layouts/styles/iziToast.css';
 import iziToast from 'izitoast';
 import SupplierTable from './SupplierTable';
-import SupplierSearch from './SupplierSearch';
+import { Modal, Button } from 'react-bootstrap';
+import SupplierCreateModal from './SupplierCreateModal';
 
 class Supplier extends Component {
 		
@@ -37,6 +38,7 @@ class Supplier extends Component {
             transitionIn: 'bounceInLeft',
             transitionOut: 'fadeOut',
             timeout: 4000,
+            showModal: false
         });
     }
     	
@@ -89,57 +91,129 @@ class Supplier extends Component {
         });        
     }
     
+    open = () => {
+      this.setState({showModal: true});
+    }
+
+    close = () => {
+      this.setState({showModal: false});
+    }
+
 	render() {
 		return (
-			<div>
-				<h1>Supplier</h1>
+            <div className="app-content content">
+                <div className="content-wrapper">
+                    <div className="content-wrapper-before"></div>
+                    <div className="content-header row">
+                        <div className="content-header-left col-md-12 col-12 mb-2 breadcrumb-new">
+                            <h3 className="content-header-title mb-0 d-inline-block">
+                                Product
+                            </h3>
 
-				<div className="row mt-2">
-                   <div className="col-sm-12">
-                      <h3 className="pull-left">Total: {this.state.totalCount}</h3>
-                       
-                   </div>
-                </div>
-                
-                <section className="row">
-                    <SupplierSearch searchSupplier={this.searchSupplier} getSuppliers={this.getSuppliers}/>
-                </section>    
+                            <div className="breadcrumbs-top d-inline-block">
+                                <div className="breadcrumb-wrapper mr-1">
+                                    <ol className="breadcrumb">
+                                        <li className="breadcrumb-item ">
+                                            <a href="supplier" className="text-white">
+                                                Suppliers
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
 
-				<section className="row">
-                    <div className="col-sm-12">
-                        {this.state.loading ? (
-                            <Spinner />
-                        ) : this.state.suppliers.length  > 0 ? (
-                            <Fragment>
-                                <SupplierTable
-                                    suppliers={this.state.suppliers}
-                                    totalCount={this.state.totalCount}
-                                    moveToArchives={this.moveToArchives}
-                                    getSuppliers={this.getSuppliers}
-                                />
-
-                               {this.state.totalCount > 10 && (
-                                    <div className="d-flex justify-content-center">
-                                         <Pagination
-                                            className="pagination"
-                                            itemClass='page-item'
-                                            linkClass='page-link'
-                                            activePage={this.state.activePage}
-                                            itemsCountPerPage={this.state.itemsCountPerPage}
-                                            totalItemsCount={this.state.totalItemsCount}
-                                            pageRangeDisplayed={this.state.pageRangeDisplayed}
-                                            onChange={this.handlePageChange}
-                                        />
-                                    </div>
-                                )}
-                            
-                            </Fragment>
-                        ) : (
-                            <h1 align="center" className="mt-5">There's No Data to show...</h1>
-                        )}
+                            <Button 
+                                onClick={this.open}
+                                className="btn btn-primary pull-right"
+                            ><i className="ft ft-plus"></i> Create New</Button>
+                        </div>
                     </div>
-            	</section>   
-			</div>
+                    <div className="content-body">
+                        <section id="basic-examples">
+                            <div className="row">
+                                <div className="col-12">
+                                    <div className="card">
+                                        <div className="card-header">
+                                            <h4 className="card-title">List of Suppliers</h4>
+                                            <a className="heading-elements-toggle">
+                                                <i className="la la-ellipsis-v font-medium-3"></i>
+                                            </a>
+                                            <div className="heading-elements">
+                                                <ul className="list-inline mb-0">
+                                                    <li>
+                                                        <a data-action="collapse">
+                                                            <i className="ft-minus"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a data-action="reload">
+                                                            <i className="ft-rotate-cw"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a data-action="close">
+                                                            <i className="ft-x"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div className="card-content collapse show">
+                                            <div className="card-body">
+                                                                                 
+                                                <section className="row">
+                                                    <div className="col-sm-12">
+                                                        {this.state.loading ? (
+                                                            <Spinner />
+                                                        ) : this.state.suppliers.length  > 0 ? (
+                                                            <Fragment>
+                                                                <SupplierTable
+                                                                    suppliers={this.state.suppliers}
+                                                                    totalCount={this.state.totalCount}
+                                                                    totalCount={this.state.totalCount}
+                                                                    moveToArchives={this.moveToArchives}
+                                                                    getSuppliers={this.getSuppliers}
+                                                                    searchSupplier={this.searchSupplier}
+                                                                />
+
+                                                               {this.state.totalCount > 10 && (
+                                                                    <div className="d-flex justify-content-center">
+                                                                         <Pagination
+                                                                            className="pagination"
+                                                                            itemClass='page-item'
+                                                                            linkClass='page-link'
+                                                                            activePage={this.state.activePage}
+                                                                            itemsCountPerPage={this.state.itemsCountPerPage}
+                                                                            totalItemsCount={this.state.totalItemsCount}
+                                                                            pageRangeDisplayed={this.state.pageRangeDisplayed}
+                                                                            onChange={this.handlePageChange}
+                                                                        />
+                                                                    </div>
+                                                                )}
+                                                            
+                                                            </Fragment>
+                                                        ) : (
+                                                            <h1 align="center" className="mt-5">There's No Data to show...</h1>
+                                                        )}
+                                                    </div>
+                                                </section>  
+                                                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <SupplierCreateModal 
+                    show={this.state.showModal} 
+                    onHide={this.close}
+                    getSuppliers={this.getSuppliers}
+                />
+
+            </div>
 		)
 	}
 }

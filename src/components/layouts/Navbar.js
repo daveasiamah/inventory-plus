@@ -1,42 +1,49 @@
-import React from 'react'
+import React, { Fragment }  from 'react'
 import {Link} from 'react-router-dom';
 
 const Navbar = () => {
     return (
-        <div>
+        <Fragment>
             <nav className="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-semi-dark">
                 <div className="navbar-wrapper">
                     <div className="navbar-container content">
                         <div className="collapse navbar-collapse show" id="navbar-mobile">
                             <ul className="nav navbar-nav mr-auto float-left">
-                                <li className="nav-item mobile-menu d-md-none mr-auto">
-                                    <a className="nav-link nav-menu-main menu-toggle hidden-xs" href="#">
-                                        <i className="ft-menu font-large-1"></i>
-                                    </a>
+                                <li className="nav-item mobile-menu d-md-none mr-auto"><a className="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i className="ft-menu font-large-1"> </i></a></li>
+                                <li className="nav-item d-none d-md-block"><a className="nav-link nav-link-expand" href="#"><i className="ficon ft-maximize"></i></a></li>
+                                <li className="nav-item dropdown navbar-search"><a className="nav-link dropdown-toggle hide" data-toggle="dropdown" href="#"><i className="ficon ft-search"></i></a>
+                                    <ul className="dropdown-menu">
+                                        <li className="arrow_box">
+                                            <form>
+                                                <div className="input-group search-box">
+                                                    <div className="position-relative has-icon-right full-width">
+                                                        <input className="form-control" id="search" type="text" placeholder="Search here..."/>
+                                                        <div className="form-control-position navbar-search-close"><i className="ft-x"></i></div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
-
                             <ul className="nav navbar-nav float-right">
                                 <li className="dropdown dropdown-user nav-item">
-                                    <a className="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                                         <span className="avatar avatar-online">
-                                             <img src="/theme/app-assets/images/portrait/small/avatar-s-19.png" alt="avatar"/>
-                                             <i></i>
-                                        </span>
-                                    </a>
+                                <a className="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
+                                 <span className="avatar avatar-online">
+                                    <img src="theme/app-assets/images/portrait/small/avatar-s-19.png" alt="avatar"/>
+                                    <i></i>
+                                </span>
+                                 </a>
                                     <div className="dropdown-menu dropdown-menu-right">
-                                        <div className="arrow_box_right">
-                                            <a className="dropdown-item" href="#">
-                                                <span className="avatar avatar-online">
-                                                    <img src="/theme/app-assets/images/portrait/small/avatar-s-19.png" alt="avatar"/>
-                                                    <span className="user-name text-bold-700 ml-1">John Doe</span>
-                                                </span>
-                                            </a>
+                                        <div className="arrow_box_right"><a className="dropdown-item" href="#"><span className="avatar avatar-online">
+                                        <img src="theme/app-assets/images/portrait/small/avatar-s-19.png" alt="avatar"/><span className="user-name text-bold-700 ml-1">John Doe</span></span></a>
+                                            <div className="dropdown-divider"></div><a className="dropdown-item" href="user-profile.html">
+                                            <i className="ft-user"></i> Edit Profile</a>
+                                            <a className="dropdown-item" href="#"><i className="ft-mail"></i> My Inbox</a>
+                                            <a className="dropdown-item" href="#"><i className="ft-check-square"></i> Task</a>
+                                            <a className="dropdown-item" href="#"><i className="ft-message-square"></i> Chats</a>
                                             <div className="dropdown-divider"></div>
-                                            <a className="dropdown-item" href="user-profile.html"><i className="ft-user"></i>Profile</a>
-                                            <a className="dropdown-item" href="email-application.html"><i className="ft-mail"></i> Account</a>
-                                                <div className="dropdown-divider"></div>
-                                                <a className="dropdown-item" href="login.html">
+                                            <a className="dropdown-item" href="#">
                                                 <i className="ft-power"></i> Logout
                                             </a>
                                         </div>
@@ -51,14 +58,27 @@ const Navbar = () => {
             <div className="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true" data-img="/theme/app-assets/images/backgrounds/04.jpg">
                 <div className="navbar-header">
                     <ul className="nav navbar-nav flex-row position-relative">
-                        <li className="nav-item mr-auto"><a className="navbar-brand" href="#"><img className="brand-logo" alt="Chameleon admin logo" src="/theme/app-assets/images/logo/logo.png"/>
+                        <li className="nav-item mr-auto">
+                            <a className="navbar-brand" href="#">
+                                <img className="brand-logo" alt="Chameleon admin logo" src="/theme/app-assets/images/logo/logo.png"/>
                                 <h3 className="brand-text">Bluehive Inc.</h3>
-                            </a></li>
-                        <li className="nav-item d-none d-md-block nav-toggle"><a className="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i className="toggle-icon ft-disc font-medium-3" data-ticon="ft-disc"></i></a></li>
-                        <li className="nav-item d-md-none"><a className="nav-link close-navbar"><i className="ft-x"></i></a></li>
+                            </a>
+                        </li>
+                        <li className="nav-item d-none d-md-block nav-toggle">
+                            <a className="nav-link modern-nav-toggle pr-0" data-toggle="collapse">
+                                <i className="toggle-icon ft-disc font-medium-3" data-ticon="ft-disc"></i>
+                            </a>
+                        </li>
+                        <li className="nav-item d-md-none">
+                            <a className="nav-link close-navbar">
+                                <i className="ft-x"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
+
                 <div className="navigation-background"></div>
+
                 <div className="main-menu-content">
                     <ul className="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                         <li className=" nav-item">
@@ -68,20 +88,16 @@ const Navbar = () => {
                         </li>
                         <li className=" nav-item">
                             <a href="#">
-                                <i className="la la-rocket"></i><span className="menu-title" data-i18n="">Products</span>
+                                <i className="la la-rocket"></i><span className="menu-title" data-i18n="">Product</span>
                             </a>
                             <ul className="menu-content">
                                 <li><Link className="menu-item" to="/product" data-i18n="nav.starter_kit.fixed_layout">Products</Link></li>
-                                <li><a className="menu-item" href="/brand" data-i18n="nav.starter_kit.boxed_layout">Brands</a>
+                                <li><a className="menu-item" href="/brand" data-i18n="nav.starter_kit.boxed_layout">Brand</a>
                                 </li>
-                                <li><a className="menu-item" href="/category" data-i18n="nav.starter_kit.static_layout">Categories</a>
+                                <li><a className="menu-item" href="/category" data-i18n="nav.starter_kit.static_layout">Category</a>
+                                <li><Link className="menu-item" to="/supplier" data-i18n="nav.starter_kit.fixed_layout">Supplier</Link></li>
                                 </li>
                             </ul>
-                        </li>
-                        <li className=" nav-item">
-                            <Link to="/supplier">
-                                <i className="la la-random"></i><span className="menu-title" data-i18n="">Supplier</span>
-                            </Link>
                         </li>
                         <li className=" nav-item">
                             <Link to="/inventory">
@@ -148,8 +164,7 @@ const Navbar = () => {
                     </ul>
                 </div>
             </div>
-    
-    </div>
+    </Fragment>
     )
 }
 

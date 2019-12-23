@@ -13,6 +13,7 @@ class Spinner extends Component{
 
 const spinnerStyle = {
 	paddingTop: '100px',
+	paddingBottom: '500px',
 	width: '100px',
 	margin: 'auto',
 	display: 'block'

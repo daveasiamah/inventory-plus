@@ -69,6 +69,21 @@ class SupplierTable extends Component {
 		}
 	};
 
+	// handle search
+    handleSearchChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value});
+    }
+
+ 	// on submit
+ 	onSearchSubmit = (e) => {
+        e.preventDefault();
+
+		if(e.target.value !== ''){
+			this.props.searchSupplier(this.state.search)
+			this.setState({search: ' '});
+		}
+    }
+
 	render() {
 		return (
 			<Fragment>
@@ -76,12 +91,29 @@ class SupplierTable extends Component {
 					<table className="table table-striped table-hover table-bordered">
 						<thead>
 							<tr>
+								<td colSpan="5">
+									<div className="pull-left">
+										<h4><b>Total: {this.props.totalCount}</b></h4>
+									</div>
+
+									<form onSubmit={this.onSearchSubmit} className="form-inline pull-right">
+						                 <input 
+						                    name="search" 
+						                    type="text"
+						                    className="form-control input-sm w-20"
+						                    placeholder="Search here..."
+						                    onChange={this.handleSearchChange}
+						                />
+						            
+					                </form>
+								</td>
+							</tr>
+							<tr>
 								<th>Name</th>
 								<th>Email</th>
 								<th>Landline</th>
 								<th>Mobile</th>
-								<th>Fax</th>
-								<th>Action</th>
+								<th width="5%">Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -91,7 +123,6 @@ class SupplierTable extends Component {
 									<td>{supplier.email}</td>
 									<td>{supplier.landline}</td>
 									<td>{supplier.mobile}</td>
-									<td>{supplier.fax}</td>
 									<td>
 										<div className="btn-group">
 											<button

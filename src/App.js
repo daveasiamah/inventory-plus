@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Navbar from "./components/layouts/Navbar";
@@ -33,41 +33,35 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div>
+        <Fragment>
           <Navbar />
-          <div className="app-content content">
-            <div className="content-wrapper">
-              <div className="content-body">
-                <Switch>
-                  {/* Products */}
-                  <Route path="/" exact component={Home} />
-                  <Route path="/product" exact component={Product} />
-                  <Route path="/product/create" component={ProductCreate} />
-                  <Route path="/product/:id" exact component={ProductShow} />
-                  <Route path="/product/:id/edit" component={ProductEdit} />
+          <Switch>
+            {/* Products */}
+            <Route path="/" exact component={Home} />
+            <Route path="/product" exact component={Product} />
+            <Route path="/product/create" component={ProductCreate} />
+            <Route path="/product/:id" exact component={ProductShow} />
+            <Route path="/product/:id/edit" component={ProductEdit} />
 
-                  {/* Supplier */}
-                  <Route path="/supplier" exact component={Supplier} /> 
+            {/* Supplier */}
+            <Route path="/supplier" exact component={Supplier} /> 
 
-                  {/* Brand */}
-                  <Route path="/brand" exact component={Brand} />
+            {/* Brand */}
+            <Route path="/brand" exact component={Brand} />
 
-                  {/* Category */}
-                  <Route path="/category" exact component={Category} />
+            {/* Category */}
+            <Route path="/category" exact component={Category} />
 
-                  {/* Customer */}
-                  <Route path="/customer" exact component={Customer} />
+            {/* Customer */}
+            <Route path="/customer" exact component={Customer} />
 
-                  {/* purchase order (PO) */}
-                  <Route path="/po" exact component={PurchaseOrder} />
-                  <Route path="/po/create" component={POCreate}/>
+            {/* purchase order (PO) */}
+            <Route path="/po" exact component={PurchaseOrder} />
+            <Route path="/po/create" component={POCreate}/>
 
-                  <Route component={PageNotFound} />
-                </Switch>
-              </div>
-            </div>
-          </div>
-        </div>
+            <Route component={PageNotFound} />
+          </Switch>
+        </Fragment>
       </Router>
     );
   }
