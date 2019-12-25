@@ -53,13 +53,22 @@ class ProductEdit extends Component {
 		name_categories: [],
 		name_suppliers: [],
 		loading: false,
-		redirect: false,
 		errors: null
 	};
 
 	componentDidMount() {
 		this.getSingleProduct(this.state.id);
 		this.getSelectAll();
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (this.props.singleBrand !== nextProps.singleBrand) {
+			this.setState({ editBrand: nextProps.singleBrand });
+		}
+
+		if (this.props.id !== nextProps.id) {
+			this.setState({ id: nextProps.id });
+		}
 	}
 
 	// alert message
@@ -313,7 +322,7 @@ class ProductEdit extends Component {
 			isSearchable
 		} = this.state.singleProduct;
 
-		const url = `http://inventory.test/`;
+		// const url = `http://inventory.test/`;
 
 		let supplierOption = this.state.name_suppliers.map(supplier => {
 			return {

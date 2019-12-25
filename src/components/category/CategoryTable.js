@@ -106,7 +106,7 @@ class CategoryTable extends Component {
 							<tr>
 								<th>Name</th>
 								<th>Parent Category</th>
-								<th width="10%">Description</th>
+								<th width="50%">Description</th>
 								<th width="5%">Action</th>
 							</tr>
 						</thead>

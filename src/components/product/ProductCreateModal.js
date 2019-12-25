@@ -1,14 +1,14 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 import "../layouts/styles/Product.css";
-import PropTypes from "prop-types";
-import { Redirect, Link } from "react-router-dom";
-import Spinner from "../layouts/Spinner";
 import Select from "react-select";
 import "../layouts/styles/iziToast.css";
 import iziToast from "izitoast";
 import axios from "axios";
 
-class ProductCreate extends Component {
+class ProductCreateModal extends Component{
+
 	state = {
 		sku: "",
 		product_name: "",
@@ -44,10 +44,9 @@ class ProductCreate extends Component {
 		name_suppliers: [],
 		isSearchable: true,
 		errors: null,
-		redirect: false,
 		loading: false
-	};
-
+	}
+	
 	componentDidMount() {
 		// get all the select options names
 		this.getSelectAll();
@@ -68,7 +67,7 @@ class ProductCreate extends Component {
 			timeout: 4000
 		});
 	};
-
+	
 	// handle inputs
 	handleInputChange = e => this.setState({ [e.target.name]: e.target.value });
 	// handle image input
@@ -80,7 +79,7 @@ class ProductCreate extends Component {
 		this.setState({ product_image: e.target.files[0] });
 		// console.log(this.state.product_image)
 	};
-
+	
 	// handle the select options
 	handleSelectInput = selectedOption => {
 		// console.log(selectedOption);
@@ -102,7 +101,7 @@ class ProductCreate extends Component {
 			}
 		});
 	};
-
+								
 	// Adding material tags
 	addTag = e => {
 		if (e.key === "Enter" && e.target.value !== "") {
@@ -238,7 +237,11 @@ class ProductCreate extends Component {
 				this.setState({ errors: res.data.errors });
 				break;
 			case 1:
-				this.setState({ loading: false, redirect: true });
+				this.setState({ loading: false, });
+				// hide the modal
+				this.props.onHide();
+				// get products
+				this.props.getProducts();
 				// alert message
 				this.toast(res.data.message);
 				break;
@@ -249,7 +252,9 @@ class ProductCreate extends Component {
 		this.setState({ loading: false });
 	};
 
+
 	render() {
+
 		// destructuring
 		const {
 			sku,
@@ -307,57 +312,72 @@ class ProductCreate extends Component {
 			};
 		});
 
-		if (this.state.loading) {
-			// loading
-			return <Spinner />;
-		} else if (this.state.redirect) {
-			// redirect to
-			return <Redirect to="/product" />;
-		} else {
-			return (
-				<div>
-					<h2 className="mb-2">Add New Product</h2>
+		return (
+
+			<Modal 
+				className="modal-container" 
+	          	show={this.props.show} 
+	          	onHide={this.props.onHide}
+	          	size="lg"
+	          	animation={true} 
+	        >
+
+	          <Modal.Header closeButton>
+	            <Modal.Title>Create New</Modal.Title>
+	          </Modal.Header>
+
+	          <Modal.Body>
+	          	{ this.state.loading ? 
 					<div>
-						{this.state.errors && (
-							<div
-								className="alert alert-danger alert-dismissible fade show"
-								role="alert"
-							>
-								{this.state.errors.map((error, i) => (
-									<li key={i}>{error}</li>
-								))}
-								<button
-									type="button"
-									className="close"
-									data-dismiss="alert"
-									aria-label="Close"
-								>
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-						)}
+						<h3 
+							align="center"
+							className="my-5">
+							Loading Please wait...
+						</h3>
 					</div>
+				:
 
-					<form
-						id="addProduct"
-						encType="multipart/form-data"
-						onKeyPress={e => {
-							if (e.key === "Enter") e.preventDefault();
-						}}
-						onSubmit={e => this.onFormSubmit(e)}
-					>
-						<h4 className="form-section">
-							<i className="ft-clipboard"></i> Details
-						</h4>
+					<Fragment>	 	
+						<div>
+							{this.state.errors && (
+								<div
+									className="alert alert-danger alert-dismissible fade show"
+									role="alert"
+								>
+									{this.state.errors.map((error, i) => (
+										<li key={i}>{error}</li>
+									))}
+									<button
+										type="button"
+										className="close"
+										data-dismiss="alert"
+										aria-label="Close"
+									>
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+							)}
+						</div>
 
-						<div className="card card-body">
+						<form
+							id="addProduct"
+							encType="multipart/form-data"
+							onKeyPress={e => {
+								if (e.key === "Enter") e.preventDefault();
+							}}
+							onSubmit={e => this.onFormSubmit(e)}
+						>
+							<h4 className="form-section">
+								<i className="ft-clipboard"></i> Details
+							</h4>
+
 							<section className="row">
 								<div className="col-sm-6">
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											SKU
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="sku"
@@ -373,10 +393,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Product Name
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="product_name"
@@ -392,10 +412,10 @@ class ProductCreate extends Component {
 									</div>
 									
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Description
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<textarea
 												id="description"
 												name="description"
@@ -411,10 +431,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Barcode
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="barcode"
@@ -433,10 +453,10 @@ class ProductCreate extends Component {
 
 								<div className="col-sm-6">
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Brand
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<Select
 												placeholder="Select Brand..."
 												isSearchable={isSearchable}
@@ -449,10 +469,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Category
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<Select
 												placeholder="Select Category..."
 												isSearchable={isSearchable}
@@ -465,10 +485,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Suppliers
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<Select
 												placeholder="Select Supplier..."
 												isSearchable={isSearchable}
@@ -481,20 +501,18 @@ class ProductCreate extends Component {
 									</div>
 								</div>
 							</section>
-						</div>
 
-						<h4 className="form-section">
-							<i className="ft-clipboard"></i> Attributes
-						</h4>
-
-						<div className="card card-body">
+							<h4 className="form-section">
+								<i className="ft-clipboard"></i> Attributes
+							</h4>
+							
 							<section className="row">
 								<div className="col-sm-6">
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Dimension
 										</label>
-										<div className="col-md-3">
+										<div className="col-md-3 pl-1">
 											<input
 												type="text"
 												id="dimension_length"
@@ -507,7 +525,7 @@ class ProductCreate extends Component {
 												value={dimension_length}
 											/>
 										</div>
-										<div className="col-md-3">
+										<div className="col-md-2 p-0">
 											<input
 												type="text"
 												id="dimension_width"
@@ -520,7 +538,7 @@ class ProductCreate extends Component {
 												value={dimension_width}
 											/>
 										</div>
-										<div className="col-md-3">
+										<div className="col-md-3 pl-1">
 											<input
 												type="text"
 												id="dimension_height"
@@ -536,10 +554,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Packing
 										</label>
-										<div className="col-md-3">
+										<div className="col-md-3 pl-1">
 											<input
 												type="text"
 												id="packing_length"
@@ -553,7 +571,7 @@ class ProductCreate extends Component {
 											/>
 										</div>
 
-										<div className="col-md-3">
+										<div className="col-md-2 p-0">
 											<input
 												type="text"
 												id="packing_width"
@@ -566,7 +584,7 @@ class ProductCreate extends Component {
 												value={packing_width}
 											/>
 										</div>
-										<div className="col-md-3">
+										<div className="col-md-3 pl-1">
 											<input
 												type="text"
 												id="packing_height"
@@ -582,10 +600,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Weight (Kg)
 										</label>
-										<div className="col-md-6">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="weight_kg"
@@ -602,10 +620,10 @@ class ProductCreate extends Component {
 
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Color
 										</label>
-										<div className="col-md-6">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="color"
@@ -625,10 +643,10 @@ class ProductCreate extends Component {
 								<div className="col-sm-6">
 									
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Material Tags
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<div className="form-group" id="materialTags">
 												<ul className="containerUl float">
 													{material_tags ? (
@@ -677,10 +695,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Fitting Type
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="fitting_type"
@@ -696,10 +714,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Fitting Qty
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="fitting_qty"
@@ -716,20 +734,18 @@ class ProductCreate extends Component {
 
 								</div>
 							</section>
-						</div>
-
-						<h4 className="form-section">
-							<i className="ft-clipboard"></i> Pricing & Stock
-						</h4>
-
-						<div className="card card-body">
+							
+							<h4 className="form-section">
+								<i className="ft-clipboard"></i> Pricing & Stock
+							</h4>
+							
 							<section className="row">
 								<div className="col-sm-6">
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Cost
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="cost"
@@ -745,10 +761,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											SRP
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="srp"
@@ -764,10 +780,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Delivery Fee
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="delivery_fee"
@@ -783,10 +799,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Custom. Fee
 										</label>
-										<div className="col-md-9">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="customization_fee"
@@ -803,12 +819,11 @@ class ProductCreate extends Component {
 								</div>
 
 								<div className="col-sm-6">
-
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Stock Alarm
 										</label>
-										<div className="col-md-6">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="stock_alarm"
@@ -824,10 +839,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Stocks
 										</label>
-										<div className="col-md-6">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="stocks"
@@ -843,10 +858,10 @@ class ProductCreate extends Component {
 									</div>
 
 									<div className="form-group row">
-										<label className="col-md-3 label-control">
+										<label className="col-md-4 label-control">
 											Sales Price
 										</label>
-										<div className="col-md-6">
+										<div className="col-md-8">
 											<input
 												type="text"
 												id="sales_price"
@@ -862,14 +877,14 @@ class ProductCreate extends Component {
 									</div>
 								</div>
 							</section>
-						</div>
+							
 
-						<h4 className="form-section">
-							<i className="ft-clipboard"></i> Image
-						</h4>
-						<div className="card card-body">
+							<h4 className="form-section">
+								<i className="ft-clipboard"></i> Image
+							</h4>
+
 							<section className="row">
-								<div className="col-md-4">
+								<div className="col-md-6">
 									<img
 										id="imagePreview"
 										src={
@@ -882,7 +897,8 @@ class ProductCreate extends Component {
 										className="img-fluid"
 									/>
 								</div>
-								<div id="drop-area" className="col-md-8">
+
+								<div id="drop-area" className="col-md-6">
 									<div align="center" className="m-5 py-5">
 										<input
 											id="product_image"
@@ -893,31 +909,33 @@ class ProductCreate extends Component {
 									</div>
 								</div>
 							</section>
-						</div>
-
-						<div className="row justify-content-end">
-							<div className="mr-2">
-								<div className="form-group">
-									<Link
-										to={"/product"}
-										className="btn btn-danger btn-sm mr-1"
-									>
-										Cancel
-									</Link>
-									<button
-										type="submit"
-										className="btn btn-primary btn-sm"
-									>
-										Save
-									</button>
+							
+							<div className="row justify-content-end">
+								<div className="mr-2">
+									<div className="form-group">
+							            <Button 
+							              	variant="danger btn-sm mr-1" 
+							              	onClick={this.props.onHide}
+							              >
+								          	  Close
+								        </Button>
+										<button
+											type="submit"
+											className="btn btn-primary btn-sm"
+										>
+											Save
+										</button>
+									</div>
 								</div>
 							</div>
-						</div>
-					</form>
-				</div>
-			);
-		}
+						</form>
+					</Fragment>
+				}
+
+	          </Modal.Body>   
+	    	</Modal> 
+		)
 	}
 }
 
-export default ProductCreate;
+export default ProductCreateModal;

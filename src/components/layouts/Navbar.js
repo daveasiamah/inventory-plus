@@ -91,11 +91,17 @@ const Navbar = () => {
                                 <i className="la la-rocket"></i><span className="menu-title" data-i18n="">Product</span>
                             </a>
                             <ul className="menu-content">
-                                <li><Link className="menu-item" to="/product" data-i18n="nav.starter_kit.fixed_layout">Products</Link></li>
-                                <li><a className="menu-item" href="/brand" data-i18n="nav.starter_kit.boxed_layout">Brand</a>
+                                <li>
+                                    <Link className="menu-item" to="/product" data-i18n="nav.starter_kit.fixed_layout">Products</Link>
                                 </li>
-                                <li><a className="menu-item" href="/category" data-i18n="nav.starter_kit.static_layout">Category</a>
-                                <li><Link className="menu-item" to="/supplier" data-i18n="nav.starter_kit.fixed_layout">Supplier</Link></li>
+                                <li>
+                                    <a className="menu-item" href="/brand" data-i18n="nav.starter_kit.boxed_layout">Brand</a>
+                                </li>
+                                <li>
+                                    <a className="menu-item" href="/category" data-i18n="nav.starter_kit.static_layout">Category</a>
+                                 </li>
+                                <li>
+                                    <Link className="menu-item" to="/supplier" data-i18n="nav.starter_kit.fixed_layout">Supplier</Link>
                                 </li>
                             </ul>
                         </li>

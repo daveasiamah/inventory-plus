@@ -6,7 +6,8 @@ import Pagination from "react-js-pagination";
 import '../layouts/styles/iziToast.css';
 import iziToast from 'izitoast';
 import ProductTable from "./ProductTable";
-import ProductSearch from "./ProductSearch";
+import { Modal, Button } from 'react-bootstrap';
+import ProductCreateModal from './ProductCreateModal';
 
 class Product extends Component {
     state = {
@@ -17,7 +18,8 @@ class Product extends Component {
         activePage: 1,
         itemsCountPerPage: 1,
         totalItemsCount: 10,
-        pageRangeDisplayed: 8
+        pageRangeDisplayed: 8,
+        showModal: false,
     };
 
     componentDidMount() {
@@ -45,7 +47,7 @@ class Product extends Component {
     getProducts = async () => {
         this.setState({ loading: true });
         let res = await axios.get(`http://inventory.test/api/admin/product`);
-        // console.log(res.data);
+        console.log(res.data);
         this.setState({
             products: res.data.products.data,
             totalCount: res.data.products.total,
@@ -108,142 +110,124 @@ class Product extends Component {
             loading: false
         });
     };
+    
+    open = () => {
+      this.setState({showModal: true});
+    }
+
+    close = () => {
+      this.setState({showModal: false});
+    }
 
     render() {
         return (
-            <div>
-                <h1>Products</h1>
-                <section className="row">
-                    <div className="col-sm-12">
-                        <div className="row">
-                            <div className="col-sm-12">
-                                <div className="card">
-                                    <div className="card-header">
-                                        <a className="heading-elements-toggle">
-                                            <i className="la la-ellipsis-v font-medium-3"></i>
-                                        </a>
-                                        <div className="heading-elements">
-                                            <ul className="list-inline mb-0">
-                                                <li>
-                                                    <a data-action="collapse">
-                                                        <i className="ft-minus"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-action="reload">
-                                                        <i className="ft-rotate-cw"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-action="close">
-                                                        <i className="ft-x"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div className="card-content collapse show">
-                                        <div className="card-body">
-                                            <div className="row">
-                                                <div className="col-md-2">
-                                                    <div className="">
-                                                        Low Stock
-                                                    </div>
-                                                    <img
-                                                        src="/square.jpg"
-                                                        className="img-fluid"
-                                                    />
-                                                </div>
+            <Fragment>
+                <div className="app-content content">
+                    <div className="content-wrapper">
+                        <div className="content-wrapper-before"></div>
+                        <div className="content-header row">
+                            <div className="content-header-left col-md-12 col-12 mb-2">
+                                <h3 className="content-header-title mb-0 d-inline-block">
+                                    Product
+                                </h3>
 
-                                                <div className="col-md-2">
-                                                    <div className="">
-                                                        Out of Stock
-                                                    </div>
-                                                    <img
-                                                        src="/square.jpg"
-                                                        className="img-fluid"
-                                                    />
+                                <Button 
+                                    onClick={this.open}
+                                    className="btn btn-primary pull-right"
+                                ><i className="ft ft-plus"></i> Create New
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="content-body">
+                            <section id="basic-examples">
+                                <div className="row">
+                                    <div className="col-12">
+                                        <div className="card">
+                                            <div className="card-header">
+                                                <h4 className="card-title">List of Products</h4>
+                                                <a className="heading-elements-toggle">
+                                                    <i className="la la-ellipsis-v font-medium-3"></i>
+                                                </a>
+                                                <div className="heading-elements">
+                                                    <ul className="list-inline mb-0">
+                                                        <li>
+                                                            <a data-action="collapse">
+                                                                <i className="ft-minus"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a data-action="reload">
+                                                                <i className="ft-rotate-cw"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a data-action="close">
+                                                                <i className="ft-x"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </div>
+                                            </div>
+                                            <div className="card-content collapse show">
+                                                <div className="card-body">
+                                                     
+                                                    <section className="row">
+                                                        <div className="col-sm-12">
+                                                            {this.state.loading ? (
+                                                                <Spinner />
+                                                            ) : this.state.products.length > 0 ? (
+                                                                <Fragment>
+                                                                    <ProductTable
+                                                                        products={this.state.products}
+                                                                        totalCount={this.state.totalCount}
+                                                                        moveToArchives={this.moveToArchives}
+                                                                        getSingleProduct={this.getSingleProduct}
+                                                                        searchProduct={this.searchProduct}
+                                                                    />
 
-                                                <div className="col-md-2">
-                                                    <div className="">
-                                                        Total Items
-                                                    </div>
-                                                    <img
-                                                        src="/square.jpg"
-                                                        className="img-fluid"
-                                                    />
-                                                </div>
-
-                                                <div className="col-md-2">
-                                                    <div className="">
-                                                        Others
-                                                    </div>
-                                                    <img
-                                                        src="/square.jpg"
-                                                        className="img-fluid"
-                                                    />
+                                                                    {this.state.totalCount > 10 && (
+                                                                        <div className="d-flex justify-content-center">
+                                                                            <Pagination
+                                                                                className="pagination"
+                                                                                itemClass="page-item"
+                                                                                linkClass="page-link"
+                                                                                activePage={this.state.activePage}
+                                                                                itemsCountPerPage={
+                                                                                    this.state.itemsCountPerPage
+                                                                                }
+                                                                                totalItemsCount={
+                                                                                    this.state.totalItemsCount
+                                                                                }
+                                                                                pageRangeDisplayed={
+                                                                                    this.state.pageRangeDisplayed
+                                                                                }
+                                                                                onChange={this.handlePageChange}
+                                                                            />
+                                                                        </div>
+                                                                    )}
+                                                                </Fragment>
+                                                            ) : (
+                                                                <h1>No Data to Show...</h1>
+                                                            )}
+                                                        </div> 
+                                                    </section>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </section>
                         </div>
-                    </div>
-                </section>
-
-                <div className="row mt-2">
-                    <div className="col-sm-12">
-                        <h3 className="pull-left">
-                            Total: {this.state.totalCount}
-                        </h3>
                     </div>
                 </div>
 
-                <section className="row">
-                    <ProductSearch searchProduct={this.searchProduct} />
-                </section>
+                <ProductCreateModal
+                    show={this.state.showModal} 
+                    onHide={this.close}
+                    getProducts={this.getProducts}
+                />
 
-                <section className="row">
-                    <div className="col-sm-12">
-                        {this.state.loading ? (
-                            <Spinner />
-                        ) : this.state.products.length > 0 ? (
-                            <Fragment>
-                                <ProductTable
-                                    products={this.state.products}
-                                    moveToArchives={this.moveToArchives}
-                                    getSingleProduct={this.getSingleProduct}
-                                />
-
-                                {this.state.totalCount > 10 && (
-                                    <div className="d-flex justify-content-center">
-                                        <Pagination
-                                            className="pagination"
-                                            itemClass="page-item"
-                                            linkClass="page-link"
-                                            activePage={this.state.activePage}
-                                            itemsCountPerPage={
-                                                this.state.itemsCountPerPage
-                                            }
-                                            totalItemsCount={
-                                                this.state.totalItemsCount
-                                            }
-                                            pageRangeDisplayed={
-                                                this.state.pageRangeDisplayed
-                                            }
-                                            onChange={this.handlePageChange}
-                                        />
-                                    </div>
-                                )}
-                            </Fragment>
-                        ) : (
-                            <h1>No Data to Show...</h1>
-                        )}
-                    </div>
-                </section>
-            </div>
+            </Fragment>
         );
     }
 }
