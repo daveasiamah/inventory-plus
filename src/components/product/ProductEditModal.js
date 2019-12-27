@@ -56,19 +56,19 @@ class ProductEditModal extends Component {
 	};
 	
 	componentDidMount() {
-		this.getSingleProduct(this.state.id);
+		// this.getSingleProduct(this.state.id);
 		this.getSelectAll();
 	}
 
-	// componentWillReceiveProps(nextProps) {
-	// 	if (this.props.singleProduct !== nextProps.singleProduct) {
-	// 		this.setState({ singleProduct: nextProps.singleProduct });
-	// 	}
+	componentWillReceiveProps(nextProps) {
+		if (this.props.singleProduct !== nextProps.singleProduct) {
+			this.setState({ singleProduct: nextProps.singleProduct });
+		}
 
-	// 	if (this.props.id !== nextProps.id) {
-	// 		this.setState({ id: nextProps.id });
-	// 	}
-	// }
+		if (this.props.id !== nextProps.id) {
+			this.setState({ id: nextProps.id });
+		}
+	}
 
 	// alert message
 	toast = message => {
@@ -87,47 +87,47 @@ class ProductEditModal extends Component {
 	};
 
 	// fetch the single item
-	getSingleProduct = async id => {
-		this.setState({ loading: true });
+	// getSingleProduct = async id => {
+	// 	this.setState({ loading: true });
 
-		let res = await axios.get(
-			`http://inventory.test/api/admin/product/${id}`
-		);
+	// 	let res = await axios.get(
+	// 		`http://inventory.test/api/admin/product/${id}`
+	// 	);
 
-		this.setState({
-			singleProduct: {
-				sku: res.data.product.sku,
-				product_name: res.data.product.product_name,
-				description: res.data.product.description,
-				brand_id: res.data.product.brand_id,
-				category_id: res.data.product.category_id,
-				supplier_id: res.data.product.supplier_id,
-				barcode: res.data.product.barcode,
-				dimension_length: res.data.product.attributes.dimension_length,
-				dimension_width: res.data.product.attributes.dimension_width,
-				dimension_height: res.data.product.attributes.dimension_height,
-				color: res.data.product.attributes.color,
-				material_tags: res.data.product.attributes.material_tags.split(
-					","
-				),
-				fitting_type: res.data.product.attributes.fitting_type,
-				fitting_qty: res.data.product.attributes.fitting_qty,
-				weight_kg: res.data.product.attributes.weight_kg,
-				packing_length: res.data.product.attributes.packing_length,
-				packing_width: res.data.product.attributes.packing_width,
-				packing_height: res.data.product.attributes.packing_height,
-				cost: res.data.product.cost,
-				srp: res.data.product.srp,
-				delivery_fee: res.data.product.delivery_fee,
-				customization_fee: res.data.product.customization_fee,
-				stock_alarm: res.data.product.stock_alarm,
-				stocks: res.data.product.stocks,
-				sales_price: res.data.product.sales_price,
-				product_image: res.data.product.product_image
-			},
-			loading: false
-		});
-	};
+	// 	this.setState({
+	// 		singleProduct: {
+	// 			sku: res.data.product.sku,
+	// 			product_name: res.data.product.product_name,
+	// 			description: res.data.product.description,
+	// 			brand_id: res.data.product.brand_id,
+	// 			category_id: res.data.product.category_id,
+	// 			supplier_id: res.data.product.supplier_id,
+	// 			barcode: res.data.product.barcode,
+	// 			dimension_length: res.data.product.attributes.dimension_length,
+	// 			dimension_width: res.data.product.attributes.dimension_width,
+	// 			dimension_height: res.data.product.attributes.dimension_height,
+	// 			color: res.data.product.attributes.color,
+	// 			material_tags: res.data.product.attributes.material_tags.split(
+	// 				","
+	// 			),
+	// 			fitting_type: res.data.product.attributes.fitting_type,
+	// 			fitting_qty: res.data.product.attributes.fitting_qty,
+	// 			weight_kg: res.data.product.attributes.weight_kg,
+	// 			packing_length: res.data.product.attributes.packing_length,
+	// 			packing_width: res.data.product.attributes.packing_width,
+	// 			packing_height: res.data.product.attributes.packing_height,
+	// 			cost: res.data.product.cost,
+	// 			srp: res.data.product.srp,
+	// 			delivery_fee: res.data.product.delivery_fee,
+	// 			customization_fee: res.data.product.customization_fee,
+	// 			stock_alarm: res.data.product.stock_alarm,
+	// 			stocks: res.data.product.stocks,
+	// 			sales_price: res.data.product.sales_price,
+	// 			product_image: res.data.product.product_image
+	// 		},
+	// 		loading: false
+	// 	});
+	// };
 
 	// update the data
 	updateSingleProduct = async (singleProduct, id) => {
@@ -290,60 +290,27 @@ class ProductEditModal extends Component {
 
 	render() {
 
-		// destructuring
-		// const {
-		// 	singleProduct: {
-		// 	sku,
-		// 	product_name,
-		// 	brand_id,
-		// 	category_id,
-		// 	supplier_id,
-		// 	description,
-		// 	barcode,
-		// 	attributes: {
-		// 		dimension_length,
-		// 		dimension_width,
-		// 		dimension_height,
-		// 		color,
-		// 		material_tags,
-		// 		fitting_type,
-		// 		fitting_qty,
-		// 		weight_kg,
-		// 		packing_length,
-		// 		packing_width,
-		// 		packing_height,
-		// 	},
-		// 	cost,
-		// 	srp,
-		// 	delivery_fee,
-		// 	customization_fee,
-		// 	stock_alarm,
-		// 	stocks,
-		// 	sales_price,
-		// 	product_image,
-		// },
-		// isSearchable
-		// } = this.state;
-
+		//destructuring
 		const {
+			singleProduct: {
 			sku,
 			product_name,
 			brand_id,
 			category_id,
-			description,
 			supplier_id,
+			description,
 			barcode,
-			dimension_length,
-			dimension_width,
-			dimension_height,
-			color,
-			material_tags,
-			fitting_type,
-			fitting_qty,
-			weight_kg,
-			packing_length,
-			packing_width,
-			packing_height,
+				dimension_length,
+				dimension_width,
+				dimension_height,
+				color,
+				material_tags,
+				fitting_type,
+				fitting_qty,
+				weight_kg,
+				packing_length,
+				packing_width,
+				packing_height,
 			cost,
 			srp,
 			delivery_fee,
@@ -352,11 +319,10 @@ class ProductEditModal extends Component {
 			stocks,
 			sales_price,
 			product_image,
-			created_at,
-			updated_at
-		} = this.props.singleProduct;
+		},
+		isSearchable
+		} = this.state;
 
-		const { isSearchable } = this.state;	
 
 		// const url = `http://inventory.test/`;
 
@@ -384,7 +350,6 @@ class ProductEditModal extends Component {
 			};
 		});
 
-
 		return (
 		    <Modal 
 		      	className="modal-container"
@@ -398,51 +363,18 @@ class ProductEditModal extends Component {
 		        </Modal.Header>
 				
 		        <Modal.Body>
-		      	{ this.state.loading ? 
-					<div>
-						<h3 
-							align="center"
-							className="my-5">
-							Loading Please wait...
-						</h3>
-					</div>
-				:
-					<Fragment>
-						<div>
-							{this.state.errors && (
-								<div
-									className="alert alert-danger alert-dismissible fade show"
-									role="alert"
-								>
-									{this.state.errors.map((error, i) => (
-										<li key={i}>{error}</li>
-									))}
-									<button
-										type="button"
-										className="close"
-										data-dismiss="alert"
-										aria-label="Close"
-									>
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-							)}
-						</div>
 
-						<form
-							id="addProduct"
-							encType="multipart/form-data"
-							onKeyPress={e => {
-								if (e.key === "Enter") e.preventDefault();
-							}}
-							onSubmit={e => this.onFormSubmit(e)}
-							>
-						<h4 className="form-section">
-							<i className="ft-clipboard"></i> Details
-						</h4>
+				<Fragment>
+					<form
+						id="addProduct"
+						encType="multipart/form-data"
+						onKeyPress={e => {
+							if (e.key === "Enter") e.preventDefault();
+						}}
+						onSubmit={e => this.onFormSubmit(e)}
+						>
 
-
-						<section className="row">
+											<section className="row">
 							<div className="col-sm-6">
 								<div className="form-group row">
 									<label className="col-md-3 label-control">
@@ -812,11 +744,6 @@ class ProductEditModal extends Component {
 						</section>
 						
 
-						<h4 className="form-section">
-							<i className="ft-clipboard"></i> Pricing & Stock
-						</h4>
-
-						
 						<section className="row">
 							<div className="col-sm-6">
 								<div className="form-group row">
@@ -1008,9 +935,10 @@ class ProductEditModal extends Component {
 								</div>
 							</div>
 						</div>
-						</form>
-					</Fragment>
-				}
+								
+					</form>
+				</Fragment>
+				
 		        </Modal.Body>
 		        <Modal.Footer>
 		              <Button 
