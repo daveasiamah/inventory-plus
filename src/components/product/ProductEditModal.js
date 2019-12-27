@@ -56,19 +56,19 @@ class ProductEditModal extends Component {
 	};
 	
 	componentDidMount() {
-		this.getSingleProduct(this.state.id);
+		// this.getSingleProduct(this.state.id);
 		this.getSelectAll();
 	}
 
-	// componentWillReceiveProps(nextProps) {
-	// 	if (this.props.singleProduct !== nextProps.singleProduct) {
-	// 		this.setState({ singleProduct: nextProps.singleProduct });
-	// 	}
+	componentWillReceiveProps(nextProps) {
+		if (this.props.singleProduct !== nextProps.singleProduct) {
+			this.setState({ singleProduct: nextProps.singleProduct });
+		}
 
-	// 	if (this.props.id !== nextProps.id) {
-	// 		this.setState({ id: nextProps.id });
-	// 	}
-	// }
+		if (this.props.id !== nextProps.id) {
+			this.setState({ id: nextProps.id });
+		}
+	}
 
 	// alert message
 	toast = message => {
