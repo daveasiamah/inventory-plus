@@ -63,6 +63,10 @@ class ProductEditModal extends Component {
 		if (this.props.singleProduct !== nextProps.singleProduct) {
 			this.setState({ singleProduct: nextProps.singleProduct });
 		}
+	
+		if (this.props.id !== nextProps.id) {
+			this.setState({ id: nextProps.id });
+		}
 	}
 
 	// alert message
@@ -110,7 +114,7 @@ class ProductEditModal extends Component {
 		data.append("stocks", singleProduct.stocks);
 		data.append("sales_price", singleProduct.sales_price);
 		data.append("product_image", singleProduct.product_image);
-		// console.table(singleProduct);
+		// console.log(singleProduct);
 
 		let res = await axios.post(
 			`http://inventory.test/api/admin/product/update/${id}`,

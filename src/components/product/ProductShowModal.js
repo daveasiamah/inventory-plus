@@ -2,56 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 class ProductShowModal extends Component {
-	
-	// 	state = {
-	// 		singleProduct: {
-	// 			sku: "",
-	// 			product_name: "",
-	// 			brand_id: [],
-	// 			category_id: [],
-	// 			supplier_id: [],
-	// 			description: "",
-	// 			barcode: "",
-	// 			attributes: {
-	// 				dimension_length: "",
-	// 				dimension_width: "",
-	// 				dimension_height: "",
-	// 				color: "",
-	// 				material_tags: [],
-	// 				fitting_type: "",
-	// 				fitting_qty: "",
-	// 				weight_kg: "",
-	// 				packing_length: "",
-	// 				packing_width: "",
-	// 				packing_height: ""
-	// 			},
-	// 			cost: "",
-	// 			srp: "",
-	// 			delivery_fee: "",
-	// 			customization_fee: "",
-	// 			stock_alarm: "",
-	// 			stocks: "",
-	// 			sales_price: "",
-	// 			product_image: null
-	// 		},
-	// 		selectNames: {
-	// 			supplier_id: "",
-	// 			brand_id: "",
-	// 			category_id: ""
-	// 		}
-	// 	};
-	
-	// componentWillReceiveProps(nextProps) {
-	// 	if (this.props.singleProduct !== nextProps.singleProduct) {
-	// 		this.setState({ singleProduct: nextProps.singleProduct });
-	// 	}
 
-	// 	if (this.props.id !== nextProps.id) {
-	// 		this.setState({ id: nextProps.id });
-	// 	}
-	// }
-	
-	
 	render() {
 
 		//destructuring
@@ -146,7 +97,7 @@ class ProductShowModal extends Component {
 							<p>
 								<strong>Material Tags:</strong>{" "}
 								{
-									material_tags ? (
+									material_tags != '' ? (
 										material_tags.map(
 											(tag, index) => <span>{tag}, </span>)
 									) : (

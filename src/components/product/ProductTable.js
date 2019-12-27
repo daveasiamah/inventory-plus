@@ -251,6 +251,7 @@ class ProductTable extends Component {
 					show={this.state.editModal}
 					onHide={this.modalClose.bind(this,'edit')}
 					singleProduct={this.state.singleProduct}
+					id={this.state.id}
 					getProducts={this.props.getProducts}
 				/>	
 
