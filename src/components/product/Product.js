@@ -183,6 +183,7 @@ class Product extends Component {
                                                                         moveToArchives={this.moveToArchives}
                                                                         getSingleProduct={this.getSingleProduct}
                                                                         searchProduct={this.searchProduct}
+                                                                        getProducts={this.getProducts}
                                                                     />
 
                                                                     {this.state.totalCount > 10 && (
