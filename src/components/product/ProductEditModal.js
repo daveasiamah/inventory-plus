@@ -65,9 +65,9 @@ class ProductEditModal extends Component {
 			this.setState({ singleProduct: nextProps.singleProduct });
 		}
 
-		if (this.props.id !== nextProps.id) {
-			this.setState({ id: nextProps.id });
-		}
+		// if (this.props.id !== nextProps.id) {
+		// 	this.setState({ id: nextProps.id });
+		// }
 	}
 
 	// alert message
@@ -85,49 +85,6 @@ class ProductEditModal extends Component {
 			timeout: 4000
 		});
 	};
-
-	// fetch the single item
-	// getSingleProduct = async id => {
-	// 	this.setState({ loading: true });
-
-	// 	let res = await axios.get(
-	// 		`http://inventory.test/api/admin/product/${id}`
-	// 	);
-
-	// 	this.setState({
-	// 		singleProduct: {
-	// 			sku: res.data.product.sku,
-	// 			product_name: res.data.product.product_name,
-	// 			description: res.data.product.description,
-	// 			brand_id: res.data.product.brand_id,
-	// 			category_id: res.data.product.category_id,
-	// 			supplier_id: res.data.product.supplier_id,
-	// 			barcode: res.data.product.barcode,
-	// 			dimension_length: res.data.product.attributes.dimension_length,
-	// 			dimension_width: res.data.product.attributes.dimension_width,
-	// 			dimension_height: res.data.product.attributes.dimension_height,
-	// 			color: res.data.product.attributes.color,
-	// 			material_tags: res.data.product.attributes.material_tags.split(
-	// 				","
-	// 			),
-	// 			fitting_type: res.data.product.attributes.fitting_type,
-	// 			fitting_qty: res.data.product.attributes.fitting_qty,
-	// 			weight_kg: res.data.product.attributes.weight_kg,
-	// 			packing_length: res.data.product.attributes.packing_length,
-	// 			packing_width: res.data.product.attributes.packing_width,
-	// 			packing_height: res.data.product.attributes.packing_height,
-	// 			cost: res.data.product.cost,
-	// 			srp: res.data.product.srp,
-	// 			delivery_fee: res.data.product.delivery_fee,
-	// 			customization_fee: res.data.product.customization_fee,
-	// 			stock_alarm: res.data.product.stock_alarm,
-	// 			stocks: res.data.product.stocks,
-	// 			sales_price: res.data.product.sales_price,
-	// 			product_image: res.data.product.product_image
-	// 		},
-	// 		loading: false
-	// 	});
-	// };
 
 	// update the data
 	updateSingleProduct = async (singleProduct, id) => {
