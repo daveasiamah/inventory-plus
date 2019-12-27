@@ -75,7 +75,7 @@ class ProductTable extends Component {
 				dimension_width: res.data.product.attributes.dimension_width,
 				dimension_height: res.data.product.attributes.dimension_height,
 				color: res.data.product.attributes.color,
-				material_tags: res.data.product.attributes.material_tags,
+				material_tags: res.data.product.attributes.material_tags.split(","),
 				fitting_type: res.data.product.attributes.fitting_type,
 				fitting_qty: res.data.product.attributes.fitting_qty,
 				weight_kg: res.data.product.attributes.weight_kg,
