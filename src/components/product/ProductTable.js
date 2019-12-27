@@ -50,7 +50,7 @@ class ProductTable extends Component {
 	};
 
 	static propTypes = {
-		// products: PropTypes.array.isRequired,
+		getProducts: PropTypes.func.isRequired,
 		moveToArchives: PropTypes.func.isRequired,
 	};
 
@@ -250,8 +250,8 @@ class ProductTable extends Component {
 				<ProductEditModal
 					show={this.state.editModal}
 					onHide={this.modalClose.bind(this,'edit')}
-					id={this.state.id}
 					singleProduct={this.state.singleProduct}
+					getProducts={this.props.getProducts}
 				/>	
 
 				<ProductDeleteModal 
