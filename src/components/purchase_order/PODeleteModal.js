@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 
-class BrandDeleteModal extends Component {
+class PODeleteModal extends Component {
+
 	render() {
 		const { id, conFirmMoveToArchives } = this.props;
-		
+
 		return (
 	      <Modal 
 	      	className="modal-container"
@@ -34,4 +35,4 @@ class BrandDeleteModal extends Component {
 	}
 }
 
-export default BrandDeleteModal;
+export default PODeleteModal;

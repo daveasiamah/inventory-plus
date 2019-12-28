@@ -25,7 +25,6 @@ import Agent from "./components/agent/Agent";
 
 // Purchase Order (PO)
 import PurchaseOrder from "./components/purchase_order/PO";
-import POCreate from './components/purchase_order/POCreate';
 
 import PageNotFound from "./components/layouts/PageNotFound";
 
@@ -54,9 +53,8 @@ class App extends Component {
             {/* Agent */}
             <Route path="/agent" exact component={Agent} />
 
-            {/* purchase order (PO) */}
+            {/* Purchase Order (PO) */}
             <Route path="/po" exact component={PurchaseOrder} />
-            <Route path="/po/create" component={POCreate}/>
 
             <Route component={PageNotFound} />
           </Switch>

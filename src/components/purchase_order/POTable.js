@@ -3,16 +3,18 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
-// import POShowModal from './POShowModal';
-// import PODeleteModal from './PODeleteModal';
+import POShowModal from './POShowModal';
+import PODeleteModal from './PODeleteModal';
+import POEditModal from './POEditModal';
 
-class POTable extends Component {
+class BrandTable extends Component {
 	state = {
 		id: 0,
 		singlePO: [],
 		showModal: false,
 		editModal: false,
-		deleteModal: false
+		deleteModal: false,
+		search: ''
 	}
 
 	static propTypes = {
@@ -20,11 +22,11 @@ class POTable extends Component {
 		moveToArchives: PropTypes.func.isRequired,
 	};
 
-	// get the pos base on id
+	// get the brand base on id
 	getSinglePO = async (id) => {
         let res = await axios.get(`http://inventory.test/api/admin/po/${id}`)
                             
-        this.setState({singlePO: res.data.purchase_order });
+        this.setState({singlePO: res.data.brand });
         // console.log(res.data.supplier)
     }
 	
@@ -67,6 +69,21 @@ class POTable extends Component {
 		}
 	}
 
+	// handle search
+    handleSearchChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value});
+    }
+
+ 	// on submit
+ 	onSearchSubmit = (e) => {
+        e.preventDefault();
+
+		if(e.target.value !== ''){
+			this.props.searchPO(this.state.search)
+			this.setState({search: ' '});
+		}
+    }
+
 	render() {
 		return (
 			<Fragment>
@@ -74,18 +91,32 @@ class POTable extends Component {
 					<table className="table table-striped table-hover table-bordered">
 						<thead>
 							<tr>
-								<th>PO #</th>
+								<td colSpan="5">
+									<div className="pull-left">
+										<h4><b>Total: {this.props.totalCount}</b></h4>
+									</div>
+									<form onSubmit={this.onSearchSubmit} className="form-inline pull-right">
+					                 	<input 
+						                    name="search" 
+						                    type="text"
+						                    className="form-control input-sm"
+						                    placeholder="Search here..."
+						                    onChange={this.handleSearchChange}
+						                />
+					                </form>
+								</td>
+							</tr>
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
 								<th>Created at</th>
 								<th>Updated at</th>
-								<th>Action</th>
+								<th width="5%">Action</th>
 							</tr>
 						</thead>
 						<tbody>
 							{this.props.purchase_orders.map(po => (
 								<tr key={po._id}>
-									<td>{po._id}</td>
-									<td>{po.created_at}</td>
-									<td>{po.updated_at}</td>
 									<td>
 										<div className="btn-group">
 											<button 
@@ -113,9 +144,29 @@ class POTable extends Component {
 						</tbody>
 					</table>
 				</div>
+
+				<POShowModal 
+					show={this.state.showModal}
+					onHide={this.modalClose.bind(this, 'show')}
+					singlePO={this.state.singlePO}
+				/>
+
+				<POEditModal
+					show={this.state.editModal}
+					onHide={this.modalClose.bind(this, 'edit')}
+					singlePO={this.state.singlePO}
+					getPurchaseOrders={this.props.getPurchaseOrders}
+				/>
+
+				<PODeleteModal 
+					show={this.state.deleteModal}
+					onHide={this.modalClose.bind(this, 'delete')}
+					id={this.state.id}
+					conFirmMoveToArchives={this.conFirmMoveToArchives}
+				/>
 			</Fragment>
 		)
 	}
 }
 
-export default POTable;
+export default BrandTable
