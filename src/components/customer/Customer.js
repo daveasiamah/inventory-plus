@@ -7,7 +7,6 @@ import Pagination from "react-js-pagination";
 import '../layouts/styles/iziToast.css';
 import iziToast from 'izitoast';
 import CustomerTable from './CustomerTable';
-import CustomerSearch from './CustomerSearch';
 import CustomerCreateModal from './CustomerCreateModal';
 
 class Customer extends Component {

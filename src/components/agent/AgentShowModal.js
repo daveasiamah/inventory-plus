@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import axios from 'axios';
 
-class SupplierShowModal extends Component {
+class AgentShowModal extends Component {
 	
 	render() {
 		const { 
@@ -15,6 +15,7 @@ class SupplierShowModal extends Component {
 				email,
 				mobile,
 				contact_person,
+				rate,
 				created_at, 
 				updated_at 
 			}, 
@@ -31,7 +32,7 @@ class SupplierShowModal extends Component {
 	      	animation={true}
 	      >
 	        <Modal.Header closeButton>
-	          <Modal.Title>Supplier Information</Modal.Title>
+	          <Modal.Title>Agent Information</Modal.Title>
 	        </Modal.Header>
 			
 	        <Modal.Body>
@@ -44,18 +45,19 @@ class SupplierShowModal extends Component {
 	      			<div className="mb-1"><strong>Email: </strong>{email}</div>
 	      			<div className="mb-1"><strong>Mobile: </strong>{mobile}</div>
 	      			<div className="mb-1"><strong>Contact Person: </strong>{contact_person}</div>
+	      			<div className="mb-1"><strong>Rate: </strong>{rate}</div>
 	      			<hr />
 	      			<div><strong>Created at: </strong>{created_at}</div>
 	      			<div><strong>Updated at: </strong>{updated_at}</div>
 	      		</div>
 	        </Modal.Body>
 	        <Modal.Footer>
-	              <Button 
+	             <Button 
 	              	variant="danger btn-sm" 
 	              	onClick={this.props.onHide}
 	              >
-		          	  Close
-		          </Button>
+		          	Close
+		        </Button>
 	        </Modal.Footer>
 	      </Modal>
 		)
@@ -63,4 +65,4 @@ class SupplierShowModal extends Component {
 }
 
 
-export default SupplierShowModal
+export default AgentShowModal

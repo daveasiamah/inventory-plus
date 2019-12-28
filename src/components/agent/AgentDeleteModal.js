@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 class AgentDeleteModal extends Component {
-
 	render() {
 		const { id, conFirmMoveToArchives } = this.props;
 		
@@ -19,13 +18,14 @@ class AgentDeleteModal extends Component {
 	        </Modal.Header>
 			
 	        <Modal.Body>
+	        
 	      		<div align="center">
-	      			<h3>Are you sure?</h3>
-		      		<Button 
-		      			className="btn btn-primary my-2"
-		      			onClick={conFirmMoveToArchives}>
-		            	Confirm
-		         	</Button>
+	      			<h4>Are you sure?</h4>
+	      		<Button 
+	      			className="btn btn-primary mb-2 mt-1"
+	      			onClick={conFirmMoveToArchives}>
+	            	Confirm
+	         	</Button>
 	      		</div>
 
 	        </Modal.Body>

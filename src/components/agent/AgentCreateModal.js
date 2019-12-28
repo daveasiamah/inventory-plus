@@ -7,6 +7,7 @@ import iziToast from 'izitoast';
 import axios from "axios";
 
 class AgentCreateModal extends Component {
+
 	state = {
 		loading: false,
 		errors: null,
@@ -17,7 +18,9 @@ class AgentCreateModal extends Component {
 		fax: "",
 		email: "",
 		mobile: "",
-		contact_person: ""
+		contact_person: "",
+		rate: '',
+		subscriber_id: ''
 	};
 
 	static propTypes = {
@@ -55,7 +58,8 @@ class AgentCreateModal extends Component {
 			fax: this.state.fax,
 			email: this.state.email,
 			mobile: this.state.mobile,
-			contact_person: this.state.contact_person
+			contact_person: this.state.contact_person,
+			rate: this.state.rate,
 		};
 
 		this.agentPost(data);
@@ -69,6 +73,7 @@ class AgentCreateModal extends Component {
 			`http://inventory.test/api/admin/agent`,
 			brand
 		);
+		
 		switch (res.data.status) {
 			case 0:
 				this.setState({ errors: res.data.errors });
@@ -84,6 +89,7 @@ class AgentCreateModal extends Component {
 					email: "",
 					mobile: "",
 					contact_person: "",
+					rate: '',
 					errors: null
 				});
 				// hide the modal
@@ -109,7 +115,8 @@ class AgentCreateModal extends Component {
 			fax,
 			email,
 			mobile,
-			contact_person
+			contact_person,
+			rate
 		} = this.state;
 
 		return (
@@ -309,6 +316,26 @@ class AgentCreateModal extends Component {
 												/>
 											</div>
 										</div>
+
+										<div className="form-group row">
+											<label className="col-md-4 label-control">
+												Rate:
+											</label>
+											<div className="col-md-8">
+												<input
+													type="text"
+													id="rate"
+													name="rate"
+													className="form-control"
+													placeholder="Rate"
+													value={rate}
+													onChange={
+														this.handleInputChange
+													}
+												/>
+											</div>
+										</div>
+
 									</div>
 								</section>
 

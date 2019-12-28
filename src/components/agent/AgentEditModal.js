@@ -70,7 +70,8 @@ class AgentEdit extends Component {
 			fax: agent.fax,
 			email: agent.email,
 			mobile: agent.mobile,
-			contact_person: agent.contact_person
+			contact_person: agent.contact_person,
+			rate: agent.rate
 		};
 
 		let res = await axios.put(
@@ -102,6 +103,7 @@ class AgentEdit extends Component {
 	};
 
 	render() {
+
 		const {
 			name,
 			business_name,
@@ -111,7 +113,7 @@ class AgentEdit extends Component {
 			email,
 			mobile,
 			contact_person,
-			archives
+			rate,
 		} = this.state.editAgent;
 
 		return (
@@ -123,7 +125,7 @@ class AgentEdit extends Component {
 				size="md"
 			>
 				<Modal.Header closeButton>
-					<Modal.Title>Edi Supplier</Modal.Title>
+					<Modal.Title>Edi Agent</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>
@@ -312,6 +314,27 @@ class AgentEdit extends Component {
 												/>
 											</div>
 										</div>
+
+
+										<div className="form-group row">
+											<label className="col-md-4 label-control">
+												Rate
+											</label>
+											<div className="col-md-8">
+												<input
+													type="text"
+													id="rate"
+													name="rate"
+													placeholder="Rate"
+													className="form-control"
+													value={rate || ""}
+													onChange={
+														this.handleInputChange
+													}
+												/>
+											</div>
+										</div>
+
 									</div>
 								</section>
 

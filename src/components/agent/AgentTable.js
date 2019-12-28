@@ -8,14 +8,14 @@ import AgentEditModal from './AgentEditModal';
 import AgentDeleteModal from "./AgentDeleteModal";
 
 class AgentTable extends Component {
-
 	state = {
 		id: 0,
 		singleAgent: [],
 		isOpen: false,
 		showModal: false,
 		editModal: false,
-		deleteModal: false
+		deleteModal: false,
+		search: ''
 	};
 
 	static propTypes = {
@@ -29,7 +29,7 @@ class AgentTable extends Component {
 		);
 
 		this.setState({ singleAgent: res.data.agent });
-	};
+	}
 
 	conFirmMoveToArchives = () => {
 		this.props.moveToArchives(this.state.id);
@@ -69,6 +69,21 @@ class AgentTable extends Component {
 		}
 	};
 
+	// handle search
+    handleSearchChange = (e) => {	
+        this.setState({ [e.target.name]: e.target.value});	
+    }	
+	
+ 	// on submit
+ 	onSearchSubmit = (e) => {
+        e.preventDefault();
+		
+		if(e.target.value !== ''){
+			this.props.searchAgent(this.state.search);
+			this.setState({ search: ' ' });
+		}
+    }
+
 	render() {
 		return (
 			<Fragment>
@@ -76,12 +91,28 @@ class AgentTable extends Component {
 					<table className="table table-striped table-hover table-bordered">
 						<thead>
 							<tr>
+								<td colSpan="6">
+									<div className="pull-left">
+										<h4><b>Total: {this.props.totalCount}</b></h4>
+									</div>
+									<form onSubmit={this.onSearchSubmit} className="form-inline pull-right">
+					                 	<input 
+						                    name="search" 
+						                    type="text"
+						                    className="form-control input-sm"
+						                    placeholder="Search here..."
+						                    onChange={this.handleSearchChange}
+						                />
+					                </form>
+								</td>
+							</tr>
+							<tr>
 								<th>Name</th>
 								<th>Email</th>
 								<th>Landline</th>
 								<th>Mobile</th>
 								<th>Fax</th>
-								<th>Action</th>
+								<th width="5%">Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -132,45 +163,6 @@ class AgentTable extends Component {
 					</table>
 				</div>
 
-				<div
-					id="delete-modal"
-					className="modal fade"
-					tabIndex="-1"
-					role="dialog"
-				>
-					<div className="modal-dialog" role="document">
-						<div className="modal-content">
-							<div className="modal-header">
-								<h5 className="modal-title"></h5>
-								<button
-									type="button"
-									className="close"
-									data-dismiss="modal"
-									aria-label="Close"
-								>
-									<span aria-hidden="true">×</span>
-								</button>
-							</div>
-							<div className="modal-body">
-								<h4 align="center">
-									Do you want to delete this item?
-								</h4>
-								<div align="center" className="mt-3">
-									<button
-										type="button"
-										className="btn btn-info"
-										data-dismiss="modal"
-										onClick={this.conFirmMoveToArchives}
-									>
-										<i className="la la-check"></i> Confirm
-									</button>
-								</div>
-							</div>
-							<div className="modal-footer"></div>
-						</div>
-					</div>
-				</div>
-
 				<AgentShowModal
 					show={this.state.showModal}
 					onHide={this.modalClose.bind(this, "show")}
@@ -180,7 +172,6 @@ class AgentTable extends Component {
 				<AgentEditModal
 					show={this.state.editModal}
 					onHide={this.modalClose.bind(this, "edit")}
-					id={this.state.id}
 					singleAgent={this.state.singleAgent}
 					getAgents={this.props.getAgents}
 				/>
