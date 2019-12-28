@@ -1,11 +1,11 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
-// import '../layouts/styles/PurchaseOrder.css';
 import { Modal, Button } from 'react-bootstrap';
 import Select from "react-select";
 import '../layouts/styles/iziToast.css';
 import iziToast from 'izitoast';
 import axios from 'axios';
+import POModalForm from './POModalForm';
 
 class POCreateModal extends Component {
 
@@ -14,13 +14,7 @@ class POCreateModal extends Component {
 		errors: null,
 		supplier_id: [],
 		name_suppliers: [],
-		products: [],
-		view_supplier: [],
-		createNew: {
-			sku: "",
-			item: "",
-			qty: "",
-		},
+		view_supplier: '',
 		isSearchable: true
 	}
 
@@ -33,9 +27,6 @@ class POCreateModal extends Component {
 		this.getSelectSupplier();
 	}
 
-	// handle inputs
-	handleInputChange = (e) => this.setState({ createNew: {[e.target.name]: e.target.value }});
-	
 	// handle the select options
 	handleSelectInput = selectedOption => {
 		// console.log(selectedOption);
@@ -172,14 +163,13 @@ class POCreateModal extends Component {
 		}
 	};
 
-
 	render() {
 
 		const {
 			supplier_id,
 			isSearchable,
 			view_supplier,
-			 sku, item, qty,
+			product,
 		} = this.state;
 
 		let supplierOption = this.state.name_suppliers.map(supplier => {
@@ -190,22 +180,12 @@ class POCreateModal extends Component {
 			};
 		});
 		
-
-		let ItemOption = this.state.products.map(supplier => {
-			return {
-				value: supplier._id,
-				label: supplier.product_name,
-				name: "products"
-			};
-		});
-
 		return (
 			<Modal 
-				className="modal-container custom-dialog" 
+				dialogClassName="modal-container custom-dialog" 
 	          	show={this.props.show} 
 	          	onHide={this.props.onHide}
 	          	animation={true}
-	          	size="lg"
 	        >
 
 	          <Modal.Header closeButton>
@@ -245,7 +225,7 @@ class POCreateModal extends Component {
 						            <section className="row">
 							            <div className="col-sm-8">
 							                <div className="form-group row">
-												<div className="col-md-8">
+												<div className="col-md-6">
 													<Select
 														placeholder="Choose Supplier..."
 														isSearchable={isSearchable}
@@ -257,12 +237,12 @@ class POCreateModal extends Component {
 												</div>
 
 												<div className="col-md-12 mt-1">
-													<div><strong>{view_supplier.name}</strong></div>
-													<div>{view_supplier.address}</div>
-													<div>{view_supplier.landline}</div>
-													<div>{view_supplier.mobile}</div>
-													<div>{view_supplier.fax}</div>
-													<div>{view_supplier.contact_person}</div>
+													<div><strong>{view_supplier.name || ''}</strong></div>
+													<div>{view_supplier.address || ''}</div>
+													<div>{view_supplier.landline || ''}</div>
+													<div>{view_supplier.mobile || ''}</div>
+													<div>{view_supplier.fax || ''}</div>
+													<div>{view_supplier.contact_person || ''}</div>
 												</div>
 							                </div>
 							            </div>
@@ -271,47 +251,9 @@ class POCreateModal extends Component {
 						            <section>
 						            	<div className="row">
 						            		<div className="col-md-12">
-						            			<table className="table table-hover table-striped table-sm">
-						            				<thead>
-														<tr>
-															<th>SKU</th>
-															<th>Item</th>
-															<th>Qty</th>
-															<th>Price</th>
-															<th width="5%">Action</th>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-															<td></td>
-															<td width="40%">
-																<Select
-																	isSearchable={isSearchable}
-																	onChange={
-																		this.handleSelectInput
-																	}
-																	options={ItemOption}
-																/>
-															</td>
-															<td width="15%">
-																<input 
-																	type="text"
-																	name="qty"
-																	onChange={this.handleInputChange}
-																	value={this.state.createNew.qty}
-																	className="form-control p-1"
-																	placeholder="Qty"
-																 />
-															</td>
-															<td></td>
-															<td>
-																<a className="btn btn-sm btn-primary text-white">
-																	<i className="ft ft-plus"></i>
-																</a>
-															</td>
-														</tr>
-													</tbody>
-						            			</table>
+												{
+													view_supplier ? ( <POModalForm/>	) : ( null ) 
+												}
 						            		</div>
 						            	</div>
 						            </section>

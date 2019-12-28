@@ -41,3 +41,12 @@
   margin-bottom: 0 !important;
 }
 /* end of material_tags styles*/
+
+/*  PO styles*/
+
+.custom-dialog {
+  z-index: 99999; 
+  max-width: 85%;
+}
+
+/* end of PO styles*/
