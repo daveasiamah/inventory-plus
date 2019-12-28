@@ -14,7 +14,8 @@ class SupplierTable extends Component {
 		isOpen: false,
 		showModal: false,
 		editModal: false,
-		deleteModal: false
+		deleteModal: false,
+		search: ''
 	};
 
 	static propTypes = {

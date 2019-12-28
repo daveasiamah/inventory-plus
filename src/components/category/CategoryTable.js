@@ -11,7 +11,8 @@ class CategoryTable extends Component {
 	state = {
 		id: 0,
 		singleCategory: [],
-		isOpen: false
+		isOpen: false,
+		search: ''
 	};
 
 	static propTypes = {

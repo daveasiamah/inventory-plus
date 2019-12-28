@@ -13,7 +13,8 @@ class BrandTable extends Component {
 		singleBrand: [],
 		showModal: false,
 		editModal: false,
-		deleteModal: false
+		deleteModal: false,
+		search: ''
 	}
 
 	static propTypes = {

@@ -42,7 +42,8 @@ class ProductTable extends Component {
 		},
 		showModal: false,
 		editModal: false,
-		deleteModal: false
+		deleteModal: false,
+		search: ''
 	};
 
 	conFirmMoveToArchives = () => {
