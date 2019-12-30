@@ -9,12 +9,13 @@ import axios from "axios";
 class POCreateModal extends Component {
 	state = {
 		loading: false,
-		errors: null,
+		errors: '',
 		supplier_id: [],
 		name_suppliers: [],
 		items: [],
-		product:[],
+		product: [],
 		itemSelected: [],
+		totalPrice: null,
 		view_supplier: "",
 		isSearchable: true
 	};
@@ -46,29 +47,42 @@ class POCreateModal extends Component {
 	};
 
 	handleSelectItem = selectOption => {
-		console.log(selectOption)
-		let newItem = this.state.itemSelected.concat(selectOption);
-		this.setState({...this.state.itemSelected, itemSelected: newItem})
-	}
-	
-	// handle inputs
-	handleInputChange = (e, index) => {
-		this.state.product[index] = e.target.name
-		this.state.product[index] = e.target.value;
-
-		// set the changed state
+		console.log(selectOption);
+		// let newItem = this.state.itemSelected.concat(selectOption);
 		this.setState({
-			product: this.state.product
+			itemSelected: {
+				sku: selectOption.sku,
+				name: selectOption.label,
+				qty: selectOption.qty,
+				srp: selectOption.srp
+			}
+		});
+	};
+
+	// handle inputs
+	handleInputChange = e => {
+		// set the changed state
+		let multipliedPrice = e.target.value * this.state.itemSelected.srp;
+		this.setState({
+			itemSelected: { ...this.state.itemSelected, qty: e.target.value, srp: multipliedPrice}
 		});
 	};
 
 	// add new product
-	handleAddProduct = () => {
+	handleAddProduct = e => {
+		e.preventDefault();
+		let itemSelected = this.state.itemSelected;
+		if (
+			this.state.product.find(
+				item => item.sku === this.state.itemSelected.sku
+			)
+		) {
+			this.setState({errors: [...this.state.errors, 'Item is already added...' ]});
+		}
+
+		// let newProduct = this.state.product.concat(itemSelected);
 		this.setState({
-			product: [
-				...this.state.product,
-				""
-			]
+			product:[ ...this.state.product, itemSelected]
 		});
 	};
 
@@ -219,6 +233,7 @@ class POCreateModal extends Component {
 				label: item.product_name,
 				name: "itemSelected",
 				sku: item.sku,
+				qty: 1,
 				srp: item.srp
 			};
 		});
@@ -244,29 +259,6 @@ class POCreateModal extends Component {
 						</div>
 					) : (
 						<div>
-							<div>
-								{this.state.errors && (
-									<div
-										className="alert alert-danger alert-dismissible fade show"
-										role="alert"
-									>
-										{this.state.errors.map((error, i) => (
-											<li key={i}>{error}</li>
-										))}
-										<button
-											type="button"
-											className="close"
-											data-dismiss="alert"
-											aria-label="Close"
-										>
-											<span aria-hidden="true">
-												&times;
-											</span>
-										</button>
-									</div>
-								)}
-							</div>
-
 							<form
 								onSubmit={e => this.onFormSubmit(e)}
 								onKeyPress={e => {
@@ -274,9 +266,9 @@ class POCreateModal extends Component {
 								}}
 							>
 								<section className="row">
-									<div className="col-sm-6">
+									<div className="col-sm-4">
 										<div className="form-group row">
-											<div className="col-md-6">
+											<div className="col-md-12">
 												<Select
 													placeholder="Choose Supplier..."
 													isSearchable={isSearchable}
@@ -321,89 +313,149 @@ class POCreateModal extends Component {
 									<div className="row">
 										<div className="col-md-12">
 											{view_supplier ? (
-												<table className="table table-hover table-striped table-bordered table-sm">
-													<thead>
-														<tr>
-															<th>SKU</th>
-															<th>Item</th>
-															<th>Qty</th>
-															<th>Price</th>
-															<th width="5%">
-																Action
-															</th>
-														</tr>
-													</thead>
-													<tbody>
-														{this.state.product.map(
-															(item, index) => {
-																return (
-																	<tr key={index}>
-																		<td>
-																			{itemSelected.sku}
-																		</td>
-																		<td width="40%">
-																			<Select
-																				placeholder="Choose Supplier..."
-																				isSearchable={isSearchable}
-																				onChange={
-																					this.handleSelectItem
-																				}
-																				options={ItemOption}
-																			/>
-																		</td>
-																		<td width="15%">
-																			<input
-																				type="text"
-																				name="qty"
-																				onChange={e =>
-																					this.handleInputChange(
-																						e,
-																						index
-																					)
-																				}
-																				value={
-																					product.qty
-																				}
-																				className="form-control p-1"
-																				placeholder="Qty"
-																			/>
-																		</td>
-																		<td>
-																			{itemSelected.srp}
-																		</td>
-																		<td>
-																			<a
-																				className="btn btn-danger btn-sm text-white"
-																				onClick={() =>
-																					this.handleRemoveProduct(
-																						index
-																					)
-																				}
-																			>
-																				<i className="la la-close"></i>
-																			</a>
-																		</td>
-																	</tr>
-																);
-															}
-														)}
-														<tr>
-															<td colSpan="4"></td>
-															<td>
-																<a
-																	className="btn btn-info btn-sm text-white"
-																	onClick={
-																		this
-																			.handleAddProduct
-																	}
+												<Fragment>
+													<div>
+														{this.state.errors && (
+															<div
+																className="alert alert-danger alert-dismissible fade show"
+																role="alert"
+															>
+																{this.state.errors.map((error, i) => (
+																	<li key={i}>{error}</li>
+																))}
+																<button
+																	type="button"
+																	className="close"
+																	data-dismiss="alert"
+																	aria-label="Close"
 																>
-																	<i className="la la-plus"></i>
-																</a>
-															</td>
-														</tr>
-													</tbody>
-												</table>
+																	<span aria-hidden="true">&times;</span>
+																</button>
+															</div>
+														)}
+													</div>
+													<table className="table table-hover table-striped table-bordered">
+														<thead>
+															<tr>
+																<th>SKU</th>
+																<th>Item</th>
+																<th>Qty</th>
+																<th>Price</th>
+																<th width="5%">
+																	Action
+																</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td>
+																	{
+																		itemSelected.sku
+																	}
+																</td>
+																<td width="40%">
+																	<Select
+																		placeholder="Choose Supplier..."
+																		isSearchable={
+																			isSearchable
+																		}
+																		onChange={
+																			this
+																				.handleSelectItem
+																		}
+																		options={
+																			ItemOption
+																		}
+																	/>
+																</td>
+																<td width="15%">
+																	<input
+																		type="number"
+																		name="qty"
+																		min="1"
+																		max="10000"
+																		onChange={
+																			this
+																				.handleInputChange
+																		}
+																		value={
+																			itemSelected.qty
+																		}
+																		className="form-control"
+																	/>
+																</td>
+																<td>
+																	{itemSelected.srp}
+																</td>
+																<td>
+																	<a
+																		className="btn btn-info btn-sm text-white"
+																		onClick={
+																			this
+																				.handleAddProduct
+																		}
+																	>
+																		<i className="la la-plus"></i>
+																	</a>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</Fragment>
 											) : null}
+
+											{
+												product ? (
+													<Fragment>
+														<div className="card card-body border-info mt-3">
+															<h4>
+																<i className="ft-clipboard"></i> Preview
+															</h4><hr/>
+															<table className="table table-hover table-striped table-bordered table-sm">
+																<thead>
+																	<tr>
+																		<th>SKU</th>
+																		<th>Item</th>
+																		<th>Qty</th>
+																		<th>Price</th>
+																		<th width="5%">
+																			Action
+																		</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	{
+																		this.state.product.map((item, index) => 
+																			(
+																				<Fragment>
+																				<tr>
+																					<td>{item.sku}</td>
+																					<td>{item.name}</td>
+																					<td>{item.qty}</td>
+																					<td>{item.srp}</td>
+																					<td>
+																						<a
+																							className="btn btn-danger btn-sm text-white"
+																							onClick={() =>
+																								this.handleRemoveProduct()
+																							}
+																						>
+																							<i className="la la-close"></i>
+																						</a>
+																					</td>
+																				</tr>
+																				<tr>
+																				</tr>
+																				</Fragment>
+																			)
+																		)
+																	}
+																</tbody>
+															</table>
+														</div>
+													</Fragment>
+												): ( null )
+											}
 										</div>
 									</div>
 								</section>
