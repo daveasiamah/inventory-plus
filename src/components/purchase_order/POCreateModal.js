@@ -9,7 +9,7 @@ import axios from "axios";
 class POCreateModal extends Component {
 	state = {
 		loading: false,
-		errors: '',
+		errors: "",
 		supplier_id: [],
 		name_suppliers: [],
 		items: [],
@@ -47,8 +47,7 @@ class POCreateModal extends Component {
 	};
 
 	handleSelectItem = selectOption => {
-		console.log(selectOption);
-		// let newItem = this.state.itemSelected.concat(selectOption);
+		// console.log(selectOption);
 		this.setState({
 			itemSelected: {
 				sku: selectOption.sku,
@@ -70,20 +69,24 @@ class POCreateModal extends Component {
 
 	// add new product
 	handleAddProduct = e => {
-		e.preventDefault();
 		let itemSelected = this.state.itemSelected;
+
 		if (
 			this.state.product.find(
 				item => item.sku === this.state.itemSelected.sku
 			)
 		) {
-			this.setState({errors: [...this.state.errors, 'Item is already added...' ]});
+			this.setState({errors: 'Item is added to the list'});
+		}else{
+
+			this.setState({
+				product:[ ...this.state.product, itemSelected],
+				errors: "",
+			});	
 		}
 
 		// let newProduct = this.state.product.concat(itemSelected);
-		this.setState({
-			product:[ ...this.state.product, itemSelected]
-		});
+
 	};
 
 	// remove the product
@@ -93,6 +96,22 @@ class POCreateModal extends Component {
 		product.splice(index, 1);
 		this.setState({ product: product });
 	};
+
+	// handle remove error
+	handleRemoveError = () => {
+		this.setState({errors: ''});
+	}
+
+	// handle Clear All
+	handleClearAll = (e) => {
+		e.preventDefault();
+
+		this.setState({ 
+			view_supplier: "",
+			itemSelected: [],
+			product: []
+		})
+	}
 
 	// handleonSubmit form
 	handleOnSubmit = e => {
@@ -216,7 +235,8 @@ class POCreateModal extends Component {
 			isSearchable,
 			view_supplier,
 			product,
-			itemSelected
+			itemSelected,
+			errors,
 		} = this.state;
 
 		let supplierOption = this.state.name_suppliers.map(supplier => {
@@ -237,6 +257,10 @@ class POCreateModal extends Component {
 				srp: item.srp
 			};
 		});
+
+		const srpTotal = product.reduce((totalSrp, item) => totalSrp + parseInt(item.srp), 0);
+		
+		// console.log(srpTotal);
 
 		return (
 			<Modal
@@ -265,47 +289,32 @@ class POCreateModal extends Component {
 									if (e.key === "Enter") e.preventDefault();
 								}}
 							>
-								<section className="row">
+								<section className="row mb-2">
 									<div className="col-sm-4">
-										<div className="form-group row">
-											<div className="col-md-12">
-												<Select
-													placeholder="Choose Supplier..."
-													isSearchable={isSearchable}
-													onChange={
-														this.handleSelectInput
-													}
-													options={supplierOption}
-												/>
-											</div>
-
-											<div className="col-md-12 mt-1">
-												<div>
-													<strong>
-														{view_supplier.name ||
-															""}
-													</strong>
-												</div>
-												<div>
-													{view_supplier.address ||
-														""}
-												</div>
-												<div>
-													{view_supplier.landline ||
-														""}
-												</div>
-												<div>
-													{view_supplier.mobile || ""}
-												</div>
-												<div>
-													{view_supplier.fax || ""}
-												</div>
-												<div>
-													{view_supplier.contact_person ||
-														""}
-												</div>
-											</div>
-										</div>
+										{
+											!view_supplier ? 
+											(
+												<div className="form-group row">
+													<div className="col-md-12">
+														<Select
+															placeholder="Choose Supplier..."
+															isSearchable={isSearchable}
+															onChange={
+																this.handleSelectInput
+															}
+															options={supplierOption}
+														/>
+													</div>
+												</div>				
+											) : ( null )
+										}
+									</div>
+									<div className="col-md-4 offset-4">
+										<button 
+				                            className="btn btn-danger pull-right btn-sm"
+											onClick={this.handleClearAll}
+				                             ><i className="ft ft-clipboard"></i> Clear All
+				                         </button>
 									</div>
 								</section>
 
@@ -320,14 +329,13 @@ class POCreateModal extends Component {
 																className="alert alert-danger alert-dismissible fade show"
 																role="alert"
 															>
-																{this.state.errors.map((error, i) => (
-																	<li key={i}>{error}</li>
-																))}
+																{errors}
 																<button
 																	type="button"
 																	className="close"
 																	data-dismiss="alert"
 																	aria-label="Close"
+																	onClick={this.handleRemoveError}
 																>
 																	<span aria-hidden="true">&times;</span>
 																</button>
@@ -405,12 +413,40 @@ class POCreateModal extends Component {
 											) : null}
 
 											{
-												product ? (
+												product.length > 0 ? (
 													<Fragment>
-														<div className="card card-body border-info mt-3">
+														<div className="card card-body border-info mt-1">
 															<h4>
 																<i className="ft-clipboard"></i> Preview
 															</h4><hr/>
+
+															<div className="col-md-12 mb-1">
+																<div>
+																	<strong>
+																		{view_supplier.name ||
+																			""}
+																	</strong>
+																</div>
+																<div>
+																	{view_supplier.address ||
+																		""}
+																</div>
+																<div>
+																	{view_supplier.landline ||
+																		""}
+																</div>
+																<div>
+																	{view_supplier.mobile || ""}
+																</div>
+																<div>
+																	{view_supplier.fax || ""}
+																</div>
+																<div>
+																	{view_supplier.contact_person ||
+																		""}
+																</div>
+															</div>
+
 															<table className="table table-hover table-striped table-bordered table-sm">
 																<thead>
 																	<tr>
@@ -427,8 +463,7 @@ class POCreateModal extends Component {
 																	{
 																		this.state.product.map((item, index) => 
 																			(
-																				<Fragment>
-																				<tr>
+																				<tr key={index}>
 																					<td>{item.sku}</td>
 																					<td>{item.name}</td>
 																					<td>{item.qty}</td>
@@ -436,20 +471,23 @@ class POCreateModal extends Component {
 																					<td>
 																						<a
 																							className="btn btn-danger btn-sm text-white"
-																							onClick={() =>
-																								this.handleRemoveProduct()
+																							onClick={(e) =>
+																								this.handleRemoveProduct(index)
 																							}
 																						>
 																							<i className="la la-close"></i>
 																						</a>
 																					</td>
 																				</tr>
-																				<tr>
-																				</tr>
-																				</Fragment>
 																			)
 																		)
 																	}
+																	<tr>
+																		<td colSpan={2}></td>
+																		<td><div align="right"><strong>Total</strong></div></td>
+																		<td>Php {srpTotal}</td>
+																		<td></td>
+																	</tr>
 																</tbody>
 															</table>
 														</div>
