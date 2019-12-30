@@ -12,7 +12,9 @@ class POCreateModal extends Component {
 		errors: null,
 		supplier_id: [],
 		name_suppliers: [],
-		product: [],
+		items: [],
+		product:[],
+		itemSelected: [],
 		view_supplier: "",
 		isSearchable: true
 	};
@@ -43,6 +45,12 @@ class POCreateModal extends Component {
 		this.getSupplierProduct(selectedOption.value);
 	};
 
+	handleSelectItem = selectOption => {
+		console.log(selectOption)
+		let newItem = this.state.itemSelected.concat(selectOption);
+		this.setState({...this.state.itemSelected, itemSelected: newItem})
+	}
+	
 	// handle inputs
 	handleInputChange = (e, index) => {
 		this.state.product[index] = e.target.name
@@ -59,7 +67,7 @@ class POCreateModal extends Component {
 		this.setState({
 			product: [
 				...this.state.product,
-				{ sku: "", item: "", qty: "", price: "" }
+				""
 			]
 		});
 	};
@@ -133,7 +141,7 @@ class POCreateModal extends Component {
 			case 1:
 				console.log(res.data);
 				this.setState({
-					products: res.data.products
+					items: res.data.products
 				});
 				break;
 			default:
@@ -193,7 +201,8 @@ class POCreateModal extends Component {
 			supplier_id,
 			isSearchable,
 			view_supplier,
-			product
+			product,
+			itemSelected
 		} = this.state;
 
 		let supplierOption = this.state.name_suppliers.map(supplier => {
@@ -204,12 +213,23 @@ class POCreateModal extends Component {
 			};
 		});
 
+		let ItemOption = this.state.items.map(item => {
+			return {
+				value: item._id.$oid,
+				label: item.product_name,
+				name: "itemSelected",
+				sku: item.sku,
+				srp: item.srp
+			};
+		});
+
 		return (
 			<Modal
 				dialogClassName="modal-container custom-dialog"
 				show={this.props.show}
 				onHide={this.props.onHide}
 				animation={true}
+				size="lg"
 			>
 				<Modal.Header closeButton>
 					<Modal.Title>Create New</Modal.Title>
@@ -319,32 +339,16 @@ class POCreateModal extends Component {
 																return (
 																	<tr key={index}>
 																		<td>
-																			<input
-																				type="text"
-																				name="sku"
-																				onChange={e => this.handleInputChange(e, index)}
-																				value={
-																					product.sku
-																				}
-																				className="form-control"
-																				placeholder="SKU"
-																			/>
+																			{itemSelected.sku}
 																		</td>
 																		<td width="40%">
-																			<input
-																				type="text"
-																				name="item"
-																				onChange={e =>
-																					this.handleInputChange(
-																						e,
-																						index
-																					)
+																			<Select
+																				placeholder="Choose Supplier..."
+																				isSearchable={isSearchable}
+																				onChange={
+																					this.handleSelectItem
 																				}
-																				value={
-																					product.item
-																				}
-																				className="form-control"
-																				placeholder="Item"
+																				options={ItemOption}
 																			/>
 																		</td>
 																		<td width="15%">
@@ -365,21 +369,7 @@ class POCreateModal extends Component {
 																			/>
 																		</td>
 																		<td>
-																			<input
-																				type="text"
-																				name="price"
-																				onChange={e =>
-																					this.handleInputChange(
-																						e,
-																						index
-																					)
-																				}
-																				value={
-																					product.price
-																				}
-																				className="form-control p-1"
-																				placeholder="Price"
-																			/>
+																			{itemSelected.srp}
 																		</td>
 																		<td>
 																			<a

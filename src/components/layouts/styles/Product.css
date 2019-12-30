@@ -42,11 +42,12 @@
 }
 /* end of material_tags styles*/
 
+
 /*  PO styles*/
 
 .custom-dialog {
   z-index: 99999; 
-  max-width: 85%;
+  max-width: 70%;
 }
 
 /* end of PO styles*/
